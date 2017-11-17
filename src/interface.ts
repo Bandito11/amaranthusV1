@@ -4,7 +4,7 @@ initial?: string;
 lastName: string;
 id: string;
 address: string;
-phoneNumber?:number[];
+phoneNumber?:string[];
 town:string;
 state:string;
 picture:string;
@@ -13,8 +13,9 @@ fatherFirstName:string;
 fatherLastName:string;
 motherFirstName:string;
 motherLastName:string;
-emergencyContactName?:string;
-emergencyContactPhoneNumber:number[];
+emergencyContactName:string;
+emergencyRelationship:string;
+emergencyContactPhoneNumber:string[];
 }
 
 export interface IAssistance {
