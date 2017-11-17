@@ -17,7 +17,7 @@
 (ionInput)="searchStudent($event)"
 [debounce]="1200"
 ></ion-searchbar>
-  <ion-list>
+  <ion-list *ngIf="students">
     <ion-item-sliding *ngFor="let student of students">
       <ion-item (click)="goToEdit(student.id)">
         <ion-avatar item-left>
