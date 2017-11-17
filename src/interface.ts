@@ -20,6 +20,6 @@ emergencyContactPhoneNumber:string[];
 
 export interface IAssistance {
 date: string;
-absennce: boolean;
+attendance: boolean;
 studentId: number;
 }
