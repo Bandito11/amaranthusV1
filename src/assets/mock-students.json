@@ -3,8 +3,8 @@
     "error": false,
     "data": {
       "students": [
-        { "firstName": "Esteban", "lastName": "Morales Morales", "id": 1234, "town": "Arroyo", "state": "PR", "gender": "male", "pic": "./assets/profilePics/defaultMale.jpg" },
-        { "firstName": "Bill", "lastName": "Gates", "id": 4321, "town": "Redmond", "state": "PR", "gender": "male", "pic": "./assets/profilePics/defaultMale.jpg" }
+        { "firstName": "Esteban", "lastName": "Morales Morales", "id": 1234,"motherFirstName":"Rosa", "motherLastName":"Morales Bonilla", "fatherFirstName": "Esteban", "fatherLastName":"Morales Gonzalez", "address":"123 Bda. Marin", "town": "Arroyo", "state": "PR", "gender": "male", "pic": "./assets/profilePics/defaultMale.jpg", "emergencyContactName":"Matt Murdock", "emergencyRelationship":"Friend", "emergencyContactPhoneNumber":"555-555-5555" },
+        { "firstName": "Bill", "lastName": "Gates", "id": 4321, "phoneNumber":"555-555-5555", "motherFirstName":"Mary", "motherLastName":"Gates", "fatherFirstName": "William", "fatherLastName":"Gates", "address":"123 Main Street", "town": "Redmond", "state": "PR", "gender": "male", "pic": "./assets/profilePics/defaultMale.jpg","emergencyContactName":"Madeline Gates", "emergencyRelationship":"Wife", "emergencyContactPhoneNumber":"555-555-5555" }
       ]
     }
   }
