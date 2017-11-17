@@ -1,0 +1,49 @@
+<!--
+  Generated template for the MainPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Main</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+<ion-searchbar
+(ionInput)="searchStudent($event)"
+[debounce]="1200"
+></ion-searchbar>
+  <ion-list>
+    <ion-item-sliding *ngFor="let student of students">
+      <ion-item (click)="goToEdit(student.id)">
+        <ion-avatar item-left>
+          <img src="{{student.pic}}" alt="no image">
+        </ion-avatar>
+        <label>
+          ID:
+        </label>
+        <p>
+          {{student.id}}
+        </p>
+        <label>
+            NAME:
+        </label>
+        <p>
+         {{getStudentFullName({firstName: student.firstName, lastName: student.lastName})}}
+        </p>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button color="primary" (click)="addAttendance(student.id)">
+          Attended
+        </button>
+        <button ion-button color="danger" (click)="addAbsence(student.id)">
+          Absent
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

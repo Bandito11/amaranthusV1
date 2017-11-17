@@ -1,0 +1,10 @@
+ {
+    "success": true,
+    "error": false,
+    "data": {
+      "students": [
+        { "firstName": "Esteban", "lastName": "Morales Morales", "id": 1234, "town": "Arroyo", "state": "PR", "gender": "male", "pic": "./assets/profilePics/defaultMale.jpg" },
+        { "firstName": "Bill", "lastName": "Gates", "id": 4321, "town": "Redmond", "state": "PR", "gender": "male", "pic": "./assets/profilePics/defaultMale.jpg" }
+      ]
+    }
+  }
