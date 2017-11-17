@@ -18,7 +18,7 @@
 [debounce]="1200"
 ></ion-searchbar>
   <ion-list *ngIf="students">
-    <ion-item-sliding *ngFor="let student of students">
+    <ion-item-sliding *ngFor="let student of students$ | async">
       <ion-item (click)="goToEdit(student.id)">
         <ion-avatar item-left>
           <img src="{{student.pic}}" alt="no image">
