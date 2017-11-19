@@ -28,7 +28,6 @@ export class TabsPage {
   tab2 = TablePage;
   
   ionViewDidLoad() {
-    console.log('ionViewDidLoad TabsPage');
   }
 
 }

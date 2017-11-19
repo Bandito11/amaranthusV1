@@ -4,7 +4,7 @@ initial?: string;
 lastName: string;
 id: string;
 address: string;
-phoneNumber?:string[];
+phoneNumber?:string;
 town:string;
 state:string;
 picture:string;
@@ -15,11 +15,18 @@ motherFirstName:string;
 motherLastName:string;
 emergencyContactName:string;
 emergencyRelationship:string;
-emergencyContactPhoneNumber:string[];
+emergencyContactPhoneNumber:string;
+isActive: boolean;
 }
 
 export interface IAssistance {
 date: string;
 attendance: boolean;
 studentId: number;
+}
+
+export interface IResponse <T> {
+    success: boolean;
+    error: string;
+    data: T[];
 }

@@ -1,8 +1,7 @@
+import { STUDENTS } from './../../mock/mock-students';
+import { IStudent, IResponse } from './../../common/interface';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-// import 'rxjs/add/operator/retry';
-import { Observable } from 'rxjs/Observable';
-import { catchError, map, tap, retry } from 'rxjs/operators';
+
 /*
   Generated class for the AmaranthusDbProvider provider.
 
@@ -12,21 +11,39 @@ import { catchError, map, tap, retry } from 'rxjs/operators';
 @Injectable()
 export class AmaranthusDBProvider {
 
-  constructor(private http: HttpClient) {
+  constructor() {
     console.log('Hello AmaranthusDbProvider Provider');
     this.createDB();
   }
-  
-getAllStudents(){
-  return this.http.get('./assets/mock-students.json')
-  .pipe(
-      catchError(this.handleError('getHeroes'))
-    );
-}
 
-handleError(error){
-  console.error(error);
-}
+  /**
+   * Will get Students from DB
+   * Will only return firstName, lastName and studentId
+   * @returns {Observable<IResponse<IStudent>>} 
+   * @memberof AmaranthusDBProvider
+   */
 
-createDB(){}
+  students: IResponse<IStudent>;
+
+  getAllStudents(): Promise<IResponse<IStudent>> {
+    return new Promise((resolve, reject) => {
+      resolve(this.students);
+    })
+  }
+
+  handleError(error) {
+    console.error(error);
+    return { error: error, success: false, data: null };
+  }
+
+  createDB() {
+    this.students = {...STUDENTS};
+  }
+
+  insertStudent(student: IStudent) {
+    new Promise((resolve, reject) => {
+      this.students = { ...STUDENTS, data: [...this.students.data, student] };
+    })
+
+  }
 }

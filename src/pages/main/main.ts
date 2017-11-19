@@ -1,3 +1,6 @@
+import { CreatePage } from './../create/create';
+import { EditPage } from './../edit/edit';
+import { IStudent } from './../../common/interface';
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
@@ -20,49 +23,74 @@ export class MainPage implements OnInit {
   }
 
   ngOnInit() {
-    this.getStudents();
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MainPage')
+    this.getStudents();
   }
 
-  students;
+  ionViewWillEnter(){
+    this.getStudents();    
+  }
+  students: IStudent[] = [];
+  private untouchedStudentList: IStudent[] = [];
+
+  initializeStudentsList() {
+    this.students = [...this.untouchedStudentList];
+  };
 
   searchStudent(event) {
     // TODO: implement query of the list by searchbar value
-    const query = event.target.value;
-    query ? alert(query) : alert('empty');
+    let query: string = event.target.value;
+    query ? this.queryStudentsList(query) : this.initializeStudentsList();
+  }
+
+  queryStudentsList(query: string) {
+    const students = [...this.untouchedStudentList];
+    let fullName = this.getStudentFullName;
+    const newQuery = students.filter(student => {
+      if (student.id == query ||
+        student.firstName.toLowerCase() == query.toLowerCase() ||
+        student.lastName.toLowerCase() == query.toLowerCase() ||
+        fullName({ firstName: student.firstName, lastName: student.lastName }).toLowerCase() == query.toLowerCase()
+      ) {
+        return student;
+      }
+    });
+    this.students = [...newQuery];
   }
 
   getStudents() {
     this.db.getAllStudents()
-      .retry(3)
-      .subscribe(
+      .then(
       response => {
         if (response.success == true) {
-          this.students = response.data.students;
+          this.students = [...response.data];
+          this.untouchedStudentList = [...response.data];
         } else {
           // TODO:  implement an alert message if it fails
           // message should say no students can be retrieved.
           this.handleError(response.error);
         }
-      },
-      error => this.handleError(error)
+      }      
       )
+      .catch(error => this.handleError(error))
   }
 
   handleError(error) {
     // TODO:  error connecting to the database message
     console.error(error);
   }
-  getStudentFullName(name: { firstName, lastName }) {
+  getStudentFullName(name: { firstName, lastName }): string {
     return `${name.firstName} ${name.lastName}`;
   }
 
-  goToEdit(studentId) {
-    //  TODO:  implement edit component
-    alert('edit ' + studentId);
+  goToEdit(id) {
+    this.navCtrl.push(EditPage, { id: id})
+  }
+
+  goToCreate(){
+    this.navCtrl.push(CreatePage);
   }
 
   addAttendance(studentId) {

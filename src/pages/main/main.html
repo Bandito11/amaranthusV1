@@ -8,36 +8,30 @@
 
   <ion-navbar color="primary">
     <ion-title>Main</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="goToCreate()">
+        Add
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
-
 <ion-content padding>
-<ion-searchbar
-(ionInput)="searchStudent($event)"
-[debounce]="1200"
-></ion-searchbar>
+  <ion-searchbar (ionInput)="searchStudent($event)">
+  </ion-searchbar>
   <ion-list *ngIf="students">
-    <ion-item-sliding *ngFor="let student of students$ | async">
+    <ion-item-sliding *ngFor="let student of students">
       <ion-item (click)="goToEdit(student.id)">
         <ion-avatar item-left>
-          <img src="{{student.pic}}" alt="no image">
+          <img src="{{student.picture}}" alt="no image">
         </ion-avatar>
-        <label>
-          ID:
-        </label>
         <p>
-          {{student.id}}
-        </p>
-        <label>
-            NAME:
-        </label>
+          <span>ID: </span>{{student.id}}</p>
         <p>
-         {{getStudentFullName({firstName: student.firstName, lastName: student.lastName})}}
-        </p>
+          <span>Name: </span>{{getStudentFullName({firstName: student.firstName, lastName: student.lastName})}}</p>
       </ion-item>
       <ion-item-options>
-        <button ion-button color="primary" (click)="addAttendance(student.id)">
+        <button ion-button color="secondary" (click)="addAttendance(student.id)">
           Attended
         </button>
         <button ion-button color="danger" (click)="addAbsence(student.id)">
