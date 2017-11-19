@@ -1,5 +1,5 @@
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
-import { IStudent } from './../../common/interface';
+import { IStudent, ISimpleAlertOptions } from './../../common/interface';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController } from 'ionic-angular';
 /**
@@ -25,7 +25,7 @@ export class CreatePage {
    * @memberof CreatePage
    */
   gender = 'male';
-  picture: string = '';
+  picture = '';
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreatePage');
@@ -40,11 +40,10 @@ export class CreatePage {
     // TODO: Implement a gallery menu to look for a picture. 
     this.picture = './assets/profilePics/MyPicture.jpg'
   }
-  resetPicture() {
-    this.picture = '';
-  }
   async createStudent(data: IStudent) {
-    if (!data.firstName ||
+    const options: ISimpleAlertOptions = {title:'', subTitle:'',buttons:[]}
+    if (
+      !data.firstName ||
       !data.lastName ||
       !data.id ||
       !data.address ||
@@ -55,22 +54,20 @@ export class CreatePage {
       !data.motherFirstName ||
       !data.motherLastName ||
       !data.emergencyContactName ||
-      !data.emergencyContactPhoneNumber) {
-      this.showSimpleAlert({ title: 'Warning!', subTitle: 'Some fields doesn\'t have the required info', buttons: ['OK'] });
+      !data.emergencyContactPhoneNumber
+    ) {
+      options.title = 'Warning!';
+      options.subTitle = 'Some fields doesn\'t have the required info';
+      options.buttons = [...['OK']]
+      this.showSimpleAlert(options);
     } else {
-      if (this.gender == 'male' && this.picture == '') {
-        this.picture = "./assets/profilePics/defaultMale.jpg";
-      } else if (this.gender == 'female' && this.picture == '') {
-        this.picture = "./assets/profilePics/defaultFemale.jpg";
-      } else if (this.gender == 'undisclosed' && this.picture == '') {
-        this.picture = "./assets/profilePics/defaultUndisclosed.jpg";
-      }
-      const student: IStudent = { ...data, picture: this.picture, gender: this.gender, isActive: true };
+      const picture = this.validatePicture({gender: this.gender, picture: this.picture});
+      const student: IStudent = { ...data, picture: picture, gender: this.gender, isActive: true };
       try {
         await this.db.insertStudent(student);
         const alert = this.alertCtrl.create({
           title: 'Successful',
-          subTitle: 'Student was created succesfully!',
+          subTitle: 'Student was created successfully!',
           buttons: [{
             text: 'Ok',
             handler: () => {
@@ -85,15 +82,31 @@ export class CreatePage {
         alert.present();
       } catch (error) {
         console.error(error);
+        options.title = 'Error!';
+        options.subTitle = 'There was an error creating a student record! Please try again.';
+        options.buttons = [...['OK']]
+        this.showSimpleAlert(options);  
       }
     }
   }
 
-  showSimpleAlert(data: { title: string, subTitle: string, buttons: string[] }) {
+  validatePicture(options: {gender: string, picture: string}) {
+    if (options.gender == 'male' && options.picture == '') {
+      options.picture = "./assets/profilePics/defaultMale.jpg";
+    } else if (options.gender == 'female' && options.picture == '') {
+      options.picture = "./assets/profilePics/defaultFemale.jpg";
+    } else if (options.gender == 'undisclosed' && options.picture == '') {
+      options.picture = "./assets/profilePics/defaultUndisclosed.jpg";
+    }
+    return options.picture;
+  }
+
+  showSimpleAlert(options: ISimpleAlertOptions) {
     return this.alertCtrl.create({
-      title: data.title,
-      subTitle: data.subTitle,
-      buttons: data.buttons
-    });
+      title: options.title,
+      subTitle: options.subTitle,
+      buttons: options.buttons
+    })
+      .present();;
   }
 }
