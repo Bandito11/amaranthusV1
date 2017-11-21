@@ -23,9 +23,9 @@ export class AmaranthusDBProvider {
    * @memberof AmaranthusDBProvider
    */
 
-  students: IResponse<IStudent>;
+  students: IResponse<IStudent[]>;
 
-  getAllStudents(): Promise<IResponse<IStudent>> {
+  getAllStudents(): Promise<IResponse<IStudent[]>> {
     return new Promise((resolve, reject) => {
       resolve(this.students);
     })
@@ -37,13 +37,51 @@ export class AmaranthusDBProvider {
   }
 
   createDB() {
-    this.students = {...STUDENTS};
+    this.students = { ...STUDENTS };
   }
 
-  insertStudent(student: IStudent) {
-    new Promise((resolve, reject) => {
+  insertStudent(student: IStudent): Promise<IResponse<null>> {
+    return new Promise((resolve, reject) => {
       this.students = { ...STUDENTS, data: [...this.students.data, student] };
-    })
+      resolve({ success: true, error: null, data: null })
+    });
+  }
 
+  updateStudent(student: IStudent): Promise<IResponse<null>> {
+    return new Promise((resolve, reject) => {
+      const queriedStudents = this.students.data.map(query => {
+        if (query.id == student.id) {
+          return student;
+        } else {
+          return query;
+        }
+      }); console.log('new query'); console.log(queriedStudents)
+      this.students = { ...STUDENTS, data: [...queriedStudents] };;
+      resolve({ success: true, error: null, data: null })
+    })
+  }
+  getStudentById(student: IStudent): Promise<IResponse<IStudent>> {
+    return new Promise((resolve, reject) => {
+      this.students.data.filter(query => {
+        if (student.id == query.id) {
+          const queriedStudent = {
+            error: null,
+            success: true,
+            data: { ...query }
+          }
+          resolve(queriedStudent);
+        }
+      });
+    });
+  }
+  deleteStudent(student: IStudent): Promise<IResponse<null>> {
+    return new Promise((resolve, reject) => {
+      this.students.data = this.students.data.filter(query => {
+        if (query.id != student.id) {
+          return query;
+        }
+      });
+      resolve({ success: true, error: null, data: null })
+    });
   }
 }

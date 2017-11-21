@@ -15,142 +15,142 @@
 
 <ion-content padding>
   <form #studentForm="ngForm" (ngSubmit)="createStudent({
-    firstName: firstName.value,
-    initial: initial.value,
-    lastName: lastName.value,
-    id: id.value,
-    address: address.value,
-    phoneNumber:phoneNumber.value,
-    town:town.value,
-    state:state.value,
-    fatherFirstName:fatherFirstName.value,
-    fatherLastName:fatherLastName.value,
-    motherFirstName:motherFirstName.value,
-    motherLastName:motherLastName.value,
-    emergencyContactName:emergencyContactName.value,
-    emergencyRelationship:emergencyRelationship.value,
-    emergencyContactPhoneNumber:emergencyContactPhoneNumber.value
-  })">
+      firstName: firstName.value,
+      initial: initial.value,
+      lastName: lastName.value,
+      id: id.value,
+      address: address.value,
+      phoneNumber:phoneNumber.value,
+      town:town.value,
+      state:state.value,
+      fatherFirstName:fatherFirstName.value,
+      fatherLastName:fatherLastName.value,
+      motherFirstName:motherFirstName.value,
+      motherLastName:motherLastName.value,
+      emergencyContactName:emergencyContactName.value,
+      emergencyRelationship:emergencyRelationship.value,
+      emergencyContactPhoneNumber:emergencyContactPhoneNumber.value
+    })">
     <!-- Picture will be taken from gallery or camera.  If the input is empty a default one will
-     be chosen from based by gender. -->
-    <ion-item>
-      <ion-label stacked>Picture</ion-label>
-      <ion-input type="text" readonly="true" name="picture" [(ngModel)]="picture"></ion-input>
-    </ion-item>
-    <button (click)="browsePicture()" type="button" ion-button color="secondary">Browse</button>
-    <button (click)="picture = ''" type="button" ion-button color="danger">Reset</button>
-    <ion-item>
-      <ion-label stacked>First Name</ion-label>
-      <ion-input type="text" #firstName></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!firstName.value"></ion-icon>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Initial</ion-label>
-      <ion-input type="text" #initial></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Last Name</ion-label>
-      <ion-input type="text" #lastName></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!lastName.value"></ion-icon>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>ID</ion-label>
-      <ion-input type="text" #id></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!id.value"></ion-icon>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Address</ion-label>
-      <ion-input type="text" #address></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!address.value"></ion-icon>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Phone Number</ion-label>
-      <ion-input type="text" #phoneNumber></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Town</ion-label>
-      <ion-input type="text" #town></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!town.value"></ion-icon>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>State</ion-label>
-      <ion-input type="text" #state></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!state.value"></ion-icon>
-    </ion-item>
-    <ion-list no-lines radio-group [(ngModel)]="gender" name="gender">
-      <ion-list-header>
-        Gender
-      </ion-list-header>
+       be chosen from based by gender. -->
+    <ion-list>
       <ion-item>
-        <ion-label inset>Male</ion-label>
-        <ion-radio value="male"></ion-radio>
+        <ion-label stacked>Picture</ion-label>
+        <ion-input type="text" readonly="true" name="picture" [(ngModel)]="picture"></ion-input>
+      </ion-item>
+      <button (click)="browsePicture()" type="button" ion-button color="secondary">Browse</button>
+      <button (click)="picture = ''" type="button" ion-button color="danger">Reset</button>
+      <ion-item>
+        <ion-label stacked>ID</ion-label>
+        <ion-input type="text" #id></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!id.value"></ion-icon>
       </ion-item>
       <ion-item>
-        <ion-label>Female</ion-label>
-        <ion-radio value="female"></ion-radio>
+        <ion-label stacked>First Name</ion-label>
+        <ion-input type="text" #firstName></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!firstName.value"></ion-icon>
       </ion-item>
       <ion-item>
-        <ion-label>Undisclosed</ion-label>
-        <ion-radio value="undisclosed"></ion-radio>
+        <ion-label stacked>Initial</ion-label>
+        <ion-input type="text" #initial></ion-input>
       </ion-item>
+      <ion-item>
+        <ion-label stacked>Last Name</ion-label>
+        <ion-input type="text" #lastName></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!lastName.value"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Address</ion-label>
+        <ion-input type="text" #address></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!address.value"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Phone Number</ion-label>
+        <ion-input type="text" #phoneNumber></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Town</ion-label>
+        <ion-input type="text" #town></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!town.value"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>State</ion-label>
+        <ion-input type="text" #state></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!state.value"></ion-icon>
+      </ion-item>
+      <ion-list no-lines radio-group [(ngModel)]="gender" name="gender">
+        <h6>Gender</h6>
+        <ion-item>
+          <ion-label inset>Male</ion-label>
+          <ion-radio value="male"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Female</ion-label>
+          <ion-radio value="female"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Undisclosed</ion-label>
+          <ion-radio value="undisclosed"></ion-radio>
+        </ion-item>
+      </ion-list>
+      <h6>Father</h6>
+      <ion-item>
+        <ion-label stacked>First Name</ion-label>
+        <ion-input type="text" #fatherFirstName></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!fatherFirstName.value"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Last Name</ion-label>
+        <ion-input type="text" #fatherLastName></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!fatherLastName.value"></ion-icon>
+      </ion-item>
+      <h6>Mother</h6>
+      <ion-item>
+        <ion-label stacked>First Name</ion-label>
+        <ion-input type="text" #motherFirstName></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!motherFirstName.value"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Last Name</ion-label>
+        <ion-input type="text" #motherLastName></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!motherLastName.value"></ion-icon>
+      </ion-item>
+      <h6>Emergency Contact</h6>
+      <ion-item>
+        <ion-label stacked>Name</ion-label>
+        <ion-input type="text" #emergencyContactName></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!emergencyContactName.value"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Relationship</ion-label>
+        <ion-input type="text" #emergencyRelationship></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!emergencyRelationship.value"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Phone Number</ion-label>
+        <ion-input type="text" #emergencyContactPhoneNumber></ion-input>
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="!emergencyContactPhoneNumber.value"></ion-icon>
+      </ion-item>
+      <button type="submit" ion-button color="secondary">Create</button>
+      <button ion-button type="button" color="danger" (click)="
+      firstName.value = '';
+      initial.value = '';
+      lastName.value = '';
+      id.value = '';
+      address.value = '';
+      phoneNumber.value = '';
+      town.value = '';
+      state.value = '';
+      fatherFirstName.value = '';
+      fatherLastName.value = '';
+      motherFirstName.value = '';
+      motherLastName.value = '';
+      emergencyContactName.value = '';
+      emergencyRelationship.value = '';
+      emergencyContactPhoneNumber.value = '';
+      ">
+        Reset
+      </button>
     </ion-list>
-    <h6>Father</h6>
-    <ion-item>
-      <ion-label stacked>First Name</ion-label>
-      <ion-input type="text" #fatherFirstName></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!fatherFirstName.value"></ion-icon>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Last Name</ion-label>
-      <ion-input type="text" #fatherLastName></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!fatherLastName.value"></ion-icon>
-    </ion-item>
-    <h6>Mother</h6>
-    <ion-item>
-      <ion-label stacked>First Name</ion-label>
-      <ion-input type="text" #motherFirstName></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!motherFirstName.value"></ion-icon>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Last Name</ion-label>
-      <ion-input type="text" #motherLastName></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!motherLastName.value"></ion-icon>
-    </ion-item>
-    <h6>Emergency Contact</h6>
-    <ion-item>
-      <ion-label stacked>Name</ion-label>
-      <ion-input type="text" #emergencyContactName></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!emergencyContactName.value"></ion-icon>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Relationship</ion-label>
-      <ion-input type="text" #emergencyRelationship></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!emergencyRelationship.value"></ion-icon>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Phone Number</ion-label>
-      <ion-input type="text" #emergencyContactPhoneNumber></ion-input>
-      <ion-icon id="form-icon" item-right name="warning" *ngIf="!emergencyContactPhoneNumber.value"></ion-icon>
-    </ion-item>
-    <button type="submit" ion-button color="secondary">Create</button>
-    <button ion-button type="button" color="danger" (click)="
-    firstName.value = '';
-    initial.value = '';
-    lastName.value = '';
-    id.value = '';
-    address.value = '';
-    phoneNumber.value = '';
-    town.value = '';
-    state.value = '';
-    fatherFirstName.value = '';
-    fatherLastName.value = '';
-    motherFirstName.value = '';
-    motherLastName.value = '';
-    emergencyContactName.value = '';
-    emergencyRelationship.value = '';
-    emergencyContactPhoneNumber.value = '';
-    ">
-    Reset
-    </button>
   </form>
 </ion-content>

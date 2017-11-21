@@ -4,6 +4,7 @@ import { IStudent } from './../../common/interface';
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { handleError } from './../../common/handleError';
 
 /**
  * Generated class for the MainPage page.
@@ -29,8 +30,8 @@ export class MainPage implements OnInit {
     this.getStudents();
   }
 
-  ionViewWillEnter(){
-    this.getStudents();    
+  ionViewWillEnter() {
+    this.getStudents();
   }
   students: IStudent[] = [];
   private untouchedStudentList: IStudent[] = [];
@@ -70,26 +71,23 @@ export class MainPage implements OnInit {
         } else {
           // TODO:  implement an alert message if it fails
           // message should say no students can be retrieved.
-          this.handleError(response.error);
+          handleError(response.error);
         }
-      }      
+      }
       )
-      .catch(error => this.handleError(error))
+      .catch(error => handleError(error))
   }
 
-  handleError(error) {
-    // TODO:  error connecting to the database message
-    console.error(error);
-  }
+
   getStudentFullName(name: { firstName, lastName }): string {
     return `${name.firstName} ${name.lastName}`;
   }
 
   goToEdit(id) {
-    this.navCtrl.push(EditPage, { id: id})
+    this.navCtrl.push(EditPage, { id: id })
   }
 
-  goToCreate(){
+  goToCreate() {
     this.navCtrl.push(CreatePage);
   }
 

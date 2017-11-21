@@ -28,11 +28,11 @@ export interface IAssistance {
 export interface IResponse<T> {
     success: boolean;
     error: string;
-    data: T[];
+    data: T;
 }
 
 export interface ISimpleAlertOptions {
     title: string;
     subTitle: string;
-    buttons: string[];
+    buttons?: string[];
 }
