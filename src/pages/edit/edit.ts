@@ -1,8 +1,8 @@
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
 import { ISimpleAlertOptions, IStudent } from './../../common/interface';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import{handleError} from './../../common/handleError';
+import { handleError } from './../../common/handleError';
 
 /**
  * Generated class for the EditPage page.
@@ -16,37 +16,43 @@ import{handleError} from './../../common/handleError';
   selector: 'page-edit',
   templateUrl: 'edit.html',
 })
-export class EditPage {
+export class EditPage implements OnInit {
 
   constructor(public db: AmaranthusDBProvider, public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams) {
-
   }
   // HTML controls
   picture: string;
-  gender: string = 'male';
-  isActive: boolean = false;
+  gender: string;
+  isActive: boolean;
 
   // HTML values
-  student: IStudent = {
-    id: '',
-    firstName: '',
-    initial: '',
-    lastName: '',
-    address: '',
-    phoneNumber: '',
-    town: '',
-    state: '',
-    fatherFirstName: '',
-    fatherLastName: '',
-    motherFirstName: '',
-    motherLastName: '',
-    emergencyContactName: '',
-    emergencyContactPhoneNumber: '',
-    emergencyRelationship: '',
-    picture: '',
-    gender: '',
-    isActive: false
-  };
+  student: IStudent;
+
+  ngOnInit() {
+    this.student = {
+      id: '',
+      firstName: '',
+      initial: '',
+      lastName: '',
+      address: '',
+      phoneNumber: '',
+      town: '',
+      state: '',
+      fatherFirstName: '',
+      fatherLastName: '',
+      motherFirstName: '',
+      motherLastName: '',
+      emergencyContactName: '',
+      emergencyContactPhoneNumber: '',
+      emergencyRelationship: '',
+      picture: '',
+      gender: '',
+      isActive: false
+    };
+    this.picture = "";
+    this.gender = 'male';
+    this.isActive = false;
+  }
 
   ionViewDidLoad() {
     this.student = { ...this.student, id: this.navParams.get('id') };
@@ -59,7 +65,15 @@ export class EditPage {
       })
       .catch(error => handleError(error))
   }
-  
+
+  validatePhoneNumber(phoneNumber) {
+    if (phoneNumber.length > 10) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   deleteStudent(opts: IStudent) {
     const options: ISimpleAlertOptions = {
       title: 'Success!',
@@ -113,12 +127,42 @@ export class EditPage {
       !opts.motherFirstName ||
       !opts.motherLastName ||
       !opts.emergencyContactName ||
-      !opts.emergencyContactPhoneNumber
+      !opts.emergencyContactPhoneNumber ||
+      opts.phoneNumber.length < 11 ||
+      opts.emergencyContactPhoneNumber.length < 11
     ) {
-      options.title = 'Warning!';
-      options.subTitle = 'Some fields doesn\'t have the required info';
-      options.buttons = [...['OK']]
-      this.showSimpleAlert(options);
+      const phoneNumber = opts.phoneNumber
+        .split('')
+        .map(phoneNumber => {
+          if (phoneNumber != '-') {
+            return phoneNumber;
+          }
+        })
+        .join('');
+      const emergencyContactPhoneNumber = opts.emergencyContactPhoneNumber
+        .split('')
+        .map(phoneNumber => {
+          if (phoneNumber != '-') {
+            return phoneNumber;
+          }
+        })
+        .join('');
+      if (phoneNumber.length < 10 && phoneNumber.length > 1) {
+        options.title = 'Warning!';
+        options.subTitle = 'Phone numbers have to be a 10 digit number.';
+        options.buttons = [...['OK']]
+        this.showSimpleAlert(options);
+      } else if (emergencyContactPhoneNumber.length < 10 && emergencyContactPhoneNumber.length > 1) {
+        options.title = 'Warning!';
+        options.subTitle = 'Emergency contact phone numbers have to be a 10 digit number.';
+        options.buttons = [...['OK']]
+        this.showSimpleAlert(options);
+      } else {
+        options.title = 'Warning!';
+        options.subTitle = 'Some fields doesn\'t have the required info';
+        options.buttons = [...['OK']]
+        this.showSimpleAlert(options);
+      }
     } else {
       const picture = this.validatePicture({ gender: this.gender, picture: this.picture })
       const student = {

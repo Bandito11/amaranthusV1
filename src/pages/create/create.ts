@@ -1,6 +1,6 @@
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
 import { IStudent, ISimpleAlertOptions } from './../../common/interface';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
 
@@ -13,9 +13,9 @@ import { handleError } from './../../common/handleError';
 @IonicPage()
 @Component({
   selector: 'page-create',
-  templateUrl: 'create.html',
+  templateUrl: 'create.html'
 })
-export class CreatePage {
+export class CreatePage implements OnInit {
 
   constructor(private alertCtrl: AlertController, private navCtrl: NavController, private db: AmaranthusDBProvider) {
   }
@@ -26,22 +26,33 @@ export class CreatePage {
    * @type {string}
    * @memberof CreatePage
    */
-  gender: string = 'male';
-  picture: string = '';
+  gender: string;
+  picture: string;
+  phoneNumber: string;
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreatePage');
   }
 
-  /**
-   * Find a picture from the native gallery
-   * 
-   * @memberof CreatePage
-   */
+  ngOnInit() {
+    this.gender = 'male';
+    this.picture = '';
+    this.phoneNumber = '';
+
+  }
+  // TODO: Implement a gallery menu to look for a picture.
   browsePicture() {
-    // TODO: Implement a gallery menu to look for a picture. 
     this.picture = './assets/profilePics/MyPicture.jpg'
   }
+
+  validatePhoneNumber(phoneNumber) {
+    if (phoneNumber.length > 10) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   createStudent(opts: IStudent) {
     let options: ISimpleAlertOptions = { title: '', subTitle: '', buttons: [] }
     if (
@@ -56,12 +67,42 @@ export class CreatePage {
       !opts.motherFirstName ||
       !opts.motherLastName ||
       !opts.emergencyContactName ||
-      !opts.emergencyContactPhoneNumber
+      !opts.emergencyContactPhoneNumber ||
+      opts.phoneNumber.length < 11 ||
+      opts.emergencyContactPhoneNumber.length < 11
     ) {
-      options.title = 'Warning!';
-      options.subTitle = 'Some fields doesn\'t have the required info';
-      options.buttons = [...['OK']]
-      this.showSimpleAlert(options);
+      const phoneNumber = opts.phoneNumber
+        .split('')
+        .map(phoneNumber => {
+          if (phoneNumber != '-') {
+            return phoneNumber;
+          }
+        })
+        .join('');
+      const emergencyContactPhoneNumber = opts.emergencyContactPhoneNumber
+        .split('')
+        .map(phoneNumber => {
+          if (phoneNumber != '-') {
+            return phoneNumber;
+          }
+        })
+        .join('');
+      if (phoneNumber.length < 10 && phoneNumber.length > 1) {
+        options.title = 'Warning!';
+        options.subTitle = 'Phone numbers have to be a 10 digit number.';
+        options.buttons = [...['OK']]
+        this.showSimpleAlert(options);
+      } else if (emergencyContactPhoneNumber.length < 10 && emergencyContactPhoneNumber.length > 1) {
+        options.title = 'Warning!';
+        options.subTitle = 'Emergency contact phone numbers have to be a 10 digit number.';
+        options.buttons = [...['OK']]
+        this.showSimpleAlert(options);
+      } else {
+        options.title = 'Warning!';
+        options.subTitle = 'Some fields doesn\'t have the required info';
+        options.buttons = [...['OK']]
+        this.showSimpleAlert(options);
+      }
     } else {
       const picture = this.validatePicture({ gender: this.gender, picture: this.picture });
       const student: IStudent = { ...opts, picture: picture, gender: this.gender, isActive: true };

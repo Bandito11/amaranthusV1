@@ -36,3 +36,10 @@ export interface ISimpleAlertOptions {
     subTitle: string;
     buttons?: string[];
 }
+
+export interface IRecords {
+    id:string;
+    name:string;
+    attendance:number;
+    absence:number;
+}

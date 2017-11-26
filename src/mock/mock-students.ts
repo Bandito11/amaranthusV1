@@ -60,7 +60,7 @@ export const STUDENTS = {
     {
       "firstName": "Stephanie",
       "lastName": "Hurlzburt",
-      "id": "L4344",
+      "id": "L4314",
       "phoneNumber": "555-555-5555",
       "motherFirstName": "Raeka",
       "motherLastName": "Hurlzburt",
@@ -78,3 +78,309 @@ export const STUDENTS = {
     }
   ]
 }
+
+
+export const RECORDS = {
+  success: true,
+  error: null,
+  data: {
+    "L4314": {
+      2018: {
+        11: {
+          1: {
+            attendance: false,
+            absence: true
+          },
+          2: {
+            attendance: false,
+            absence: true
+          },
+          3: {
+            attendance: false,
+            absence: true
+          },
+          4: {
+            attendance: true,
+            absence: false
+          },
+          5: {
+            attendance: true,
+            absence: false
+          },
+          6: {
+            attendance: false,
+            absence: true
+          },
+          7: {
+            attendance: true,
+            absence: false
+          },
+          8: {
+            attendance: true,
+            absence: false
+          },
+          9: {
+            attendance: true,
+            absence: false
+          },
+          10: {
+            attendance: true,
+            absence: false
+          },
+          11: {
+            attendance: true,
+            absence: false
+          },
+          12: {
+            attendance: true,
+            absence: false
+          },
+          13: {
+            attendance: true,
+            absence: false
+          },
+          14: {
+            attendance: true,
+            absence: false
+          },
+          15: {
+            attendance: true,
+            absence: false
+          },
+          16: {
+            attendance: true,
+            absence: false
+          },
+          17: {
+            attendance: true,
+            absence: false
+          },
+          18: {
+            attendance: true,
+            absence: false
+          },
+          19: {
+            attendance: true,
+            absence: false
+          },
+          20: {
+            attendance: false,
+            absence: true
+          },
+          21: {
+            attendance: false,
+            absence: true
+          },
+          22: {
+            attendance: false,
+            absence: true
+          }
+        }
+      }
+    },
+    "L1234": {
+      2017: {
+        11: {
+          1: {
+            attendance: true,
+            absence: false
+          },
+          2: {
+            attendance: true,
+            absence: false
+          },
+          3: {
+            attendance: true,
+            absence: false
+          },
+          4: {
+            attendance: true,
+            absence: false
+          },
+          5: {
+            attendance: true,
+            absence: false
+          },
+          6: {
+            attendance: false,
+            absence: true
+          },
+          7: {
+            attendance: true,
+            absence: false
+          },
+          8: {
+            attendance: true,
+            absence: false
+          },
+          9: {
+            attendance: true,
+            absence: false
+          },
+          10: {
+            attendance: true,
+            absence: false
+          },
+          11: {
+            attendance: true,
+            absence: false
+          },
+          12: {
+            attendance: true,
+            absence: false
+          },
+          13: {
+            attendance: true,
+            absence: false
+          },
+          14: {
+            attendance: true,
+            absence: false
+          },
+          15: {
+            attendance: true,
+            absence: false
+          },
+          16: {
+            attendance: true,
+            absence: false
+          },
+          17: {
+            attendance: true,
+            absence: false
+          },
+          18: {
+            attendance: true,
+            absence: false
+          },
+          19: {
+            attendance: true,
+            absence: false
+          },
+          20: {
+            attendance: false,
+            absence: true
+          },
+          21: {
+            attendance: false,
+            absence: true
+          },
+          22: {
+            attendance: false,
+            absence: true
+          }
+        }
+      }
+    },
+    "L4321": {
+      2017: {
+        11: {
+          1: {
+            attendance: true,
+            absence: false
+          },
+          2: {
+            attendance: false,
+            absence: true
+          },
+          3: {
+            attendance: true,
+            absence: false
+          },
+          4: {
+            attendance: true,
+            absence: false
+          },
+          5: {
+            attendance: true,
+            absence: false
+          },
+          6: {
+            attendance: false,
+            absence: true
+          },
+          7: {
+            attendance: true,
+            absence: false
+          },
+          8: {
+            attendance: true,
+            absence: false
+          },
+          9: {
+            attendance: true,
+            absence: false
+          },
+          10: {
+            attendance: true,
+            absence: false
+          },
+          11: {
+            attendance: true,
+            absence: false
+          },
+          12: {
+            attendance: true,
+            absence: false
+          },
+          13: {
+            attendance: true,
+            absence: false
+          },
+          14: {
+            attendance: true,
+            absence: false
+          },
+          15: {
+            attendance: true,
+            absence: false
+          },
+          16: {
+            attendance: true,
+            absence: false
+          },
+          17: {
+            attendance: true,
+            absence: false
+          },
+          18: {
+            attendance: true,
+            absence: false
+          },
+          19: {
+            attendance: true,
+            absence: false
+          },
+          20: {
+            attendance: false,
+            absence: true
+          },
+          21: {
+            attendance: false,
+            absence: true
+          },
+          22: {
+            attendance: false,
+            absence: true
+          }
+        }
+      }
+    }
+  }
+}
+// export const RECORDS = {
+// success:"true",
+// error:"null",
+// data:{
+//   id:{
+//     year:{
+//       month:{
+//         day:{
+//           attendance:"",
+//           absence:""
+//         }
+//       }
+//     }
+//   }
+// }
+// }

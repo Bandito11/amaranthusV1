@@ -23,22 +23,24 @@ export class MainPage implements OnInit {
   constructor(public navCtrl: NavController, public navParams: NavParams, public db: AmaranthusDBProvider) {
   }
 
-  ngOnInit() {
-  }
-
   ionViewDidLoad() {
     this.getStudents();
   }
+  students: IStudent[];
+  private untouchedStudentList: IStudent[];
+  query: string;
+  selectOptions: string[];
 
-  ionViewWillEnter() {
-    this.getStudents();
-  }
-  students: IStudent[] = [];
-  private untouchedStudentList: IStudent[] = [];
-
-  initializeStudentsList() {
+  private initializeStudentsList() {
     this.students = [...this.untouchedStudentList];
   };
+
+  ngOnInit() {
+    this.students = [];
+    this.untouchedStudentList = [];
+    this.selectOptions = ['Id', 'Name', 'None'];
+    this.query = "None";
+  }
 
   searchStudent(event) {
     // TODO: implement query of the list by searchbar value
@@ -46,7 +48,36 @@ export class MainPage implements OnInit {
     query ? this.queryStudentsList(query) : this.initializeStudentsList();
   }
 
-  queryStudentsList(query: string) {
+  queryData(option: string) {
+    switch (option) {
+      case 'Id':
+        this.queryStudentsbyId();
+        break;
+      case 'Name':
+        this.queryStudentsName();
+        break;
+      default:
+        this.students = [...this.untouchedStudentList];
+    }
+  }
+
+  queryStudentsbyId() {
+    this.students = [...this.students.sort((a, b) => {
+      if (a.id < b.id) return -1;
+      if (a.id > b.id) return 1;
+      return 0;
+    })];
+  }
+
+  queryStudentsName() {
+    this.students = [...this.students.sort((a, b) => {
+      if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
+      if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
+      return 0;
+    })];
+  }
+
+  private queryStudentsList(query: string) {
     const students = [...this.untouchedStudentList];
     let fullName = this.getStudentFullName;
     const newQuery = students.filter(student => {
@@ -61,8 +92,8 @@ export class MainPage implements OnInit {
     this.students = [...newQuery];
   }
 
-  getStudents() {
-    this.db.getAllStudents()
+  private getStudents() {
+    this.db.getAllActiveStudents()
       .then(
       response => {
         if (response.success == true) {
@@ -92,12 +123,8 @@ export class MainPage implements OnInit {
   }
 
   addAttendance(studentId) {
-    //  TODO: implement attend event
-    alert('attended ' + studentId)
   }
 
   addAbsence(studentId) {
-    // TODO:  implement absence event
-    alert('absent ' + studentId);
   }
 }

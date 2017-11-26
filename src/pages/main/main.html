@@ -19,6 +19,12 @@
 <ion-content padding>
   <ion-searchbar (ionInput)="searchStudent($event)">
   </ion-searchbar>
+  <ion-item>
+    <ion-label>Query by: </ion-label>
+    <ion-select [(ngModel)]="query" multiple="false" selectSettings="selectOptions">
+      <ion-option  *ngFor="let option of selectOptions" (ionSelect)="queryData(option)">{{option}}</ion-option>
+    </ion-select>
+  </ion-item>
   <ion-list *ngIf="students">
     <ion-item-sliding *ngFor="let student of students">
       <ion-item (click)="goToEdit(student.id)">

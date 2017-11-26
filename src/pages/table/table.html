@@ -7,12 +7,67 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Table</ion-title>
+    <ion-title>Records</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-Table
+  <ion-item>
+    <ion-label>Query by: </ion-label>
+    <ion-select [(ngModel)]="query" multiple="false" selectSettings="selectOptions">
+      <ion-option  *ngFor="let option of selectOptions" (ionSelect)="queryData(option)">{{option}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <div *ngIf="query == 'Date'">
+  <ion-item>
+    <ion-label>Year</ion-label>
+    <ion-select [(ngModel)]="yearQuery" multiple="false" >
+      <ion-option *ngFor="let year of years" value="{{year}}" (ionSelect)="queryDataByYear(year)">{{year}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item >
+    <ion-label>Months: </ion-label>
+    <ion-select [(ngModel)]="monthQuery" multiple="false">
+      <ion-option *ngFor="let month of months; let i = index" value="{{month}}" (ionSelect)="queryDataByMonth(i)">{{month}}</ion-option>
+    </ion-select>
+  </ion-item>
+</div>
+  <table>
+    <caption [ngSwitch]="query">
+      <ng-template ngSwitchWhen="Date">Students attendance in {{months[currentDate.getMonth()]}}, {{currentDate.getFullYear()}}</ng-template>
+      <ng-template ngSwitchDefault>Students attendance in {{monthQuery}}, {{yearQuery}}</ng-template>
+        </caption>
+    <!-- <caption *ngIf="query != 'Date'">Students attendance in {{months[currentDate.getMonth()]}}, {{currentDate.getFullYear()}}</caption>
+    <caption *ngIf="query == 'Date'">Students attendance in {{monthQuery}}, {{yearQuery}}</caption>     -->
+    <tr>
+      <th>
+        Id
+      </th>
+      <th>
+        Name
+      </th>
+      <th>
+        Attendance
+      </th>
+      <th>
+        Absence
+      </th>
+    </tr>
+    <tr *ngFor="let student of students">
+      <td>
+        {{student.id}}
+      </td>
+      <td>
+        {{student.name}}
+      </td>
+      <td>
+        {{student.attendance}}
+      </td>
+      <td>
+        {{student.absence}}
+      </td>
+    </tr>
+  </table>
 </ion-content>
