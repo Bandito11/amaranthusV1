@@ -1,13 +1,10 @@
 import { STUDENTS, RECORDS } from './../../mock/mock-students';
 import { IStudent, IResponse, IRecords } from './../../common/interface';
 import { Injectable } from '@angular/core';
+import * as Loki from 'lokijs';
+import { IonicStorageAdapter } from './../../common/adapter';
 
-/*
-  Generated class for the AmaranthusDbProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class AmaranthusDBProvider {
 
@@ -15,22 +12,171 @@ export class AmaranthusDBProvider {
     this.createDB();
   }
 
-  /**
-   * Will get Students from DB
-   * Will only return firstName, lastName and studentId
-   * @returns {Observable<IResponse<IStudent>>} 
-   * @memberof AmaranthusDBProvider
-   */
+  oldStudentsData: IResponse<IStudent[]>;
+  oldRecordsData: IResponse<IRecords[]>;
+  db: Loki;
+  students: LokiCollection<{}>;
+  records: LokiCollection<{}>;
 
-  students: IResponse<IStudent[]>;
-  records: IResponse<any>;
+  createDB() {
+    const ldbAdapter = new IonicStorageAdapter();
+    const dbOptions: LokiConfigureOptions = {
+      autosave: true,
+      autoload: true,
+      adapter: ldbAdapter
+    }
+    this.db = new Loki('amaranthus.db', dbOptions);
+    this.students = this.db.addCollection('students');
+    this.records = this.db.addCollection('records');
+    ///// Only for dev Purposes ///////
+    this.oldStudentsData = { ...STUDENTS };
+    this.oldRecordsData = { ...RECORDS };
+    this.devInsertStudentsIntoDb();
+    this.devInsertRecordsIntoDb();
+    ////////////////////////////////////
+  }
 
-  // query by isActive
-  getAllActiveStudents(): Promise<IResponse<IStudent[]>> {
+  saveDatabase() {
+    this.db.saveDatabase();
+  }
+
+  // Only for dev purposes!!!!!!!!!
+  devInsertStudentsIntoDb() {
+    this.oldStudentsData.data.map(student => this.insertStudent(student))
+  }
+  devInsertRecordsIntoDb() {
+    this.oldRecordsData.data.map(record => this.records.insert(record));
+  }
+
+
+  ///////////////////////////
+
+  checkIfUserExists(opts: { id: string }): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      resolve(this.students);
+      try {
+        let results: any = this.students.findOne({
+          'student.id': { '$eq': opts.id }
+        });
+        results ? resolve(true) : resolve(false);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  insertStudent(student: IStudent): Promise<IResponse<null>> {
+    let response: IResponse<any>;
+    return new Promise((resolve, reject) => {
+      this.checkIfUserExists({ id: student.id })
+        .then(value => {
+          try {
+            if (value == false) {
+              this.students.insert({ student });
+              response = { success: true, error: null, data: null };
+            } else {
+              response = { success: false, error: 'User already exists in the database', data: null };
+            }
+            this.saveDatabase();
+            resolve(response);
+          } catch (error) {
+            reject(error);
+          }
+        })
+        .catch(error => reject(error));
+    });
+  }
+
+  addAbsence(opts: { date: Date, id: string }): Promise<IResponse<null>> {
+    return new Promise((resolve, reject) => {
+      this.updateRecord({ ...opts, attendance: false, absence: true })
+        .then(res => resolve(res))
+        .catch(error => reject(error))
     })
   }
+
+  addAttendance(opts: { date: Date, id: string }): Promise<IResponse<null>> {
+    return new Promise((resolve, reject) => {
+      this.updateRecord({ ...opts, attendance: true, absence: false })
+        .then(res => resolve(res))
+        .catch(error => reject(error))
+    });
+  }
+
+  updateRecord(opts: { attendance: boolean, absence: boolean, date: Date, id: string }): Promise<IResponse<null>> {
+    return new Promise((resolve, reject) => {
+      try {
+        const record: IRecords = {
+          id: opts.id,
+          month: opts.date.getMonth() + 1,
+          year: opts.date.getFullYear(),
+          day: opts.date.getDate(),
+          attendance: opts.attendance,
+          absence: opts.absence
+        }
+        let results: any = this.records.findOne({
+          'record.id': { '$eq': record.id },
+          'record.month': { '$eq': record.month },
+          'record.year': { '$eq': record.year },
+          'record.day': { '$eq': record.day }
+        });
+        if (results) {
+          results.record = { ...record };
+          this.records.update(results);
+        } else {
+          this.records.insert(record);
+        }
+        this.saveDatabase();
+        resolve({ success: true, error: null, data: null });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  updateStudent(student: IStudent): Promise<IResponse<null>> {
+    return new Promise((resolve, reject) => {
+      try {
+        let results: any = this.students.findOne({
+          'student.id': { '$eq': student.id }
+        });
+        results.student = { ...student };
+        this.students.update(results);
+        this.saveDatabase();
+        resolve({ success: true, error: null, data: null })
+      } catch (error) {
+        reject(error)
+      }
+    });
+  }
+
+  deleteStudent(student: IStudent): Promise<IResponse<null>> {
+    return new Promise((resolve, reject) => {
+      try {
+        let results: any = this.students.findOne({
+          'student.id': { '$eq': student.id }
+        });
+        this.students.remove(results);
+        this.saveDatabase();
+        resolve({ success: true, error: null, data: null })
+      } catch (error) {
+        reject(error)
+      }
+    });
+  }
+
+  getStudentById(student: IStudent): Promise<IResponse<any>> {
+    return new Promise((resolve, reject) => {
+      try {
+        const results: any = this.students.findOne({
+          'student.id': { '$eq': student.id }
+        });
+        const queriedStudent = results.student;
+        resolve({ success: true, error: null, data: queriedStudent });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
 
   getQueriedRecords(opts: { query: string, date?: { year: number, month: number } }): Promise<IResponse<IRecords[]>> {
     let response: IResponse<any> = { success: true, error: null, data: null };
@@ -53,175 +199,81 @@ export class AmaranthusDBProvider {
     });
   }
 
+  getAllStudentsRecords(opts: { year: number, month: number }): Promise<IResponse<any>> {
+    let response: IResponse<any> = { success: true, error: null, data: [] };
+    let attendance: number;
+    let absence: number;
+    return new Promise((resolve, reject) => {
+      try {
+        const students = this.students.find({
+          'student.isActive': { '$eq': true }
+        });
+        students.map((data: any) => {
+          attendance = 0;
+          absence = 0;
+          const records = this.records.find({
+            'id': { '$eq': data.student.id },
+            'year': { '$eq': opts.year },
+            'month': { '$eq': opts.month }
+          });
+          if (records) {
+            records.map((record: IRecords) => {
+              if (record.attendance == true) {
+                attendance++;
+              }
+              if (record.absence == true) {
+                absence++;
+              }
+            });
+            response = {
+              ...response,
+              data: [...response.data, {
+                id: data.student.id,
+                name: `${data.student.firstName} ${data.student.lastName}`,
+                attendance: attendance,
+                absence: absence
+              }]
+            };
+          };
+        });
+        resolve(response);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  // query by isActive
+  getAllActiveStudents(): Promise<IResponse<any>> {
+    return new Promise((resolve, reject) => {
+      try {
+        const results = this.students.find({ 'student.isActive': { '$eq': true } });
+        resolve({ success: true, error: null, data: results });
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  // query by isActive
+  getAllStudents(): Promise<IResponse<any>> {
+    return new Promise((resolve, reject) => {
+      try {
+        const results = this.students.find({});
+        resolve({ success: true, error: null, data: results });
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
   getQueriedRecordsByDate(opts: { year: number, month: number }): Promise<IResponse<IRecords[]>> {
-    const response: IResponse<any> = { success: true, error: null, data: [] };
-    let attendance;
-    let absence;
     return new Promise((resolve, reject) => {
-      this.students.data.map(student => {
-        attendance = 0;
-        absence = 0;
-        try {
-          if (this.records.data[student.id]) {
-            // for (const year in this.records.data[student.id]) {
-            // for (let j = 0; j < 12; j++) { // <= months
-            if (this.records.data[student.id][opts.year][opts.month]) {
-              // for (const month in this.records.data[student.id][opts.year][j + 1]) {
-              for (let i = 1; i < 31; i++) {
-                if (this.records.data[student.id][opts.year][opts.month]) {
-                  if (this.records.data[student.id][opts.year][opts.month][i]) {
-                    if (this.records.data[student.id][opts.year][opts.month][i].attendance) {
-                      attendance++;
-                    }
-                    if (this.records.data[student.id][opts.year][opts.month][i].absence) {
-                      absence++;
-                    }
-                  }
-                }
-                // }
-                //   }
-                // }
-              }
-            };
-            response.data = [...response.data, {
-              id: student.id,
-              name: `${student.firstName} ${student.lastName}`,
-              attendance: attendance,
-              absence: absence
-            }]
-          }
-        } catch (error) {
-
-        }
-
-      });
-      resolve(response);
-    });
-  }
-  getAllStudentsRecords(opts: { year: number, month: number }): Promise<IResponse<IRecords[]>> {
-    const response: IResponse<any> = { success: true, error: null, data: [] };
-    let attendance;
-    let absence;
-    return new Promise((resolve, reject) => {
-      this.students.data.map(student => {
-        attendance = 0;
-        absence = 0;
-        try {
-          if (this.records.data[student.id]) {
-            // for (const year in this.records.data[student.id]) {
-            // for (let j = 0; j < 12; j++) { // <= months
-            if (this.records.data[student.id][opts.year][opts.month]) {
-              // for (const month in this.records.data[student.id][opts.year][j + 1]) {
-              for (let i = 1; i < 31; i++) {
-                if (this.records.data[student.id][opts.year][opts.month]) {
-                  if (this.records.data[student.id][opts.year][opts.month][i]) {
-                    if (this.records.data[student.id][opts.year][opts.month][i].attendance) {
-                      attendance++;
-                    }
-                    if (this.records.data[student.id][opts.year][opts.month][i].absence) {
-                      absence++;
-                    }
-                  }
-                }
-                // }
-                //   }
-                // }
-              }
-            };
-            response.data = [...response.data, {
-              id: student.id,
-              name: `${student.firstName} ${student.lastName}`,
-              attendance: attendance,
-              absence: absence
-            }]
-          }
-
-        } catch (error) {
-
-        }
-      });
-      resolve(response);
-    });
-  }
-  getQueryStudentsByAttendance(): Promise<IResponse<IRecords[]>> {
-    return new Promise((resolve, reject) => {
-
-    })
-  }
-  getQueryStudentsByAbsence(): Promise<IResponse<IRecords[]>> {
-    return new Promise((resolve, reject) => {
-
-    })
-  }
-  getQueryStudentsByYear(): Promise<IResponse<IRecords[]>> {
-    return new Promise((resolve, reject) => {
-
-    })
-  }
-  getQueryStudentsByName(): Promise<IResponse<IRecords[]>> {
-    return new Promise((resolve, reject) => {
-
-    })
-  }
-  getQueryStudentsByMonth(): Promise<IResponse<IRecords[]>> {
-    return new Promise((resolve, reject) => {
-
-    })
-  }
-
-
-  handleError(error) {
-    console.error(error);
-    return { error: error, success: false, data: null };
-  }
-
-  createDB() {
-    this.students = { ...STUDENTS };
-    this.records = { ...RECORDS };
-  }
-
-  insertStudent(student: IStudent): Promise<IResponse<null>> {
-    return new Promise((resolve, reject) => {
-      this.students = { ...STUDENTS, data: [...this.students.data, student] };
-      resolve({ success: true, error: null, data: null })
+      this.getAllStudentsRecords(opts)
+        .then(res => resolve(res))
+        .catch(error => reject(error))
     });
   }
 
-  updateStudent(student: IStudent): Promise<IResponse<null>> {
-    return new Promise((resolve, reject) => {
-      const queriedStudents = [...this.students.data.map(query => {
-        if (query.id == student.id) {
-          return student;
-        } else {
-          return query;
-        }
-      })];
-      this.students = { ...STUDENTS, data: [...queriedStudents] };;
-      resolve({ success: true, error: null, data: null })
-    })
-  }
-  getStudentById(student: IStudent): Promise<IResponse<IStudent>> {
-    return new Promise((resolve, reject) => {
-      this.students.data.filter(query => {
-        if (student.id == query.id) {
-          const queriedStudent = {
-            error: null,
-            success: true,
-            data: { ...query }
-          }
-          resolve(queriedStudent);
-        }
-      });
-    });
-  }
-  deleteStudent(student: IStudent): Promise<IResponse<null>> {
-    return new Promise((resolve, reject) => {
-      this.students.data = [...this.students.data.filter(query => {
-        if (query.id != student.id) {
-          return query;
-        }
-      })];
-      resolve({ success: true, error: null, data: null })
-    });
-  }
+
 }

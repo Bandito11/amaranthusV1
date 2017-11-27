@@ -31,7 +31,6 @@ export class CreatePage implements OnInit {
   phoneNumber: string;
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CreatePage');
   }
 
   ngOnInit() {
@@ -46,7 +45,7 @@ export class CreatePage implements OnInit {
   }
 
   validatePhoneNumber(phoneNumber) {
-    if (phoneNumber.length > 10) {
+    if (phoneNumber.length >= 10 && phoneNumber.length < 11) {
       return false;
     } else {
       return true;
@@ -68,8 +67,8 @@ export class CreatePage implements OnInit {
       !opts.motherLastName ||
       !opts.emergencyContactName ||
       !opts.emergencyContactPhoneNumber ||
-      opts.phoneNumber.length < 11 ||
-      opts.emergencyContactPhoneNumber.length < 11
+      opts.phoneNumber.length < 10 ||
+      opts.emergencyContactPhoneNumber.length < 10
     ) {
       const phoneNumber = opts.phoneNumber
         .split('')
@@ -87,12 +86,12 @@ export class CreatePage implements OnInit {
           }
         })
         .join('');
-      if (phoneNumber.length < 10 && phoneNumber.length > 1) {
+      if (phoneNumber.length < 10 && phoneNumber.length > 0) {
         options.title = 'Warning!';
         options.subTitle = 'Phone numbers have to be a 10 digit number.';
         options.buttons = [...['OK']]
         this.showSimpleAlert(options);
-      } else if (emergencyContactPhoneNumber.length < 10 && emergencyContactPhoneNumber.length > 1) {
+      } else if (emergencyContactPhoneNumber.length < 10 && emergencyContactPhoneNumber.length > 0) {
         options.title = 'Warning!';
         options.subTitle = 'Emergency contact phone numbers have to be a 10 digit number.';
         options.buttons = [...['OK']]
@@ -130,14 +129,15 @@ export class CreatePage implements OnInit {
                       this.showAdvancedAlert(options);
                     });
                   } else {
-                    handleError(response.error);
                     options = {
                       title: 'Error',
-                      subTitle: 'There was an error trying to create the record. Please try again.'
+                      subTitle: response.error
                     }
                     navTransition.then(() => this.showAdvancedAlert(options));
                   }
-                });
+                })
+                .catch(error => handleError(error));
+              ;
               return false;
             }
           }

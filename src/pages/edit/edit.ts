@@ -4,12 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
 
-/**
- * Generated class for the EditPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -67,7 +61,7 @@ export class EditPage implements OnInit {
   }
 
   validatePhoneNumber(phoneNumber) {
-    if (phoneNumber.length > 10) {
+    if (phoneNumber.length >= 10 && phoneNumber.length < 11) {
       return false;
     } else {
       return true;
@@ -114,7 +108,7 @@ export class EditPage implements OnInit {
   }
 
   editStudent(opts: IStudent) {
-    let options: ISimpleAlertOptions = { title: '', subTitle: '', buttons: [] };
+    let options: ISimpleAlertOptions = { title: '', subTitle: '', buttons: [] }
     if (
       !opts.firstName ||
       !opts.lastName ||
@@ -128,8 +122,8 @@ export class EditPage implements OnInit {
       !opts.motherLastName ||
       !opts.emergencyContactName ||
       !opts.emergencyContactPhoneNumber ||
-      opts.phoneNumber.length < 11 ||
-      opts.emergencyContactPhoneNumber.length < 11
+      opts.phoneNumber.length < 10 ||
+      opts.emergencyContactPhoneNumber.length < 10
     ) {
       const phoneNumber = opts.phoneNumber
         .split('')
@@ -147,12 +141,12 @@ export class EditPage implements OnInit {
           }
         })
         .join('');
-      if (phoneNumber.length < 10 && phoneNumber.length > 1) {
+      if (phoneNumber.length < 10 && phoneNumber.length > 0) {
         options.title = 'Warning!';
         options.subTitle = 'Phone numbers have to be a 10 digit number.';
         options.buttons = [...['OK']]
         this.showSimpleAlert(options);
-      } else if (emergencyContactPhoneNumber.length < 10 && emergencyContactPhoneNumber.length > 1) {
+      } else if (emergencyContactPhoneNumber.length < 10 && emergencyContactPhoneNumber.length > 0) {
         options.title = 'Warning!';
         options.subTitle = 'Emergency contact phone numbers have to be a 10 digit number.';
         options.buttons = [...['OK']]
@@ -261,7 +255,7 @@ export class EditPage implements OnInit {
             // begin the alert's dismiss transition
             alert.dismiss()
               .then(() => {
-                this.navCtrl.pop();
+                this.navCtrl.popToRoot();
               });
             return false;
           }

@@ -39,7 +39,10 @@ export interface ISimpleAlertOptions {
 
 export interface IRecords {
     id:string;
-    name:string;
-    attendance:number;
-    absence:number;
+    attendance:boolean;
+    absence:boolean;
+    year: number;
+    month:number;
+    day:number;
+    name?: string;
 }

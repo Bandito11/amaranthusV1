@@ -1,12 +1,13 @@
-import { StudentProfilePage } from './../student-profile/student-profile';
-import { CreatePage } from './../create/create';
-import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { handleError } from './../../common/handleError';
+import { handleError } from '../../common/handleError';
+import { StudentProfilePage } from '../student-profile/student-profile';
+import { CreatePage } from '../create/create';
+import { ISimpleAlertOptions } from '../../common/interface';
+import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 
 /**
- * Generated class for the MainPage page.
+ * Generated class for the StudentListPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -14,10 +15,10 @@ import { handleError } from './../../common/handleError';
 
 @IonicPage()
 @Component({
-  selector: 'page-main',
-  templateUrl: 'main.html',
+  selector: 'page-student-list',
+  templateUrl: 'student-list.html',
 })
-export class MainPage implements OnInit {
+export class StudentListPage implements OnInit {
 
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public db: AmaranthusDBProvider) {
   }
@@ -27,12 +28,12 @@ export class MainPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    this.query = "None";    
+    this.query = "None";
     this.getStudents();
   }
 
-  students:any[];
-  private untouchedStudentList:any[];
+  students: any[];
+  private untouchedStudentList: any[];
   query: string;
   selectOptions: string[];
 
@@ -43,7 +44,7 @@ export class MainPage implements OnInit {
   ngOnInit() {
     this.students = [];
     this.untouchedStudentList = [];
-    this.selectOptions = ['Id', 'Name', 'None'];
+    this.selectOptions = ['Id', 'Name', 'Active', 'Not Active', 'None'];
     this.query = "None";
   }
 
@@ -61,8 +62,28 @@ export class MainPage implements OnInit {
       case 'Name':
         this.queryStudentsName();
         break;
+      case 'Active':
+      case 'Not Active':
+        this.queryByIsActive(option);
+        break;
       default:
         this.students = [...this.untouchedStudentList];
+    }
+  }
+
+  queryByIsActive(query: string) {
+    if (query == 'Active') {
+      this.students = [...this.students.sort((a, b) => {
+        if (a.student.isActive == true) return -1;
+        if (a.student.isActive == false) return 1;
+        return 0;
+      })];
+    } else {
+      this.students = [...this.students.sort((a, b) => {
+        if (a.student.isActive == false) return -1;
+        if (a.student.isActive == true) return 1;
+        return 0;
+      })];
     }
   }
 
@@ -84,7 +105,7 @@ export class MainPage implements OnInit {
 
   private queryStudentsList(query: string) {
     const students = [...this.untouchedStudentList];
-    let fullName:string;
+    let fullName: string;
     const newQuery = students.filter(data => {
       fullName = `${data.student.firstName} ${data.student.lastName}`.toLowerCase();
       if (data.student.id == query ||
@@ -99,7 +120,7 @@ export class MainPage implements OnInit {
   }
 
   private getStudents() {
-    this.db.getAllActiveStudents()
+    this.db.getAllStudents()
       .then(
       response => {
         if (response.success == true) {
@@ -116,7 +137,7 @@ export class MainPage implements OnInit {
   }
 
 
-  goToStudentProfile(id:string){
+  goToStudentProfile(id: string) {
     this.navCtrl.push(StudentProfilePage, { id: id })
   }
 

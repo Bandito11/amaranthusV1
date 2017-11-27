@@ -1,0 +1,39 @@
+
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Profile</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="goToEdit(student.id)">
+        Edit
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card>
+    <img src="{{picture}}" />
+    <ion-card-content>
+      <h1>{{student.firstName}} <span *ngIf="student.initial">{{student.initial}}</span> {{student.lastName}}</h1>
+      <h2><span>ID: </span>{{student.id}}</h2>
+      <p><span>Address: </span>{{student.address}}</p>
+      <p *ngIf="student.phoneNumber"><span>Phone Number: </span>{{student.phoneNumber}}</p>
+      <p><span>Town: </span>{{student.town}}</p>
+      <p><span>State: </span>{{student.state}}</p>
+      <p><span>Gender: </span>{{student.gender}}</p>
+      <p><span>Father's Name: </span>{{student.fatherFirstName}} {{student.fatherLastName}}</p>
+      <p><span>Mother's Name: </span>{{student.motherFirstName}} {{student.motherLastName}}</p>
+      <p><span>Emergency Contact's Name: </span>{{student.emergencyContactName}}</p>
+      <p><span>Emergency Contact's Relationship: </span>{{student.emergencyRelationship}}</p>
+      <p><span>Emergency Contact's Phone Number: </span>{{student.emergencyContactPhoneNumber}}</p>
+      <p *ngIf="student.isActive == true">
+          Student is currently active on the roster.
+        </p>
+        <p *ngIf="student.isActive == false">
+          Student is currently inactive on the roster.
+        </p>
+    </ion-card-content>
+  </ion-card>

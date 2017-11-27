@@ -1,8 +1,7 @@
 {
-  "name": "blankApp",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "name": "amaranthus",
+  "version": "0.7.0",
+  "author": "Esteban Morales",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",

@@ -1,3 +1,5 @@
+import { StudentProfilePage } from './../pages/student-profile/student-profile';
+import { StudentListPage } from './../pages/student-list/student-list';
 import { PhoneNumberPipe } from './../common/phonenumber.pipe';
 import { TabsPage } from '../pages/tabs/tabs';
 import { MainPage } from '../pages/main/main';
@@ -12,6 +14,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { AmaranthusDBProvider } from '../providers/amaranthus-db/amaranthus-db';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -20,7 +23,9 @@ import { AmaranthusDBProvider } from '../providers/amaranthus-db/amaranthus-db';
     TablePage,
     EditPage,
     CreatePage,
-    PhoneNumberPipe
+    PhoneNumberPipe,
+    StudentProfilePage,
+    StudentListPage
     ],
   imports: [
     BrowserModule,
@@ -34,7 +39,9 @@ import { AmaranthusDBProvider } from '../providers/amaranthus-db/amaranthus-db';
     MainPage,
     TablePage,
     EditPage,
-    CreatePage
+    CreatePage,
+    StudentProfilePage,
+    StudentListPage
   ],
   providers: [
     StatusBar,

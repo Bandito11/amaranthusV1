@@ -1,4 +1,3 @@
-import { IRecords } from './../../common/interface';
 import { monthsLabels, yearLabels } from './../../common/labels';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
@@ -22,8 +21,8 @@ export class TablePage implements OnInit {
   constructor(public navCtrl: NavController, public navParams: NavParams, public db: AmaranthusDBProvider) {
   }
 
-  students: IRecords[];
-  private untouchedStudentList: IRecords[];
+  students;
+  private untouchedStudentList;
   query: string;
   monthQuery: string;
   months: string[];
@@ -44,11 +43,21 @@ export class TablePage implements OnInit {
     this.selectOptions = ['Id', 'Attendance', 'Absence', 'Date', 'Name', 'None'];
   }
 
+  ionViewWillEnter() {
+    this.query = "None";
+    this.getStudentsRecords();
+  }
+
   ionViewDidLoad() {
-    this.getStudents();
+    this.getStudentsRecords();
+  }
+  
+  initializeStudents() {
+    this.students = [...this.untouchedStudentList];
   }
 
   queryData(option: string) {
+    this.initializeStudents();
     switch (option) {
       case 'Id':
         this.queryStudentsbyId();
@@ -62,8 +71,11 @@ export class TablePage implements OnInit {
       case 'Name':
         this.queryStudentsName();
         break;
+      case 'Date':
+        this.queryDataByYear(new Date().getFullYear());
+        break;
       default:
-        this.students = [...this.untouchedStudentList];
+        this.initializeStudents();
     }
   }
 
@@ -71,14 +83,14 @@ export class TablePage implements OnInit {
     const date = {
       year: +year,
       month: this.months.indexOf(this.monthQuery) + 1
-    };console.log(date)
+    }; 
     this.db.getQueriedRecordsByDate(date)
       .then(response => {
         if (response.success == true) {
           this.students = [...response.data];
         }
       })
-      .catch(error => this.handleError(error));
+      .catch(error => handleError(error));
   }
 
   queryDataByMonth(index: number) {
@@ -100,9 +112,10 @@ export class TablePage implements OnInit {
           this.students = [...response.data];
         }
       })
-      .catch(error => this.handleError(error));
+      .catch(error => handleError(error));
   }
-  getStudents() {
+
+  getStudentsRecords() {
     // Will get all Students queried by today's date.
     this.db.getQueriedRecords({ query: this.query })
       .then(
@@ -150,8 +163,5 @@ export class TablePage implements OnInit {
       if (a.id > b.id) return 1;
       return 0;
     })];
-  }
-  handleError(error) {
-    console.error(error);
   }
 }
