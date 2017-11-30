@@ -4,6 +4,7 @@ import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
+import { ISimpleAlertOptions } from '../../common/interface';
 
 /**
  * Generated class for the MainPage page.
@@ -19,20 +20,24 @@ import { handleError } from './../../common/handleError';
 })
 export class MainPage implements OnInit {
 
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public db: AmaranthusDBProvider) {
-  }
+  constructor(
+    public alertCtrl: AlertController,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public db: AmaranthusDBProvider
+  ) { }
 
   ionViewDidLoad() {
     this.getStudents();
   }
 
   ionViewDidEnter() {
-    this.query = "None";    
+    this.query = "None";
     this.getStudents();
   }
 
-  students:any[];
-  private untouchedStudentList:any[];
+  students: any[];
+  private untouchedStudentList: any[];
   query: string;
   selectOptions: string[];
 
@@ -68,31 +73,31 @@ export class MainPage implements OnInit {
 
   queryStudentsbyId() {
     this.students = [...this.students.sort((a, b) => {
-      if (a.student.id < b.student.id) return -1;
-      if (a.student.id > b.student.id) return 1;
+      if (a.id < b.id) return -1;
+      if (a.id > b.id) return 1;
       return 0;
     })];
   }
 
   queryStudentsName() {
     this.students = [...this.students.sort((a, b) => {
-      if (a.student.firstName.toLowerCase() < b.student.firstName.toLowerCase()) return -1;
-      if (a.student.firstName.toLowerCase() > b.student.firstName.toLowerCase()) return 1;
+      if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
+      if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
       return 0;
     })];
   }
 
   private queryStudentsList(query: string) {
     const students = [...this.untouchedStudentList];
-    let fullName:string;
-    const newQuery = students.filter(data => {
-      fullName = `${data.student.firstName} ${data.student.lastName}`.toLowerCase();
-      if (data.student.id == query ||
-        data.student.firstName.toLowerCase() == query.toLowerCase() ||
-        data.student.lastName.toLowerCase() == query.toLowerCase() ||
+    let fullName: string;
+    const newQuery = students.filter(student => {
+      fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
+      if (student.id == query ||
+        student.firstName.toLowerCase() == query.toLowerCase() ||
+        student.lastName.toLowerCase() == query.toLowerCase() ||
         fullName == query.toLowerCase()
       ) {
-        return data;
+        return student;
       }
     });
     this.students = [...newQuery];
@@ -116,7 +121,7 @@ export class MainPage implements OnInit {
   }
 
 
-  goToStudentProfile(id:string){
+  goToStudentProfile(id: string) {
     this.navCtrl.push(StudentProfilePage, { id: id })
   }
 

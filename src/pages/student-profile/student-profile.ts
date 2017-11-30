@@ -1,6 +1,6 @@
 import { EditPage } from './../edit/edit';
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
-import {  IStudent } from './../../common/interface';
+import { IStudent } from './../../common/interface';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
@@ -13,8 +13,12 @@ import { handleError } from './../../common/handleError';
 })
 export class StudentProfilePage implements OnInit {
 
-  constructor(public db: AmaranthusDBProvider, public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams) {
-  }
+  constructor(
+    public db: AmaranthusDBProvider,
+    public alertCtrl: AlertController,
+    public navCtrl: NavController,
+    public navParams: NavParams
+  ) { }
 
 
   goToEdit(id: string) {

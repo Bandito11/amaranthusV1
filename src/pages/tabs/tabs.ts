@@ -24,8 +24,7 @@ import { TablePage } from '../../pages/table/table';
 })
 export class TabsPage {
 
-  constructor() {
-  }
+  constructor() { }
 
   tab1 = MainPage;
   tab2 = TablePage;

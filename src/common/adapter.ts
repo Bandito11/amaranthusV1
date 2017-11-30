@@ -1,7 +1,7 @@
 import { Storage } from '@ionic/storage';
 
 const storage = new Storage({
-    driverOrder: ['sqlite', 'localstorage', 'indexeddb', 'websql']
+    driverOrder: ['sqlite', 'localstorage', 'websql', 'indexeddb']
 });
 /**
  * A loki persistence adapter which persists to web browser's local storage object
@@ -17,7 +17,7 @@ export function IonicStorageAdapter() {
  * @memberof IonicStorageAdapter
  */
 IonicStorageAdapter.prototype.loadDatabase = function loadDatabase(dbname, callback) {
-storage.get(dbname)
+    storage.get(dbname)
         .then(value => {
             callback(value);
         });

@@ -20,7 +20,12 @@ import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-d
 })
 export class StudentListPage implements OnInit {
 
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public db: AmaranthusDBProvider) {
+  constructor(
+    public alertCtrl: AlertController,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public db: AmaranthusDBProvider
+  ) {
   }
 
   ionViewDidLoad() {
@@ -74,14 +79,14 @@ export class StudentListPage implements OnInit {
   queryByIsActive(query: string) {
     if (query == 'Active') {
       this.students = [...this.students.sort((a, b) => {
-        if (a.student.isActive == true) return -1;
-        if (a.student.isActive == false) return 1;
+        if (a.isActive == true) return -1;
+        if (a.isActive == false) return 1;
         return 0;
       })];
     } else {
       this.students = [...this.students.sort((a, b) => {
-        if (a.student.isActive == false) return -1;
-        if (a.student.isActive == true) return 1;
+        if (a.isActive == false) return -1;
+        if (a.isActive == true) return 1;
         return 0;
       })];
     }
@@ -89,16 +94,16 @@ export class StudentListPage implements OnInit {
 
   queryStudentsbyId() {
     this.students = [...this.students.sort((a, b) => {
-      if (a.student.id < b.student.id) return -1;
-      if (a.student.id > b.student.id) return 1;
+      if (a.id < b.id) return -1;
+      if (a.id > b.id) return 1;
       return 0;
     })];
   }
 
   queryStudentsName() {
     this.students = [...this.students.sort((a, b) => {
-      if (a.student.firstName.toLowerCase() < b.student.firstName.toLowerCase()) return -1;
-      if (a.student.firstName.toLowerCase() > b.student.firstName.toLowerCase()) return 1;
+      if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
+      if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
       return 0;
     })];
   }
@@ -106,14 +111,14 @@ export class StudentListPage implements OnInit {
   private queryStudentsList(query: string) {
     const students = [...this.untouchedStudentList];
     let fullName: string;
-    const newQuery = students.filter(data => {
-      fullName = `${data.student.firstName} ${data.student.lastName}`.toLowerCase();
-      if (data.student.id == query ||
-        data.student.firstName.toLowerCase() == query.toLowerCase() ||
-        data.student.lastName.toLowerCase() == query.toLowerCase() ||
+    const newQuery = students.filter(student => {
+      fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
+      if (student.id == query ||
+        student.firstName.toLowerCase() == query.toLowerCase() ||
+        student.lastName.toLowerCase() == query.toLowerCase() ||
         fullName == query.toLowerCase()
       ) {
-        return data;
+        return student;
       }
     });
     this.students = [...newQuery];

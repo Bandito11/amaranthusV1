@@ -13,7 +13,12 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+  <!-- Picture will be taken from gallery or camera.  If the input is empty a default one will
+       be chosen from based by gender. -->
+  <div class="profile-image">
+    <img *ngIf="picture != ''" src="{{picture}}">
+  </div>
   <form #studentForm="ngForm" (ngSubmit)="editStudent({
       firstName: firstName.value,
       initial: initial.value,
@@ -31,12 +36,7 @@
       emergencyRelationship:emergencyRelationship.value,
       emergencyContactPhoneNumber:emergencyContactPhoneNumber.value
     })">
-    <!-- Picture will be taken from gallery or camera.  If the input is empty a default one will
-       be chosen from based by gender. -->
-    <ion-list>
-      <div id="image">
-          <img src="{{picture}}">
-        </div>
+    <ion-item-group>
       <ion-item>
         <ion-label stacked>Picture</ion-label>
         <ion-input type="text" readonly="true" name="picture" [(ngModel)]="picture"></ion-input>
@@ -70,7 +70,7 @@
       <ion-item>
         <ion-label stacked>Phone Number</ion-label>
         <ion-input [value]="student.phoneNumber" type="text" #phoneNumber></ion-input>
-        <ion-icon id="form-icon" item-right name="warning" *ngIf="validatePhoneNumber(phoneNumber.value)"></ion-icon>                
+        <ion-icon id="form-icon" item-right name="warning" *ngIf="validatePhoneNumber(phoneNumber.value)"></ion-icon>
       </ion-item>
       <ion-item>
         <ion-label stacked>Town</ion-label>
@@ -140,7 +140,7 @@
         <ion-checkbox name="isActive" [(ngModel)]='isActive'></ion-checkbox>
       </ion-item>
       <button type="submit" ion-button block color="secondary">Edit</button>
-      <button type="button" ion-button block color="danger" (click)="deleteStudent({id:id.value})">Delete</button>      
-    </ion-list>
+      <button type="button" ion-button block color="danger" (click)="deleteStudent({id:id.value})">Delete</button>
+    </ion-item-group>
   </form>
 </ion-content>

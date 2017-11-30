@@ -1,4 +1,3 @@
-
 <ion-header>
 
   <ion-navbar color="primary">
@@ -13,27 +12,48 @@
 </ion-header>
 
 
-<ion-content padding>
-  <ion-card>
+<ion-content class="profile-content">
+  <div class="profile-image">
     <img src="{{picture}}" />
-    <ion-card-content>
-      <h1>{{student.firstName}} <span *ngIf="student.initial">{{student.initial}}</span> {{student.lastName}}</h1>
-      <h2><span>ID: </span>{{student.id}}</h2>
-      <p><span>Address: </span>{{student.address}}</p>
-      <p *ngIf="student.phoneNumber"><span>Phone Number: </span>{{student.phoneNumber}}</p>
-      <p><span>Town: </span>{{student.town}}</p>
-      <p><span>State: </span>{{student.state}}</p>
-      <p><span>Gender: </span>{{student.gender}}</p>
-      <p><span>Father's Name: </span>{{student.fatherFirstName}} {{student.fatherLastName}}</p>
-      <p><span>Mother's Name: </span>{{student.motherFirstName}} {{student.motherLastName}}</p>
-      <p><span>Emergency Contact's Name: </span>{{student.emergencyContactName}}</p>
-      <p><span>Emergency Contact's Relationship: </span>{{student.emergencyRelationship}}</p>
-      <p><span>Emergency Contact's Phone Number: </span>{{student.emergencyContactPhoneNumber}}</p>
-      <p *ngIf="student.isActive == true">
-          Student is currently active on the roster.
+    <header class="text center header">
+      {{student.firstName}}
+      <span *ngIf="student.initial">{{student.initial}}</span>
+      {{student.lastName}}
+    </header>
+  </div>
+  <div class="text" padding>
+    <div>
+      <p class="text bold id">
+        <span class="text label">ID: </span>{{student.id}}
+      </p>
+      <p class="text bold">
+        <span class="text label">Address: </span>{{student.address}}</p>
+      <p class="text bold" *ngIf="student.phoneNumber">
+        <span class="text label">Phone Number: </span>{{student.phoneNumber}}</p>
+      <p class="text bold">
+        <span class="text label">Town: </span>{{student.town}}</p>
+      <p class="text bold">
+        <span class="text label">State: </span>{{student.state}}</p>
+      <p class="text bold">
+        <span class="text label">Gender: </span>{{student.gender}}</p>
+      <p class="text bold">
+        <span class="text label">Father's Name: </span>{{student.fatherFirstName}} {{student.fatherLastName}}</p>
+      <p class="text bold">
+        <span class="text label">Mother's Name: </span>{{student.motherFirstName}} {{student.motherLastName}}</p>
+      <p class="text bold">
+        <span class="text label">Emergency Contact's Name: </span>{{student.emergencyContactName}}</p>
+      <p class="text bold">
+        <span class="text label">Emergency Contact's Relationship: </span>{{student.emergencyRelationship}}</p>
+      <p class="text bold">
+        <span class="text label">Emergency Contact's Phone Number: </span>{{student.emergencyContactPhoneNumber}}</p>
+      <div class="text center bold">
+        <p *ngIf="student.isActive == true">
+          *Student is currently active on the roster.*
         </p>
         <p *ngIf="student.isActive == false">
-          Student is currently inactive on the roster.
+          *Student is currently inactive on the roster.*
         </p>
-    </ion-card-content>
-  </ion-card>
+      </div>
+    </div>
+  </div>
+</ion-content>

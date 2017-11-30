@@ -21,25 +21,33 @@
     </ion-select>
   </ion-item>
   <ion-list *ngIf="students">
-    <ion-item-sliding>
-      <ion-item (click)="goToStudentProfile(data.student.id)" *ngFor="let data of students">
+      <ion-item (click)="goToStudentProfile(student.id)" *ngFor="let student of students">
         <ion-avatar item-left>
-          <img src="{{data.student.picture}}" alt="no image">
+          <img src="{{student.picture}}" alt="no image">
         </ion-avatar>
-        <p>
-          <span>ID: </span>{{data.student.id}}</p>
-        <p>
-          <span>Name: </span>{{data.student.firstName}} {{data.student.lastName}}</p>
-        <p *ngIf="data.student.phoneNumber">
-          <span>Phone Number: </span>{{data.student.phoneNumber}}
-        </p>
-        <p>
-          <span>Address: </span>{{data.student.address}}</p>
-        <p>
-          <span>Town: </span>{{data.student.town}}</p>
-        <p>
-          <span>State: </span>{{data.student.state}}</p>
-      </ion-item>
-    </ion-item-sliding>
+        <div class="amaranthus">
+            <p>
+              <span class="label name">Name: </span>
+              <span class="name">{{student.firstName}} {{student.lastName}}</span>
+            </p>
+            <p>
+              <span class="label">ID: </span>{{student.id}}
+            </p>
+            <div *ngIf="student.phoneNumber">
+              <p>
+                <span class="label">Phone Number: </span>{{student.phoneNumber}}
+              </p>
+            </div>
+            <p>
+              <span class="label">Address: </span>{{student.address}}
+            </p>
+            <p>
+              <span class="label">Town: </span>{{student.town}}
+            </p>
+              <p>
+                <label class="label">State: </label>{{student.state}}
+              </p>
+          </div>
+        </ion-item>
   </ion-list>
 </ion-content>

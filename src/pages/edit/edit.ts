@@ -12,8 +12,12 @@ import { handleError } from './../../common/handleError';
 })
 export class EditPage implements OnInit {
 
-  constructor(public db: AmaranthusDBProvider, public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams) {
-  }
+  constructor(
+    public db: AmaranthusDBProvider,
+    public alertCtrl: AlertController,
+    public navCtrl: NavController,
+    public navParams: NavParams
+  ) { }
   // HTML controls
   picture: string;
   gender: string;
@@ -60,14 +64,6 @@ export class EditPage implements OnInit {
       .catch(error => handleError(error))
   }
 
-  validatePhoneNumber(phoneNumber) {
-    if (phoneNumber.length >= 10 && phoneNumber.length < 11) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   deleteStudent(opts: IStudent) {
     const options: ISimpleAlertOptions = {
       title: 'Success!',
@@ -107,6 +103,14 @@ export class EditPage implements OnInit {
     alert.present();
   }
 
+  validatePhoneNumber(phoneNumber) {
+    if (phoneNumber.length >= 10 && phoneNumber.length <= 12) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   editStudent(opts: IStudent) {
     let options: ISimpleAlertOptions = { title: '', subTitle: '', buttons: [] }
     if (
@@ -120,11 +124,16 @@ export class EditPage implements OnInit {
       !opts.fatherLastName ||
       !opts.motherFirstName ||
       !opts.motherLastName ||
-      !opts.emergencyContactName ||
-      !opts.emergencyContactPhoneNumber ||
-      opts.phoneNumber.length < 10 ||
-      opts.emergencyContactPhoneNumber.length < 10
+      !opts.emergencyContactName
     ) {
+      options = {
+        ...options, title: 'Warning!',
+        subTitle: 'Some fields doesn\'t have the required info',
+        buttons: [...['OK']]
+      }
+      this.showSimpleAlert(options);
+    } else {
+
       const phoneNumber = opts.phoneNumber
         .split('')
         .map(phoneNumber => {
@@ -141,68 +150,74 @@ export class EditPage implements OnInit {
           }
         })
         .join('');
-      if (phoneNumber.length < 10 && phoneNumber.length > 0) {
-        options.title = 'Warning!';
-        options.subTitle = 'Phone numbers have to be a 10 digit number.';
-        options.buttons = [...['OK']]
+      if (+phoneNumber == NaN || +emergencyContactPhoneNumber == NaN) {
+        options = {
+          ...options, title: 'Warning!',
+          subTitle: 'Phone numbers can only have numbers or \'-\'.',
+          buttons: [...['OK']]
+        }
+        this.showSimpleAlert(options);
+      } else if (phoneNumber.length < 10 && phoneNumber.length > 0) {
+        options = {
+          ...options, title: 'Warning!',
+          subTitle: 'Phone numbers have to be a 10 digit number.',
+          buttons: [...['OK']]
+        }
         this.showSimpleAlert(options);
       } else if (emergencyContactPhoneNumber.length < 10 && emergencyContactPhoneNumber.length > 0) {
-        options.title = 'Warning!';
-        options.subTitle = 'Emergency contact phone numbers have to be a 10 digit number.';
-        options.buttons = [...['OK']]
+        options = {
+          ...options, title: 'Warning!',
+          subTitle: 'Emergency contact phone numbers have to be a 10 digit number.',
+          buttons: [...['OK']]
+        }
         this.showSimpleAlert(options);
       } else {
-        options.title = 'Warning!';
-        options.subTitle = 'Some fields doesn\'t have the required info';
-        options.buttons = [...['OK']]
-        this.showSimpleAlert(options);
-      }
-    } else {
-      const picture = this.validatePicture({ gender: this.gender, picture: this.picture })
-      const student = {
-        ...opts,
-        gender: this.gender,
-        isActive: this.isActive,
-        picture: picture
-      }
-      const alert = this.alertCtrl.create({
-        title: 'Warning!',
-        subTitle: `Are you sure you want to edit ${opts.firstName} ${opts.lastName} record?`,
-        buttons: [
-          {
-            text: 'No'
-          },
-          {
-            text: 'Yes',
-            handler: () => {
-              // user has clicked the alert button
-              // begin the alert's dismiss transition
-              const navTransition = alert.dismiss();
-              this.db.updateStudent(student)
-                .then((response) => {
-                  if (response.success == true) {
-                    navTransition.then(() => {
+        const picture = this.validatePicture({ gender: this.gender, picture: this.picture })
+        const student = {
+          ...opts,
+          gender: this.gender,
+          isActive: this.isActive,
+          picture: picture
+        }
+        const alert = this.alertCtrl.create({
+          title: 'Warning!',
+          subTitle: `Are you sure you want to edit ${opts.firstName} ${opts.lastName} record?`,
+          buttons: [
+            {
+              text: 'No'
+            },
+            {
+              text: 'Yes',
+              handler: () => {
+                // user has clicked the alert button
+                // begin the alert's dismiss transition
+                const navTransition = alert.dismiss();
+                this.db.updateStudent(student)
+                  .then((response) => {
+                    if (response.success == true) {
+                      navTransition.then(() => {
+                        options = {
+                          title: 'Success!',
+                          subTitle: `${opts.firstName} ${opts.lastName} was edited.`
+                        };
+                        this.showAdvancedAlert(options);
+                      });
+                    } else {
+                      handleError(response.error);
                       options = {
-                        title: 'Success!',
-                        subTitle: `${opts.firstName} ${opts.lastName} was edited.`
-                      };
-                      this.showAdvancedAlert(options);
-                    });
-                  } else {
-                    handleError(response.error);
-                    options = {
-                      title: 'Error',
-                      subTitle: 'There was an error trying to edit the record. Please try again.'
+                        title: 'Error',
+                        subTitle: 'There was an error trying to edit the record. Please try again.'
+                      }
+                      navTransition.then(() => this.showAdvancedAlert(options));
                     }
-                    navTransition.then(() => this.showAdvancedAlert(options));
-                  }
-                });
-              return false;
+                  });
+                return false;
+              }
             }
-          }
-        ]
-      });
-      alert.present();
+          ]
+        });
+        alert.present();
+      }
     }
   }
   private validatePicture(opts: { gender: string, picture: string }) {

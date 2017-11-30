@@ -18,8 +18,11 @@ import { handleError } from '../../common/handleError';
 
 export class TablePage implements OnInit {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public db: AmaranthusDBProvider) {
-  }
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public db: AmaranthusDBProvider
+  ) { }
 
   students;
   private untouchedStudentList;
@@ -51,7 +54,7 @@ export class TablePage implements OnInit {
   ionViewDidLoad() {
     this.getStudentsRecords();
   }
-  
+
   initializeStudents() {
     this.students = [...this.untouchedStudentList];
   }
@@ -83,7 +86,7 @@ export class TablePage implements OnInit {
     const date = {
       year: +year,
       month: this.months.indexOf(this.monthQuery) + 1
-    }; 
+    };
     this.db.getQueriedRecordsByDate(date)
       .then(response => {
         if (response.success == true) {
