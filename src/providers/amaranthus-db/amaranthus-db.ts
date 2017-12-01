@@ -26,7 +26,7 @@ export class AmaranthusDBProvider {
       adapter: ionicStorageAdapter
     }
     this.db = new Loki('amaranthus.db', lokiOptions);
-    this.students = this.db.addCollection('students');
+    this.students = this.db.addCollection('students')
     this.records = this.db.addCollection('records');
     ///// Only for dev Purposes ///////
     this.oldStudentsData = { ...STUDENTS };
@@ -53,7 +53,7 @@ export class AmaranthusDBProvider {
   checkIfUserExists(opts: { id: string }): Promise<boolean> {
     return new Promise((resolve, reject) => {
       try {
-        let results: any = this.students.findOne({
+        let results = this.students.findOne({
           'id': { '$eq': opts.id }
         });
         results ? resolve(true) : resolve(false);
