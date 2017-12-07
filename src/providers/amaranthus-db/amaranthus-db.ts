@@ -1,5 +1,5 @@
 import { STUDENTS, RECORDS } from './../../mock/mock-students';
-import { IStudent, IResponse, IRecords } from './../../common/interface';
+import { IStudent, IResponse, IRecord } from './../../common/interface';
 import { Injectable } from '@angular/core';
 import * as Loki from 'lokijs';
 import { IonicStorageAdapter } from './../../common/adapter';
@@ -15,8 +15,8 @@ export class AmaranthusDBProvider {
   // oldStudentsData: IResponse<IStudent[]>;
   // oldRecordsData: IResponse<IRecords[]>;
   db: Loki;
-  students: LokiCollection<any>;
-  records: LokiCollection<any>;
+  students: LokiCollection<IStudent>;
+  records: LokiCollection<IRecord>;
 
   createDB() {
     const ionicStorageAdapter = new IonicStorageAdapter();
@@ -26,9 +26,9 @@ export class AmaranthusDBProvider {
       adapter: ionicStorageAdapter
     }
     this.db = new Loki('amaranthus.db', lokiOptions);
-    this.students = this.db.addCollection('students')
-    this.records = this.db.addCollection('records');
-    ///// Only for dev Purposes ///////
+    this.students = this.db.addCollection<IStudent>('students')
+    this.records = this.db.addCollection<IRecord>('records');
+    /////// Only for dev Purposes /////////
     // this.oldStudentsData = { ...STUDENTS };
     // this.oldRecordsData = { ...RECORDS };
     // this.devInsertStudentsIntoDb();
@@ -40,6 +40,7 @@ export class AmaranthusDBProvider {
     this.db.saveDatabase();
   }
 
+  ///////////////////////////////////////
   // Only for dev purposes!!!!!!!!!
   // devInsertStudentsIntoDb() {
   //   this.oldStudentsData.data.map(student => this.students.insert(student))
@@ -47,8 +48,7 @@ export class AmaranthusDBProvider {
   // devInsertRecordsIntoDb() {
   //   this.oldRecordsData.data.map(record => this.records.insert(record));
   // }
-
-  ///////////////////////////
+  //////////////////////////////////////
 
   checkIfUserExists(opts: { id: string }): Promise<boolean> {
     return new Promise((resolve, reject) => {
@@ -104,7 +104,7 @@ export class AmaranthusDBProvider {
   updateRecord(opts: { attendance: boolean, absence: boolean, date: Date, id: string }): Promise<IResponse<null>> {
     return new Promise((resolve, reject) => {
       try {
-        const record: IRecords = {
+        const record: IRecord = {
           id: opts.id,
           month: opts.date.getMonth() + 1,
           year: opts.date.getFullYear(),
@@ -176,7 +176,7 @@ export class AmaranthusDBProvider {
   }
 
 
-  getQueriedRecords(opts: { query: string, date?: { year: number, month: number } }): Promise<IResponse<IRecords[]>> {
+  getQueriedRecords(opts: { query: string, date?: { year: number, month: number } }): Promise<IResponse<IRecord[]>> {
     let response: IResponse<any> = { success: true, error: null, data: null };
     return new Promise((resolve, reject) => {
       switch (opts.query) {
@@ -198,7 +198,7 @@ export class AmaranthusDBProvider {
     });
   }
 
-  getAllStudentsRecords(opts: { year: number, month: number }): Promise<IResponse<IRecords[]>> {
+  getAllStudentsRecords(opts: { year: number, month: number }): Promise<IResponse<IRecord[]>> {
     let response: IResponse<any> = { success: true, error: null, data: [] };
     let attendance: number;
     let absence: number;
@@ -216,7 +216,7 @@ export class AmaranthusDBProvider {
             'month': { '$eq': opts.month }
           });
           if (records) {
-            records.map((record: IRecords) => {
+            records.map((record: IRecord) => {
               if (record.attendance == true) {
                 attendance++;
               }
@@ -266,7 +266,7 @@ export class AmaranthusDBProvider {
     })
   }
 
-  getQueriedRecordsByDate(opts: { year: number, month: number }): Promise<IResponse<IRecords[]>> {
+  getQueriedRecordsByDate(opts: { year: number, month: number }): Promise<IResponse<IRecord[]>> {
     return new Promise((resolve, reject) => {
       this.getAllStudentsRecords(opts)
         .then(res => resolve(res))

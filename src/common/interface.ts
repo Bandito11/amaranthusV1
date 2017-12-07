@@ -37,7 +37,7 @@ export interface ISimpleAlertOptions {
     buttons?: string[];
 }
 
-export interface IRecords {
+export interface IRecord {
     id: string;
     attendance: boolean;
     absence: boolean;

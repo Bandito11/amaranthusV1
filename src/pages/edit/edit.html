@@ -82,8 +82,8 @@
         <ion-input [value]="student.state" type="text" #state></ion-input>
         <ion-icon id="form-icon" item-right name="warning" *ngIf="!state.value"></ion-icon>
       </ion-item>
+      <h6>Gender</h6>
       <ion-list no-lines radio-group [(ngModel)]="gender" name="gender">
-        <h6>Gender</h6>
         <ion-item>
           <ion-label inset>Male</ion-label>
           <ion-radio value="male"></ion-radio>
