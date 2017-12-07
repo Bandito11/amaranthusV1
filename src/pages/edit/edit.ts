@@ -3,6 +3,7 @@ import { ISimpleAlertOptions, IStudent } from './../../common/interface';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 
 @IonicPage()
@@ -16,7 +17,8 @@ export class EditPage implements OnInit {
     public db: AmaranthusDBProvider,
     public alertCtrl: AlertController,
     public navCtrl: NavController,
-    public navParams: NavParams
+    public navParams: NavParams,
+    private camera: Camera
   ) { }
   // HTML controls
   picture: string;
@@ -246,7 +248,21 @@ export class EditPage implements OnInit {
   }
 
   browsePicture() {
-    this.picture = './assets/profilePics/MyPicture.jpg'
+    const options: CameraOptions = {
+      quality: 100,
+      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      targetWidth: 150,
+      targetHeight: 150,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      mediaType: this.camera.MediaType.PICTURE,
+      encodingType: this.camera.EncodingType.JPEG
+    };
+    this.camera.getPicture(options)
+      .then((imageData) => {
+        this.picture = `data:image/jpeg;base64,${imageData}`;
+      },
+      error => handleError(error)
+      )
   }
 
   showSimpleAlert(options: ISimpleAlertOptions) {

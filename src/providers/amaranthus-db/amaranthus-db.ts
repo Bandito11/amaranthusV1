@@ -12,11 +12,11 @@ export class AmaranthusDBProvider {
     this.createDB();
   }
 
-  oldStudentsData: IResponse<IStudent[]>;
-  oldRecordsData: IResponse<IRecords[]>;
+  // oldStudentsData: IResponse<IStudent[]>;
+  // oldRecordsData: IResponse<IRecords[]>;
   db: Loki;
-  students: LokiCollection<IStudent>;
-  records: LokiCollection<IRecords>;
+  students: LokiCollection<any>;
+  records: LokiCollection<any>;
 
   createDB() {
     const ionicStorageAdapter = new IonicStorageAdapter();
@@ -29,10 +29,10 @@ export class AmaranthusDBProvider {
     this.students = this.db.addCollection('students')
     this.records = this.db.addCollection('records');
     ///// Only for dev Purposes ///////
-    this.oldStudentsData = { ...STUDENTS };
-    this.oldRecordsData = { ...RECORDS };
-    this.devInsertStudentsIntoDb();
-    this.devInsertRecordsIntoDb();
+    // this.oldStudentsData = { ...STUDENTS };
+    // this.oldRecordsData = { ...RECORDS };
+    // this.devInsertStudentsIntoDb();
+    // this.devInsertRecordsIntoDb();
     ////////////////////////////////////
   }
 
@@ -41,12 +41,12 @@ export class AmaranthusDBProvider {
   }
 
   // Only for dev purposes!!!!!!!!!
-  devInsertStudentsIntoDb() {
-    this.oldStudentsData.data.map(student => this.students.insert(student))
-  }
-  devInsertRecordsIntoDb() {
-    this.oldRecordsData.data.map(record => this.records.insert(record));
-  }
+  // devInsertStudentsIntoDb() {
+  //   this.oldStudentsData.data.map(student => this.students.insert(student))
+  // }
+  // devInsertRecordsIntoDb() {
+  //   this.oldRecordsData.data.map(record => this.records.insert(record));
+  // }
 
   ///////////////////////////
 

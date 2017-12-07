@@ -3,7 +3,7 @@ import { IStudent, ISimpleAlertOptions } from './../../common/interface';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
-
+import { Camera, CameraOptions } from '@ionic-native/camera';
 /**
  * TODO:
  * Add required to input
@@ -20,7 +20,8 @@ export class CreatePage implements OnInit {
   constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
-    private db: AmaranthusDBProvider
+    private db: AmaranthusDBProvider,
+    private camera: Camera
   ) { }
 
   /**
@@ -33,18 +34,32 @@ export class CreatePage implements OnInit {
   picture: string;
   phoneNumber: string;
 
-  ionViewDidLoad() {
-  }
-
   ngOnInit() {
     this.gender = 'male';
     this.picture = '';
     this.phoneNumber = '';
-
   }
+
+  ionViewDidLoad() {
+  }
+
   // TODO: Implement a gallery menu to look for a picture.
   browsePicture() {
-    this.picture = './assets/profilePics/MyPicture.jpg'
+    const options: CameraOptions = {
+      quality: 100,
+      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      targetWidth: 150,
+      targetHeight: 150,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      mediaType: this.camera.MediaType.PICTURE,
+      encodingType: this.camera.EncodingType.JPEG
+    };
+    this.camera.getPicture(options)
+      .then((imageData) => {
+        this.picture = `data:image/jpeg;base64,${imageData}`;
+      },
+      error => handleError(error)
+      )
   }
 
   validatePhoneNumber(phoneNumber) {

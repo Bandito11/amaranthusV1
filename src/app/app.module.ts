@@ -14,6 +14,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { AmaranthusDBProvider } from '../providers/amaranthus-db/amaranthus-db';
+import { Camera } from '@ionic-native/camera';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { AmaranthusDBProvider } from '../providers/amaranthus-db/amaranthus-db';
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    AmaranthusDBProvider
+    AmaranthusDBProvider,
+    Camera
   ]
 })
 export class AppModule { }
