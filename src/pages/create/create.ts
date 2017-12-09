@@ -1,21 +1,16 @@
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
 import { IStudent, ISimpleAlertOptions } from './../../common/interface';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-/**
- * TODO:
- * Add required to input
- * make sure data is validated before inserting into DB. 
- */
 
 @IonicPage()
 @Component({
   selector: 'page-create',
   templateUrl: 'create.html'
 })
-export class CreatePage implements OnInit {
+export class CreatePage {
 
   constructor(
     private alertCtrl: AlertController,
@@ -24,26 +19,29 @@ export class CreatePage implements OnInit {
     private camera: Camera
   ) { }
 
-  /**
-   * Can have a value of male, female or undisclosed depending on user input
-   * 
-   * @type {string}
-   * @memberof CreatePage
-   */
   gender: string;
   picture: string;
   phoneNumber: string;
+  idInput: string;
 
-  ngOnInit() {
+  counter = 0;
+  ionViewWillEnter() {
+    this.getNewId();
     this.gender = 'male';
     this.picture = '';
     this.phoneNumber = '';
   }
 
-  ionViewDidLoad() {
+  getNewId(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.idInput = `EM${Math.ceil(Math.random() * 100000000)}`;
+      this.db.checkIfUserExists({ id: this.idInput })
+        .then(value => {
+          value == false ? resolve(this.idInput) : this.getNewId();
+        })
+    });
   }
 
-  // TODO: Implement a gallery menu to look for a picture.
   browsePicture() {
     const options: CameraOptions = {
       quality: 100,
@@ -52,11 +50,11 @@ export class CreatePage implements OnInit {
       targetHeight: 150,
       destinationType: this.camera.DestinationType.DATA_URL,
       mediaType: this.camera.MediaType.PICTURE,
-      encodingType: this.camera.EncodingType.JPEG
+      encodingType: this.camera.EncodingType.PNG
     };
     this.camera.getPicture(options)
       .then((imageData) => {
-        this.picture = `data:image/jpeg;base64,${imageData}`;
+        this.picture = `data:image/png;base64,${imageData}`;
       },
       error => handleError(error)
       )
@@ -197,15 +195,15 @@ export class CreatePage implements OnInit {
     alert.present();
   }
 
-  private validatePicture(data: { gender: string, picture: string }) {
-    if (data.gender == 'male' && data.picture == '') {
-      data.picture = "./assets/profilePics/defaultMale.jpg";
-    } else if (data.gender == 'female' && data.picture == '') {
-      data.picture = "./assets/profilePics/defaultFemale.jpg";
-    } else if (data.gender == 'undisclosed' && data.picture == '') {
-      data.picture = "./assets/profilePics/defaultUndisclosed.jpg";
+  private validatePicture(opts: { gender: string, picture: string }) {
+    if (opts.gender == 'male' && opts.picture == '') {
+      opts.picture = "./assets/profilePics/defaultMale.png";
+    } else if (opts.gender == 'female' && opts.picture == '') {
+      opts.picture = "./assets/profilePics/defaultFemale.png";
+    } else if (opts.gender == 'undisclosed' && opts.picture == '') {
+      opts.picture = "./assets/profilePics/defaultUndisclosed.png";
     }
-    return data.picture;
+    return opts.picture;
   }
 
   private showSimpleAlert(options: ISimpleAlertOptions) {

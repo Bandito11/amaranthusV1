@@ -1,10 +1,15 @@
-import { STUDENTS, RECORDS } from './../../mock/mock-students';
 import { IStudent, IResponse, IRecord } from './../../common/interface';
 import { Injectable } from '@angular/core';
-import * as Loki from 'lokijs';
 import { IonicStorageAdapter } from './../../common/adapter';
+import * as Loki from 'lokijs';
+//////////// Only for dev purposes ////////////////
+// import { STUDENTS, RECORDS } from './../../mock/mock-students';
+///////////////////////////////////
 
-
+let studentsColl: LokiCollection<IStudent>;
+let recordsColl: LokiCollection<IRecord>;
+let db: Loki;
+const dbName = 'amaranthus.db';
 @Injectable()
 export class AmaranthusDBProvider {
 
@@ -12,22 +17,31 @@ export class AmaranthusDBProvider {
     this.createDB();
   }
 
+  ///////////////////////////////////////
+  // Only for dev purposes!!!!!!!!!
+  // devInsertStudentsIntoDb() {
+  //   this.oldStudentsData.data.map(student => students.insert(student))
+  // }
+  // devInsertRecordsIntoDb() {
+  //   this.oldRecordsData.data.map(record => records.insert(record));
+  // }
+  //////////////////////////////////////
+
+  ///// Only for dev purposes///////////
   // oldStudentsData: IResponse<IStudent[]>;
-  // oldRecordsData: IResponse<IRecords[]>;
-  db: Loki;
-  students: LokiCollection<IStudent>;
-  records: LokiCollection<IRecord>;
+  // oldRecordsData: IResponse<IRecord[]>;
+  /////////////////////////////////////////
 
   createDB() {
     const ionicStorageAdapter = new IonicStorageAdapter();
     const lokiOptions: LokiConfigureOptions = {
       autosave: true,
       autoload: true,
-      adapter: ionicStorageAdapter
+      adapter: ionicStorageAdapter,
+      autoloadCallback: this.loadDatabase,
+      autosaveCallback: this.saveDatabase
     }
-    this.db = new Loki('amaranthus.db', lokiOptions);
-    this.students = this.db.addCollection<IStudent>('students')
-    this.records = this.db.addCollection<IRecord>('records');
+    db = new Loki(dbName, lokiOptions);
     /////// Only for dev Purposes /////////
     // this.oldStudentsData = { ...STUDENTS };
     // this.oldRecordsData = { ...RECORDS };
@@ -37,40 +51,41 @@ export class AmaranthusDBProvider {
   }
 
   saveDatabase() {
-    this.db.saveDatabase();
+    db.saveDatabase();
   }
 
-  ///////////////////////////////////////
-  // Only for dev purposes!!!!!!!!!
-  // devInsertStudentsIntoDb() {
-  //   this.oldStudentsData.data.map(student => this.students.insert(student))
-  // }
-  // devInsertRecordsIntoDb() {
-  //   this.oldRecordsData.data.map(record => this.records.insert(record));
-  // }
-  //////////////////////////////////////
+  loadDatabase() {
+    studentsColl = db.getCollection<IStudent>('students');
+    recordsColl = db.getCollection<IRecord>('records');
+    if (!studentsColl && !recordsColl) {
+      studentsColl = db.addCollection<IStudent>('students')
+      recordsColl = db.addCollection<IRecord>('records');
+    }
+  }
 
   checkIfUserExists(opts: { id: string }): Promise<boolean> {
     return new Promise((resolve, reject) => {
       try {
-        let results = this.students.findOne({
+        let results = studentsColl.findOne({
           'id': { '$eq': opts.id }
         });
         results ? resolve(true) : resolve(false);
       } catch (error) {
-        reject(error);
+        if (studentsColl) {
+          reject(error);
+        }
       }
     });
   }
 
   insertStudent(student: IStudent): Promise<IResponse<null>> {
-    let response: IResponse<any>;
+    let response;
     return new Promise((resolve, reject) => {
       this.checkIfUserExists({ id: student.id })
         .then(value => {
           try {
             if (value == false) {
-              this.students.insert(student);
+              studentsColl.insert(student);
               response = { success: true, error: null, data: null };
             } else {
               response = { success: false, error: 'User already exists in the database', data: null };
@@ -112,7 +127,7 @@ export class AmaranthusDBProvider {
           attendance: opts.attendance,
           absence: opts.absence
         }
-        let results = this.records.findOne({
+        let results = recordsColl.findOne({
           'id': { '$eq': record.id },
           'month': { '$eq': record.month },
           'year': { '$eq': record.year },
@@ -120,29 +135,33 @@ export class AmaranthusDBProvider {
         });
         if (results) {
           results = { ...results, ...record };
-          this.records.update(results);
+          recordsColl.update(results);
         } else {
-          this.records.insert(record);
+          recordsColl.insert(record);
         }
         this.saveDatabase();
         resolve({ success: true, error: null, data: null });
       } catch (error) {
-        reject(error);
+        if (recordsColl) {
+          reject(error);
+        }
       }
     });
   }
   updateStudent(student: IStudent): Promise<IResponse<null>> {
     return new Promise((resolve, reject) => {
       try {
-        let results: any = this.students.findOne({
+        let results: any = studentsColl.findOne({
           'id': { '$eq': student.id }
         });
         results = { ...results, ...student };
-        this.students.update(results);
+        studentsColl.update(results);
         this.saveDatabase();
         resolve({ success: true, error: null, data: null })
       } catch (error) {
-        reject(error)
+        if (studentsColl) {
+          reject(error);
+        }
       }
     });
   }
@@ -150,14 +169,16 @@ export class AmaranthusDBProvider {
   deleteStudent(student: IStudent): Promise<IResponse<null>> {
     return new Promise((resolve, reject) => {
       try {
-        let results: any = this.students.findOne({
+        let results: any = studentsColl.findOne({
           'id': { '$eq': student.id }
         });
-        this.students.remove(results);
+        studentsColl.remove(results);
         this.saveDatabase();
         resolve({ success: true, error: null, data: null })
       } catch (error) {
-        reject(error)
+        if (studentsColl) {
+          reject(error);
+        }
       }
     });
   }
@@ -165,19 +186,21 @@ export class AmaranthusDBProvider {
   getStudentById(student: IStudent): Promise<IResponse<IStudent>> {
     return new Promise((resolve, reject) => {
       try {
-        const results = this.students.findOne({
+        const results = studentsColl.findOne({
           'id': { '$eq': student.id }
         });
         resolve({ success: true, error: null, data: results });
       } catch (error) {
-        reject(error);
+        if (studentsColl) {
+          reject(error);
+        }
       }
     });
   }
 
 
   getQueriedRecords(opts: { query: string, date?: { year: number, month: number } }): Promise<IResponse<IRecord[]>> {
-    let response: IResponse<any> = { success: true, error: null, data: null };
+    let response = { success: true, error: null, data: null };
     return new Promise((resolve, reject) => {
       switch (opts.query) {
         case 'Date':
@@ -199,18 +222,18 @@ export class AmaranthusDBProvider {
   }
 
   getAllStudentsRecords(opts: { year: number, month: number }): Promise<IResponse<IRecord[]>> {
-    let response: IResponse<any> = { success: true, error: null, data: [] };
+    let response = { success: true, error: null, data: [] };
     let attendance: number;
     let absence: number;
     return new Promise((resolve, reject) => {
       try {
-        const students = this.students.find({
+        const students = studentsColl.find({
           'isActive': { '$eq': true }
         });
         students.map((student: IStudent) => {
           attendance = 0;
           absence = 0;
-          const records = this.records.find({
+          const records = recordsColl.find({
             'id': { '$eq': student.id },
             'year': { '$eq': opts.year },
             'month': { '$eq': opts.month }
@@ -237,7 +260,12 @@ export class AmaranthusDBProvider {
         });
         resolve(response);
       } catch (error) {
-        reject(error);
+        if (studentsColl) {
+          reject(error);
+        }
+        if (recordsColl) {
+          reject(error);
+        }
       }
     });
   }
@@ -246,10 +274,12 @@ export class AmaranthusDBProvider {
   getAllActiveStudents(): Promise<IResponse<any>> {
     return new Promise((resolve, reject) => {
       try {
-        const results = this.students.find({ 'isActive': { '$eq': true } });
+        const results = studentsColl.find({ 'isActive': { '$eq': true } });
         resolve({ success: true, error: null, data: results });
       } catch (error) {
-        reject(error);
+        if (studentsColl) {
+          reject(error);
+        }
       }
     })
   }
@@ -258,10 +288,12 @@ export class AmaranthusDBProvider {
   getAllStudents(): Promise<IResponse<IStudent[]>> {
     return new Promise((resolve, reject) => {
       try {
-        const results = this.students.data;
+        const results = studentsColl.data;
         resolve({ success: true, error: null, data: results });
       } catch (error) {
-        reject(error);
+        if (studentsColl) {
+          reject(error);
+        }
       }
     })
   }

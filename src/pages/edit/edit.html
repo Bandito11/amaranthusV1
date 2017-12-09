@@ -41,8 +41,8 @@
         <ion-label stacked>Picture</ion-label>
         <ion-input type="text" readonly="true" name="picture" [(ngModel)]="picture"></ion-input>
       </ion-item>
-      <button (click)="browsePicture()" type="button" ion-button color="secondary">Browse</button>
-      <button (click)="picture = ''" type="button" ion-button color="danger">Reset</button>
+      <button (click)="browsePicture()" type="button" ion-button color="primary">Browse</button>
+      <button (click)="picture = ''" type="button" ion-button color="secondary">Reset</button>
       <ion-item>
         <ion-label stacked>ID</ion-label>
         <ion-input [value]="student.id" type="text" #id readonly="true"></ion-input>
@@ -139,8 +139,8 @@
         <ion-label>is Student active?</ion-label>
         <ion-checkbox name="isActive" [(ngModel)]='isActive'></ion-checkbox>
       </ion-item>
-      <button type="submit" ion-button block color="secondary">Edit</button>
-      <button type="button" ion-button block color="danger" (click)="deleteStudent({id:id.value})">Delete</button>
+      <button type="submit" ion-button block color="primary">Edit</button>
+      <button type="button" ion-button block color="secondary" (click)="deleteStudent({id:id.value})">Delete</button>
     </ion-item-group>
   </form>
 </ion-content>

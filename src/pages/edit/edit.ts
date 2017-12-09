@@ -49,9 +49,6 @@ export class EditPage implements OnInit {
       gender: '',
       isActive: false
     };
-    this.picture = "";
-    this.gender = 'male';
-    this.isActive = false;
   }
 
   ionViewDidLoad() {
@@ -222,13 +219,14 @@ export class EditPage implements OnInit {
       }
     }
   }
+
   private validatePicture(opts: { gender: string, picture: string }) {
     if (opts.gender == 'male' && opts.picture == '') {
-      opts.picture = "./assets/profilePics/defaultMale.jpg";
+      opts.picture = "./assets/profilePics/defaultMale.png";
     } else if (opts.gender == 'female' && opts.picture == '') {
-      opts.picture = "./assets/profilePics/defaultFemale.jpg";
+      opts.picture = "./assets/profilePics/defaultFemale.png";
     } else if (opts.gender == 'undisclosed' && opts.picture == '') {
-      opts.picture = "./assets/profilePics/defaultUndisclosed.jpg";
+      opts.picture = "./assets/profilePics/defaultUndisclosed.png";
     }
     return opts.picture;
   }

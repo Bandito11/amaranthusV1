@@ -42,7 +42,7 @@
           </p>
           <div *ngIf="student.phoneNumber">
             <p>
-              <span class="label">Phone Number: </span>{{student.phoneNumber}}
+              <span class="label">Phone Number: </span>{{student.phoneNumber | phonenumber}}
             </p>
           </div>
           <p>
@@ -62,10 +62,10 @@
         </div>
       </ion-item>
       <ion-item-options>
-        <button ion-button color="secondary" (click)="addAttendance({id: student.id})">
+        <button ion-button color="primary" (click)="addAttendance({id: student.id})">
           Attended
         </button>
-        <button ion-button color="danger" (click)="addAbsence({id: student.id})">
+        <button ion-button color="secondary" (click)="addAbsence({id: student.id})">
           Absent
         </button>
       </ion-item-options>

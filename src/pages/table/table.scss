@@ -11,7 +11,7 @@ page-table {
         border-bottom: 1px solid #ddd;
     }
     th {
-        background-color: #4CAF50;
+        background-color: color($colors, secondary);;
         color: white;
     }
      tr:nth-child(even) {background-color: #f2f2f2;} 

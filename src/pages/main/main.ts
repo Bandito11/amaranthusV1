@@ -4,14 +4,7 @@ import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
-import { ISimpleAlertOptions } from '../../common/interface';
-
-/**
- * Generated class for the MainPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { ISimpleAlertOptions, IStudent } from '../../common/interface';
 
 @IonicPage()
 @Component({
@@ -27,17 +20,18 @@ export class MainPage implements OnInit {
     public db: AmaranthusDBProvider
   ) { }
 
-  ionViewDidLoad() {
-    this.getStudents();
-  }
-
   ionViewDidEnter() {
     this.query = "None";
-    this.getStudents();
+    let interval = setInterval(() => {
+      this.getStudents();
+      if (this.students.length > 0) {
+        clearInterval(interval);
+      }
+    }, 500);
   }
 
-  students: any[];
-  private untouchedStudentList: any[];
+  students: IStudent[];
+  private untouchedStudentList: IStudent[];
   query: string;
   selectOptions: string[];
 
@@ -103,21 +97,20 @@ export class MainPage implements OnInit {
     this.students = [...newQuery];
   }
 
-  private getStudents() {
-    this.db.getAllActiveStudents()
-      .then(
-      response => {
-        if (response.success == true) {
-          this.students = [...response.data];
-          this.untouchedStudentList = [...response.data];
-        } else {
-          // TODO:  implement an alert message if it fails
-          // message should say no students can be retrieved.
-          handleError(response.error);
-        }
+  private async getStudents() {
+    try {
+      const response = await this.db.getAllActiveStudents();
+      if (response.success == true) {
+        this.students = [...response.data];
+        this.untouchedStudentList = [...response.data];
+      } else {
+        // TODO:  implement an alert message if it fails
+        // message should say no students can be retrieved.
+        handleError(response.error);
       }
-      )
-      .catch(error => handleError(error))
+    } catch (error) {
+      handleError(error);
+    }
   }
 
 

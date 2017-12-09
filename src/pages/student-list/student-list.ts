@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { handleError } from '../../common/handleError';
 import { StudentProfilePage } from '../student-profile/student-profile';
 import { CreatePage } from '../create/create';
-import { ISimpleAlertOptions } from '../../common/interface';
+import { ISimpleAlertOptions, IStudent } from '../../common/interface';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 
 /**
@@ -28,17 +28,19 @@ export class StudentListPage implements OnInit {
   ) {
   }
 
-  ionViewDidLoad() {
-    this.getStudents();
-  }
 
   ionViewDidEnter() {
     this.query = "None";
-    this.getStudents();
+    let interval = setInterval(() => {
+      this.getStudents();
+      if (this.students.length > 0) {
+        clearInterval(interval);
+      }
+    }, 500);
   }
 
-  students: any[];
-  private untouchedStudentList: any[];
+  students: IStudent[];
+  private untouchedStudentList: IStudent[];
   query: string;
   selectOptions: string[];
 
@@ -124,21 +126,20 @@ export class StudentListPage implements OnInit {
     this.students = [...newQuery];
   }
 
-  private getStudents() {
-    this.db.getAllStudents()
-      .then(
-      response => {
-        if (response.success == true) {
-          this.students = [...response.data];
-          this.untouchedStudentList = [...response.data];
-        } else {
-          // TODO:  implement an alert message if it fails
-          // message should say no students can be retrieved.
-          handleError(response.error);
-        }
+  private async getStudents() {
+    try {
+      const response = await this.db.getAllStudents();
+      if (response.success == true) {
+        this.students = [...response.data];
+        this.untouchedStudentList = [...response.data];
+      } else {
+        // TODO:  implement an alert message if it fails
+        // message should say no students can be retrieved.
+        handleError(response.error);
       }
-      )
-      .catch(error => handleError(error))
+    } catch (error) {
+      handleError(error);
+    }
   }
 
 

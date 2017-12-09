@@ -29,7 +29,7 @@
       <p class="text bold">
         <span class="text label">Address: </span>{{student.address}}</p>
       <p class="text bold" *ngIf="student.phoneNumber">
-        <span class="text label">Phone Number: </span>{{student.phoneNumber}}</p>
+        <span class="text label">Phone Number: </span>{{student.phoneNumber | phonenumber}}</p>
       <p class="text bold">
         <span class="text label">Town: </span>{{student.town}}</p>
       <p class="text bold">
@@ -45,7 +45,7 @@
       <p class="text bold">
         <span class="text label">Emergency Contact's Relationship: </span>{{student.emergencyRelationship}}</p>
       <p class="text bold">
-        <span class="text label">Emergency Contact's Phone Number: </span>{{student.emergencyContactPhoneNumber}}</p>
+        <span class="text label">Emergency Contact's Phone Number: </span>{{student.emergencyContactPhoneNumber | phonenumber}}</p>
       <div class="text center bold">
         <p *ngIf="student.isActive == true">
           *Student is currently active on the roster.*
