@@ -33,9 +33,11 @@ export class TablePage implements OnInit {
   yearQuery: string;
   years: number[];
   selectOptions: string[];
+  // dateQuery: string; // Will be used with the date time component
 
   ngOnInit() {
     this.currentDate = new Date();
+    // this.dateQuery = `${this.currentDate.getFullYear()}-${this.currentDate.getMonth() - 1}`; // will be used with the date time component
     this.months = [...monthsLabels];
     this.query = "None";
     this.monthQuery = this.months[this.currentDate.getMonth()];

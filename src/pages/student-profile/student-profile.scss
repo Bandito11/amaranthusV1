@@ -5,7 +5,7 @@ page-student-profile {
        color:#ffffff;
     }
     .profile-content{
-        background-color:rgba(110, 209, 248, 0.788); 
+        background-color:color($colors, secondary); 
     }
     .header{
         font-size: $fontSize + 10%;
