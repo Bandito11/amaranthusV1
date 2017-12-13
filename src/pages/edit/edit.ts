@@ -118,12 +118,7 @@ export class EditPage implements OnInit {
       !opts.id ||
       !opts.address ||
       !opts.town ||
-      !opts.state ||
-      !opts.fatherFirstName ||
-      !opts.fatherLastName ||
-      !opts.motherFirstName ||
-      !opts.motherLastName ||
-      !opts.emergencyContactName
+      !opts.state
     ) {
       options = {
         ...options, title: 'Warning!',
@@ -132,10 +127,10 @@ export class EditPage implements OnInit {
       }
       this.showSimpleAlert(options);
     } else {
-
       const phoneNumber = opts.phoneNumber
         .split('')
-        .map(phoneNumber => {
+        .filter(phoneNumber => {
+          console.log(phoneNumber)
           if (phoneNumber != '-') {
             return phoneNumber;
           }
@@ -171,6 +166,7 @@ export class EditPage implements OnInit {
         }
         this.showSimpleAlert(options);
       } else {
+        opts = { ...opts, phoneNumber: phoneNumber, emergencyContactPhoneNumber: emergencyContactPhoneNumber };
         const picture = this.validatePicture({ gender: this.gender, picture: this.picture })
         const student = {
           ...opts,

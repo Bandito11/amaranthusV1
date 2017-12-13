@@ -34,7 +34,7 @@ export class CreatePage {
 
   getNewId(): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.idInput = `EM${Math.ceil(Math.random() * 100000000)}`;
+      this.idInput = `XY${Math.ceil(Math.random() * 100000000)}`;
       this.db.checkIfUserExists({ id: this.idInput })
         .then(value => {
           value == false ? resolve(this.idInput) : this.getNewId();
@@ -75,12 +75,7 @@ export class CreatePage {
       !opts.id ||
       !opts.address ||
       !opts.town ||
-      !opts.state ||
-      !opts.fatherFirstName ||
-      !opts.fatherLastName ||
-      !opts.motherFirstName ||
-      !opts.motherLastName ||
-      !opts.emergencyContactName
+      !opts.state
     ) {
       options = {
         ...options, title: 'Warning!',
@@ -89,7 +84,6 @@ export class CreatePage {
       }
       this.showSimpleAlert(options);
     } else {
-
       const phoneNumber = opts.phoneNumber
         .split('')
         .map(phoneNumber => {
@@ -128,6 +122,7 @@ export class CreatePage {
         }
         this.showSimpleAlert(options);
       } else {
+        opts = { ...opts, phoneNumber: phoneNumber, emergencyContactPhoneNumber: emergencyContactPhoneNumber };
         const picture = this.validatePicture({ gender: this.gender, picture: this.picture });
         const student: IStudent = { ...opts, picture: picture, gender: this.gender, isActive: true };
         const alert = this.alertCtrl.create({

@@ -51,10 +51,16 @@
           <p>
             <span class="label">Town: </span>{{student.town}}
           </p>
+          <p>
+            <span class="label">State: </span>{{student.state}}
+          </p>
           <div>
-            <p class="left">
-              <label class="label">State: </label>{{student.state}}
-            </p>
+              <p class="left" *ngIf="student.attended == true">
+                  {{student.firstName}} {{student.lastName}} is present today!
+                </p>
+                <p class="left" *ngIf="student.attended == false">
+                  {{student.firstName}} {{student.lastName}} is absent today!
+                </p>
             <p class="right">
               Swipe for more options
             </p>

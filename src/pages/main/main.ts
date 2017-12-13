@@ -20,30 +20,64 @@ export class MainPage implements OnInit {
     public db: AmaranthusDBProvider
   ) { }
 
-  ionViewDidEnter() {
-    this.query = "None";
-    let interval = setInterval(() => {
-      this.getStudents();
-      if (this.students.length > 0) {
-        clearInterval(interval);
-      }
-    }, 500);
-  }
 
   students: IStudent[];
   private untouchedStudentList: IStudent[];
   query: string;
   selectOptions: string[];
+  // records: IRecord[];
+
+  ionViewDidEnter() {
+    this.query = "None";
+    let studentInterval = setInterval(() => {
+      this.getStudents();
+      if (this.students.length > -1) {
+        clearInterval(studentInterval);
+      }
+    }, 500);
+  }
+
+  ngOnInit() {
+    this.students = [];
+    // this.records = [];
+    this.untouchedStudentList = [];
+    this.selectOptions = ['Id', 'Name', 'None'];
+    this.query = "None";
+  }
 
   private initializeStudentsList() {
     this.students = [...this.untouchedStudentList];
   };
 
-  ngOnInit() {
-    this.students = [];
-    this.untouchedStudentList = [];
-    this.selectOptions = ['Id', 'Name', 'None'];
-    this.query = "None";
+  // getStudentRecord(opts: { studentId: string }) {
+  //   return new Promise((resolve, reject) => {
+  //     this.db.getQueriedRecordsByCurrentDate({
+  //       studentId: opts.studentId,
+  //       month: this.currentDate.month,
+  //       year: this.currentDate.year,
+  //       day: this.currentDate.day
+  //     })
+  //       .then(response => {this.attended = true;
+  //         resolve(response)
+  //       })
+  //       .catch(error => handleError(error));
+  //   })
+  // }
+
+  private async getStudents() {
+    try {
+      const studentResponse = await this.db.getAllActiveStudents();
+      if (studentResponse.success == true) {
+        this.students = studentResponse.data;
+        this.untouchedStudentList = studentResponse.data;
+      } else {
+        // TODO:  implement an alert message if it fails
+        // message should say no students can be retrieved.
+        handleError(studentResponse.error);
+      }
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   searchStudent(event) {
@@ -97,23 +131,6 @@ export class MainPage implements OnInit {
     this.students = [...newQuery];
   }
 
-  private async getStudents() {
-    try {
-      const response = await this.db.getAllActiveStudents();
-      if (response.success == true) {
-        this.students = [...response.data];
-        this.untouchedStudentList = [...response.data];
-      } else {
-        // TODO:  implement an alert message if it fails
-        // message should say no students can be retrieved.
-        handleError(response.error);
-      }
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-
   goToStudentProfile(id: string) {
     this.navCtrl.push(StudentProfilePage, { id: id })
   }
@@ -124,35 +141,50 @@ export class MainPage implements OnInit {
 
   addAttendance(opts: { id: string }) {
     this.db.addAttendance({ date: new Date(), id: opts.id })
-      .then(response =>
-        response.success == true ?
+      .then(response => {
+        if (response.success == true) {
+          this.updateStudentAttendance({ id: opts.id, attended: true });
           this.showSimpleAlert({
             title: 'Success!',
             subTitle: 'Student was marked present!',
             buttons: ['Ok']
-          }) :
-          this.handleError(response.error))
-      .catch(error => this.handleError(error));
-  }
-
-  handleError(error) {
-    console.error(error);
+          });
+        } else {
+          handleError(response.error)
+        }
+      })
+      .catch(error => handleError(error));
   }
 
   addAbsence(opts: { id: string }) {
     this.db.addAbsence({ date: new Date(), id: opts.id })
-      .then(response =>
-        response.success == true ?
+      .then(response => {
+        if (response.success == true) {
+          this.updateStudentAttendance({ id: opts.id, attended: false });
           this.showSimpleAlert({
             title: 'Success!',
             subTitle: 'Student was marked absent!',
             buttons: ['Ok']
-          }) :
-          this.handleError(response.error))
-      .catch(error => this.handleError(error));
+          });
+        } else {
+          handleError(response.error);
+        }
+      })
+      .catch(error => handleError(error));
 
   }
 
+  updateStudentAttendance(opts: { id: string, attended: boolean }) {
+    const results = this.students.map(student => {
+      if (student.id == opts.id) {
+        return { ...student, attended: opts.attended };
+      } else {
+        return student;
+      }
+    });
+    this.students = [...results];
+    this.untouchedStudentList = [...results];
+  }
   private showSimpleAlert(options: ISimpleAlertOptions) {
     return this.alertCtrl.create({
       title: options.title,
@@ -160,5 +192,15 @@ export class MainPage implements OnInit {
       buttons: options.buttons
     })
       .present();;
+  }
+
+  getAttendance(opts: { attended: boolean }) {
+    if (opts.attended == true) {
+      return true;
+    } else if (opts.attended == false) {
+      return false;
+    } else {
+      return null;
+    }
   }
 }

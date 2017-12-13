@@ -271,20 +271,6 @@ export class AmaranthusDBProvider {
   }
 
   // query by isActive
-  getAllActiveStudents(): Promise<IResponse<any>> {
-    return new Promise((resolve, reject) => {
-      try {
-        const results = studentsColl.find({ 'isActive': { '$eq': true } });
-        resolve({ success: true, error: null, data: results });
-      } catch (error) {
-        if (studentsColl) {
-          reject(error);
-        }
-      }
-    })
-  }
-
-  // query by isActive
   getAllStudents(): Promise<IResponse<IStudent[]>> {
     return new Promise((resolve, reject) => {
       try {
@@ -306,5 +292,72 @@ export class AmaranthusDBProvider {
     });
   }
 
+  // query by isActive
+  getAllActiveStudents(): Promise<IResponse<any>> {
+    return new Promise((resolve, reject) => {
+      try {
+        const students = studentsColl.find({ 'isActive': { '$eq': true } });
+        const currentDate = {
+          day: new Date().getDate(),
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1
+        };
+        let record: IRecord;
+        const results = students.map(student => {
+          record = {
+            ...this.getQueriedRecordsByCurrentDate({
+              studentId: student.id,
+              year: currentDate.year,
+              day: currentDate.day,
+              month: currentDate.month
+            })
+          };
+          if (record != null && record.id == student.id) {
+            if (record.attendance == true) {
+              return { ...student, attended: true };
+            } else if (record.absence == true) {
+              return { ...student, attended: false };
+            } else {
+              return { ...student, attended: null };
+            }
+          } else {
+            return { ...student, attended: null };
+          }
+        });
+        resolve({ success: true, error: null, data: results });
+      } catch (error) {
+        if (studentsColl) {
+          reject(error);
+        }
+      }
+    })
+  }
+
+  getQueriedRecordsByCurrentDate(opts: { studentId: string, day: number, year: number, month: number }): IRecord {
+    let response: IRecord;
+    try {
+      const recordQuery = recordsColl.findOne({
+        'id': { '$eq': opts.studentId },
+        'year': { '$eq': opts.year },
+        'day': { '$eq': opts.day },
+        'month': { '$eq': opts.month }
+      });
+      if (recordQuery) {
+        response = recordQuery;
+        return response;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      if (recordsColl) {
+        setTimeout(() => this.getQueriedRecordsByCurrentDate(opts), 5000);
+      } else {
+        return null;
+      }
+    }
+  }
+
 
 }
+
+
