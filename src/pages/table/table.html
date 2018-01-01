@@ -9,7 +9,7 @@
 
 <ion-content padding>
   <ion-item>
-    <ion-label>Query by: </ion-label>
+    <ion-label>Filter by: </ion-label>
     <ion-select (ionCancel)="initializeStudents()" [(ngModel)]="query" multiple="false" selectSettings="selectOptions">
       <ion-option *ngFor="let option of selectOptions" (ionSelect)="queryData(option)">{{option}}</ion-option>
     </ion-select>

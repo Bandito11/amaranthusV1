@@ -21,7 +21,7 @@
   <ion-searchbar (ionInput)="searchStudent($event)">
   </ion-searchbar>
   <ion-item>
-    <ion-label>Query by: </ion-label>
+    <ion-label>Filter by: </ion-label>
     <ion-select [(ngModel)]="query" multiple="false" selectSettings="selectOptions">
       <ion-option *ngFor="let option of selectOptions" (ionSelect)="queryData(option)">{{option}}</ion-option>
     </ion-select>
@@ -39,20 +39,6 @@
           </p>
           <p>
             <span class="label">ID: </span>{{student.id}}
-          </p>
-          <div *ngIf="student.phoneNumber">
-            <p>
-              <span class="label">Phone Number: </span>{{student.phoneNumber | phonenumber}}
-            </p>
-          </div>
-          <p>
-            <span class="label">Address: </span>{{student.address}}
-          </p>
-          <p>
-            <span class="label">Town: </span>{{student.town}}
-          </p>
-          <p>
-            <span class="label">State: </span>{{student.state}}
           </p>
           <div>
               <p class="left" *ngIf="student.attended == true">

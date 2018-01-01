@@ -21,8 +21,8 @@
       {{student.lastName}}
     </header>
   </div>
-  <div class="text" padding>
-    <div>
+  <div class="text">
+    <div class="landscape">
       <p class="text bold id">
         <span class="text label">ID: </span>{{student.id}}
       </p>
@@ -46,7 +46,7 @@
         <span class="text label">Emergency Contact's Relationship: </span>{{student.emergencyRelationship}}</p>
       <p class="text bold">
         <span class="text label">Emergency Contact's Phone Number: </span>{{student.emergencyContactPhoneNumber | phonenumber}}</p>
-      <div class="text center bold">
+      <div class="text bold">
         <p *ngIf="student.isActive == true">
           *Student is currently active on the roster.*
         </p>

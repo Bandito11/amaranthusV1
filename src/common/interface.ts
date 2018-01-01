@@ -47,3 +47,10 @@ export interface IRecord {
     day: number;
     name?: string;
 }
+
+export interface Calendar {
+    weekDay?: number,
+    day: number,
+    month: number,
+    year: number
+}

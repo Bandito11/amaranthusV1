@@ -16,6 +16,8 @@ import { MyApp } from './app.component';
 import { AmaranthusDBProvider } from '../providers/amaranthus-db/amaranthus-db';
 import { Camera } from '@ionic-native/camera';
 import { IonicStorageModule } from '@ionic/storage';
+import {CalendarComponent} from './../components/calendar/calendar';
+import { CalendarPage } from '../pages/calendar/calendar';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { IonicStorageModule } from '@ionic/storage';
     CreatePage,
     PhoneNumberPipe,
     StudentProfilePage,
-    StudentListPage
+    StudentListPage,
+    CalendarPage,
+    CalendarComponent
     ],
   imports: [
     BrowserModule,
@@ -44,7 +48,8 @@ import { IonicStorageModule } from '@ionic/storage';
     EditPage,
     CreatePage,
     StudentProfilePage,
-    StudentListPage
+    StudentListPage,
+    CalendarPage
   ],
   providers: [
     StatusBar,

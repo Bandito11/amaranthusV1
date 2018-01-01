@@ -7,3 +7,24 @@ for (let i = 1; i <= 5; i++) {
 }
 
 export const yearLabels = [...years];
+
+export const weekDaysLabels = [
+    'Sun',
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat'
+  ];
+  
+  export const weekDaysHeader = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
+  ];
+  

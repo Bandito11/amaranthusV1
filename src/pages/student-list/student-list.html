@@ -15,39 +15,39 @@
   <ion-searchbar (ionInput)="searchStudent($event)">
   </ion-searchbar>
   <ion-item>
-    <ion-label>Query by: </ion-label>
+    <ion-label>Filter by: </ion-label>
     <ion-select [(ngModel)]="query" multiple="false" selectSettings="selectOptions">
       <ion-option *ngFor="let option of selectOptions" (ionSelect)="queryData(option)">{{option}}</ion-option>
     </ion-select>
   </ion-item>
   <ion-list *ngIf="students">
-      <ion-item (click)="goToStudentProfile(student.id)" *ngFor="let student of students">
-        <ion-avatar item-left>
-          <img src="{{student.picture}}" alt="no image">
-        </ion-avatar>
-        <div class="amaranthus">
-            <p>
-              <span class="label name">Name: </span>
-              <span class="name">{{student.firstName}} {{student.lastName}}</span>
-            </p>
-            <p>
-              <span class="label">ID: </span>{{student.id}}
-            </p>
-            <div *ngIf="student.phoneNumber">
-              <p>
-                <span class="label">Phone Number: </span>{{student.phoneNumber | phonenumber}}
-              </p>
-            </div>
-            <p>
-              <span class="label">Address: </span>{{student.address}}
-            </p>
-            <p>
-              <span class="label">Town: </span>{{student.town}}
-            </p>
-              <p>
-                <label class="label">State: </label>{{student.state}}
-              </p>
-          </div>
-        </ion-item>
+    <ion-item (click)="goToStudentProfile(student.id)" *ngFor="let student of students">
+      <ion-avatar item-left>
+        <img src="{{student.picture}}" alt="no image">
+      </ion-avatar>
+      <div class="amaranthus">
+        <p>
+          <span class="label name">Name: </span>
+          <span class="name">{{student.firstName}} {{student.lastName}}</span>
+        </p>
+        <p>
+          <span class="label">ID: </span>{{student.id}}
+        </p>
+        <div *ngIf="student.phoneNumber">
+          <p>
+            <span class="label">Phone Number: </span>{{student.phoneNumber | phonenumber}}
+          </p>
+        </div>
+        <p>
+          <span class="label">Address: </span>{{student.address}}
+        </p>
+        <p>
+          <span class="label">Town: </span>{{student.town}}
+        </p>
+        <p>
+          <label class="label">State: </label>{{student.state}}
+        </p>
+      </div>
+    </ion-item>
   </ion-list>
 </ion-content>

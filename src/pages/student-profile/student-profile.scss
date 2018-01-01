@@ -1,44 +1,68 @@
 page-student-profile {
     $fontSize: 105%;
-    .text{
-       font-size: $fontSize;
-       color:#ffffff;
+    .text {
+        font-size: $fontSize;
+        color: #ffffff;
+        margin-left: 2%;
     }
-    .profile-content{
-        background-color:color($colors, secondary); 
+    .profile-content {
+        background-color: color($colors, secondary);
     }
-    .header{
+    .header {
         font-size: $fontSize + 10%;
-        color:#000;
-        font-weight: bolder; 
+        color: #000;
+        font-weight: bolder;
     }
-    .text.label{
+    .text.label {
         font-weight: normal;
     }
-    .text.bold{
-        font-weight: bolder; 
+    .text.bold {
+        font-weight: bolder;
     }
-    .id{
+    .id {
         font-size: $fontSize + 50%;
     }
-    
-    .text.center{
+    .text.center {
         text-align: center;
-        padding:initial;
+        padding: initial;
     }
-    .profile-image{
-        padding-bottom:15px;
+    .profile-image {
+        padding-bottom: 15px;
         background-color: #ffffff;
         border-bottom-right-radius: 100%;
         border-bottom-left-radius: 100%;
     }
     img {
-        width:150px;
-        height:150px;
+        width: 150px;
+        height: 150px;
         border-radius: 100%;
         display: block;
         margin-left: auto;
         margin-right: auto;
         padding-bottom: 10px;
+    }
+    @media only screen and ( orientation:landscape) {
+        .landscape {
+            margin-left: 40%;
+        }
+        .text {
+            padding: 0px;
+        }
+    }
+    @media only screen and ( orientation:landscape) and ( max-width:1280px) {
+        .landscape {
+            margin-left: 35%;
+        }
+        .text {
+            padding: 0px;
+        }
+    }
+    @media only screen and ( orientation:portrait) and (min-width:600px) {
+        .landscape {
+            margin-left: 25%;
+        }
+        .text {
+            padding: 0px;
+        }
     }
 }
