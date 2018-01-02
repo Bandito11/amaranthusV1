@@ -41,10 +41,10 @@
             <span class="label">ID: </span>{{student.id}}
           </p>
           <div>
-              <p class="left" *ngIf="student.attended == true">
+              <p class="left attended" *ngIf="student.attended == true">
                   {{student.firstName}} {{student.lastName}} is present today!
                 </p>
-                <p class="left" *ngIf="student.attended == false">
+                <p class="left attended" *ngIf="student.attended == false">
                   {{student.firstName}} {{student.lastName}} is absent today!
                 </p>
             <p class="right">

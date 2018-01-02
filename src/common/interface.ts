@@ -46,6 +46,7 @@ export interface IRecord {
     month: number;
     day: number;
     name?: string;
+    picture?: string;
 }
 
 export interface Calendar {

@@ -130,7 +130,6 @@ export class EditPage implements OnInit {
       const phoneNumber = opts.phoneNumber
         .split('')
         .filter(phoneNumber => {
-          console.log(phoneNumber)
           if (phoneNumber != '-') {
             return phoneNumber;
           }
@@ -144,77 +143,101 @@ export class EditPage implements OnInit {
           }
         })
         .join('');
-      if (+phoneNumber == NaN || +emergencyContactPhoneNumber == NaN) {
+      if (!+phoneNumber || !phoneNumber) {
         options = {
           ...options, title: 'Warning!',
           subTitle: 'Phone numbers can only have numbers or \'-\'.',
           buttons: [...['OK']]
         }
         this.showSimpleAlert(options);
-      } else if (phoneNumber.length < 10 && phoneNumber.length > 0) {
+        return;
+      }
+      if (phoneNumber.length < 10 || phoneNumber.length > 12) {
         options = {
           ...options, title: 'Warning!',
           subTitle: 'Phone numbers have to be a 10 digit number.',
           buttons: [...['OK']]
         }
         this.showSimpleAlert(options);
-      } else if (emergencyContactPhoneNumber.length < 10 && emergencyContactPhoneNumber.length > 0) {
-        options = {
-          ...options, title: 'Warning!',
-          subTitle: 'Emergency contact phone numbers have to be a 10 digit number.',
-          buttons: [...['OK']]
+        return;
+      }
+      if ((emergencyContactPhoneNumber.length >=10 ||  emergencyContactPhoneNumber.length <= 12)) {
+        if (!+emergencyContactPhoneNumber) {
+          options = {
+            ...options, title: 'Warning!',
+            subTitle: 'Phone numbers can only have numbers or \'-\'.',
+            buttons: [...['OK']]
+          }
+        this.showSimpleAlert(options);
+        return;
+      }
+      }
+      if ((emergencyContactPhoneNumber.length < 10 ||  emergencyContactPhoneNumber.length > 12) && emergencyContactPhoneNumber) {
+        if (!+emergencyContactPhoneNumber) {
+          options = {
+            ...options, title: 'Warning!',
+            subTitle: 'Phone numbers can only have numbers or \'-\'.',
+            buttons: [...['OK']]
+          }
+        } else {
+          options = {
+            ...options, title: 'Warning!',
+            subTitle: 'Emergency contact phone numbers have to be a 10 digit number.',
+            buttons: [...['OK']]
+          }
         }
         this.showSimpleAlert(options);
-      } else {
-        opts = { ...opts, phoneNumber: phoneNumber, emergencyContactPhoneNumber: emergencyContactPhoneNumber };
-        const picture = this.validatePicture({ gender: this.gender, picture: this.picture })
-        const student = {
-          ...opts,
-          gender: this.gender,
-          isActive: this.isActive,
-          picture: picture
-        }
-        const alert = this.alertCtrl.create({
-          title: 'Warning!',
-          subTitle: `Are you sure you want to edit ${opts.firstName} ${opts.lastName} record?`,
-          buttons: [
-            {
-              text: 'No'
-            },
-            {
-              text: 'Yes',
-              handler: () => {
-                // user has clicked the alert button
-                // begin the alert's dismiss transition
-                const navTransition = alert.dismiss();
-                this.db.updateStudent(student)
-                  .then((response) => {
-                    if (response.success == true) {
-                      navTransition.then(() => {
-                        options = {
-                          title: 'Success!',
-                          subTitle: `${opts.firstName} ${opts.lastName} was edited.`
-                        };
-                        this.showAdvancedAlert(options);
-                      });
-                    } else {
-                      handleError(response.error);
-                      options = {
-                        title: 'Error',
-                        subTitle: 'There was an error trying to edit the record. Please try again.'
-                      }
-                      navTransition.then(() => this.showAdvancedAlert(options));
-                    }
-                  });
-                return false;
-              }
-            }
-          ]
-        });
-        alert.present();
+        return;
       }
+      opts = { ...opts, phoneNumber: phoneNumber, emergencyContactPhoneNumber: emergencyContactPhoneNumber };
+      const picture = this.validatePicture({ gender: this.gender, picture: this.picture })
+      const student = {
+        ...opts,
+        gender: this.gender,
+        isActive: this.isActive,
+        picture: picture
+      }
+      const alert = this.alertCtrl.create({
+        title: 'Warning!',
+        subTitle: `Are you sure you want to edit ${opts.firstName} ${opts.lastName} record?`,
+        buttons: [
+          {
+            text: 'No'
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              // user has clicked the alert button
+              // begin the alert's dismiss transition
+              const navTransition = alert.dismiss();
+              this.db.updateStudent(student)
+                .then((response) => {
+                  if (response.success == true) {
+                    navTransition.then(() => {
+                      options = {
+                        title: 'Success!',
+                        subTitle: `${opts.firstName} ${opts.lastName} was edited.`
+                      };
+                      this.showAdvancedAlert(options);
+                    });
+                  } else {
+                    handleError(response.error);
+                    options = {
+                      title: 'Error',
+                      subTitle: 'There was an error trying to edit the record. Please try again.'
+                    }
+                    navTransition.then(() => this.showAdvancedAlert(options));
+                  }
+                });
+              return false;
+            }
+          }
+        ]
+      });
+      alert.present();
     }
   }
+
 
   private validatePicture(opts: { gender: string, picture: string }) {
     if (opts.gender == 'male' && opts.picture == '') {

@@ -1,22 +1,51 @@
-import { Component, OnChanges } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Calendar } from '../../common/interface';
-import { SimpleChanges } from '@angular/core/src/metadata/lifecycle_hooks';
+import { Component, OnInit } from '@angular/core';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { Calendar, IRecord, ISimpleAlertOptions } from '../../common/interface';
 import { monthsLabels, weekDaysHeader } from '../../common/labels';
+import { handleError } from '../../common/handleError';
+import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 
 @IonicPage()
 @Component({
   selector: 'page-calendar',
   templateUrl: 'calendar.html',
 })
-export class CalendarPage implements OnChanges {
+export class CalendarPage implements OnInit {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public alertCtrl: AlertController,
+    public db: AmaranthusDBProvider,
+    public navCtrl: NavController,
+    public navParams: NavParams
+  ) { }
 
+  currentDate: string;
+  students: IRecord[];
+  private untouchedStudentList: IRecord[];
+private date: Calendar;
+
+  ionViewWillEnter(){
+    this.getStudentsRecords(this.date);
+  }
+  ngOnInit() {
+    this.students = [];
+    this.untouchedStudentList = [];
   }
 
-  date: Calendar;
-  currentDate: string;
+  getStudentsRecords(opts: Calendar) {
+    // Will get all Students queried by today's date.
+    const date = { ...opts, month: opts.month + 1 }
+    this.db.getStudentsRecordsByDate(date)
+      .then(response => {
+        if (response.success == true) {
+          this.students = [...response.data];
+          this.untouchedStudentList = [...response.data];
+        }else{
+          handleError(response.error);
+        }
+      })
+      .catch(error => handleError(error))
+  }
 
   getDate(date: Calendar) {
     this.date = date;
@@ -25,13 +54,61 @@ export class CalendarPage implements OnChanges {
     const currentYear = date.year;
     const currentWeekDay = weekDaysHeader[date.weekDay];
     this.currentDate = `${currentWeekDay}, ${currentDay} ${currentMonth}, ${currentYear}`;
+    this.getStudentsRecords(date);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    for (let propName in changes) {
-      if (propName == 'date') {
-        this.date = changes[propName].currentValue;
+  addAttendance(opts: { id: string }) {
+    this.db.addAttendance({ date: new Date(), id: opts.id })
+      .then(response => {
+        if (response.success == true) {
+          this.updateStudentAttendance({ id: opts.id, absence: false, attendance: true });
+          this.showSimpleAlert({
+            title: 'Success!',
+            subTitle: 'Student was marked present!',
+            buttons: ['Ok']
+          });
+        } else {
+          handleError(response.error)
+        }
+      })
+      .catch(error => handleError(error));
+  }
+
+  updateStudentAttendance(opts: { id: string, absence: boolean, attendance: boolean }) {
+    const results = this.students.map(student => {
+      if (student.id == opts.id) {
+        return { ...student, attendance: opts.attendance, absence: opts.absence };
+      } else {
+        return student;
       }
-    }
+    });
+    this.students = [...results];
+    this.untouchedStudentList = [...results];
+  }
+  
+  private showSimpleAlert(options: ISimpleAlertOptions) {
+    return this.alertCtrl.create({
+      title: options.title,
+      subTitle: options.subTitle,
+      buttons: options.buttons
+    })
+      .present();;
+  }
+
+  addAbsence(opts: { id: string }) {
+    this.db.addAbsence({ date: new Date(), id: opts.id })
+      .then(response => {
+        if (response.success == true) {
+          this.updateStudentAttendance({ id: opts.id, absence: true, attendance: false });
+          this.showSimpleAlert({
+            title: 'Success!',
+            subTitle: 'Student was marked absent!',
+            buttons: ['Ok']
+          });
+        } else {
+          handleError(response.error);
+        }
+      })
+      .catch(error => handleError(error));
   }
 }

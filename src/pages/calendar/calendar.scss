@@ -2,4 +2,22 @@ page-calendar {
     h4 {
         text-align: center;
     }
+        .amaranthus{
+            .label{
+                font-weight: bolder; 
+            }
+            .name{
+                font-size: 130%;
+            }
+            .left{
+                float: left;
+            }
+            .right{
+                float:right;
+                color:rgb(141, 162, 247);
+            }
+            .attended{
+                color:rgb(230, 164, 164);
+            }
+        }
 }

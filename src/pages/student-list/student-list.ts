@@ -150,44 +150,4 @@ export class StudentListPage implements OnInit {
   goToCreate() {
     this.navCtrl.push(CreatePage);
   }
-
-  addAttendance(opts: { id: string }) {
-    this.db.addAttendance({ date: new Date(), id: opts.id })
-      .then(response =>
-        response.success == true ?
-          this.showSimpleAlert({
-            title: 'Success!',
-            subTitle: 'Student was marked present!',
-            buttons: ['Ok']
-          }) :
-          this.handleError(response.error))
-      .catch(error => this.handleError(error));
-  }
-
-  handleError(error) {
-    console.error(error);
-  }
-
-  addAbsence(opts: { id: string }) {
-    this.db.addAbsence({ date: new Date(), id: opts.id })
-      .then(response =>
-        response.success == true ?
-          this.showSimpleAlert({
-            title: 'Success!',
-            subTitle: 'Student was marked absent!',
-            buttons: ['Ok']
-          }) :
-          this.handleError(response.error))
-      .catch(error => this.handleError(error));
-
-  }
-
-  private showSimpleAlert(options: ISimpleAlertOptions) {
-    return this.alertCtrl.create({
-      title: options.title,
-      subTitle: options.subTitle,
-      buttons: options.buttons
-    })
-      .present();;
-  }
 }

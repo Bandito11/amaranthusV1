@@ -16,4 +16,43 @@
 <ion-content padding>
   <calendar-component (getDate)="getDate($event)"></calendar-component>
   <h4>{{currentDate}}</h4>
+  <ion-list *ngIf="students">
+    <ion-item-sliding *ngFor="let student of students">
+      <ion-item>
+        <ion-avatar item-left>
+          <img src="{{student.picture}}" alt="no image">
+        </ion-avatar>
+        <div class="amaranthus">
+          <p>
+            <span class="label name">Name: </span>
+            <span class="name">{{student.name}}</span>
+          </p>
+          <p>
+            <span class="label">ID: </span>{{student.id}}
+          </p>
+          <div>
+            <p class="left attended" *ngIf="student.attendance == true">
+              {{student.name}} is present this day!
+            </p>
+            <p class="left attended" *ngIf="student.absence == true">
+              {{student.name}} is absent this day!
+            </p>
+
+            <p class="right">
+              Swipe for more options
+            </p>
+          </div>
+        </div>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button color="primary" (click)="addAttendance({id: student.id})">
+          Attended
+        </button>
+        <button ion-button color="secondary" (click)="addAbsence({id: student.id})">
+          Absent
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
 </ion-content>

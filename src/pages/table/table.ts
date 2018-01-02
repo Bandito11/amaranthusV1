@@ -3,13 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { handleError } from '../../common/handleError';
+import { IRecord, Calendar } from '../../common/interface';
 
-/**
- * Generated class for the TablePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 @IonicPage()
 @Component({
   selector: 'page-table',
@@ -24,8 +20,8 @@ export class TablePage implements OnInit {
     public db: AmaranthusDBProvider
   ) { }
 
-  students;
-  private untouchedStudentList;
+  students: IRecord[];
+  private untouchedStudentList: IRecord[];
   query: string;
   monthQuery: string;
   months: string[];
@@ -85,9 +81,10 @@ export class TablePage implements OnInit {
   }
 
   queryDataByYear(year: number) {
-    const date = {
+    const date: Calendar = {
       year: +year,
-      month: this.months.indexOf(this.monthQuery) + 1
+      month: this.months.indexOf(this.monthQuery) + 1,
+      day: null
     };
     this.db.getQueriedRecordsByDate(date)
       .then(response => {
@@ -99,16 +96,18 @@ export class TablePage implements OnInit {
   }
 
   queryDataByMonth(index: number) {
-    let date: { month: number, year: number };
+    let date: Calendar;
     if (index) {
       date = {
         year: +this.yearQuery,
-        month: index + 1
+        month: index + 1,
+        day: null
       }
     } else {
       date = {
         year: +this.yearQuery,
-        month: new Date().getMonth() + 1
+        month: new Date().getMonth() + 1,
+        day: null
       }
     }
     this.db.getQueriedRecordsByDate(date)
