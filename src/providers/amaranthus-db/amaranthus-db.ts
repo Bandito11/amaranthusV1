@@ -229,20 +229,40 @@ export class AmaranthusDBProvider {
         const students = studentsColl.find({
           'isActive': { '$eq': true }
         });
+
         students.map((student: IStudent) => {
-          const records = recordsColl.findOne({
+          const record = recordsColl.findOne({
             'id': { '$eq': student.id },
             'year': { '$eq': opts.year },
             'month': { '$eq': opts.month },
             'day': { '$eq': opts.day }
           });
-          if (records) {
+          if (record) {
+            if (student.id == record.id) {
+              response = {
+                ...response,
+                data: [...response.data, {
+                  firstName: student.firstName,
+                  lastName: student.lastName,
+                  name: `${student.firstName} ${student.lastName}`,
+                  picture: student.picture,
+                  attendance: record.attendance,
+                  absence: record.absence,
+                  id: student.id
+                }]
+              };
+            } 
+          }else {
             response = {
               ...response,
               data: [...response.data, {
+                firstName: student.firstName,
+                lastName: student.lastName,
                 name: `${student.firstName} ${student.lastName}`,
                 picture: student.picture,
-                ...records
+                attendance: false,
+                absence: false,
+                id: student.id
               }]
             };
           };

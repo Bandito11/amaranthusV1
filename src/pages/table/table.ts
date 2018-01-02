@@ -139,8 +139,8 @@ export class TablePage implements OnInit {
 
   queryStudentsName() {
     this.students = [...this.students.sort((a, b) => {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-      if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+      if (a.fullName.toLowerCase() < b.fullName.toLowerCase()) return -1;
+      if (a.fullName.toLowerCase() > b.fullName.toLowerCase()) return 1;
       return 0;
     })];
   }

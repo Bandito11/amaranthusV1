@@ -111,4 +111,29 @@ private date: Calendar;
       })
       .catch(error => handleError(error));
   }
+  searchStudent(event) {
+    // TODO: implement query of the list by searchbar value
+    let query: string = event.target.value;
+    query ? this.queryStudentsList(query) : this.initializeStudentsList();
+  }
+  private initializeStudentsList() {
+    this.students = [...this.untouchedStudentList];
+  };
+
+  private queryStudentsList(query: string) {
+    const students = [...this.untouchedStudentList];
+    let fullName: string;
+    const newQuery = students.filter(student => {
+      fullName = `${student.fullName} ${student.fullName}`.toLowerCase();
+      if (student.id == query ||
+        student.firstName.toLowerCase() == query.toLowerCase() ||
+        student.lastName.toLowerCase() == query.toLowerCase() ||
+        fullName == query.toLowerCase()
+      ) {
+        return student;
+      }
+    });
+    this.students = [...newQuery];
+  }
+
 }

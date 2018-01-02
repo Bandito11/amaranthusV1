@@ -86,7 +86,7 @@ export class CreatePage {
     } else {
       const phoneNumber = opts.phoneNumber
         .split('')
-        .map(phoneNumber => {
+        .filter(phoneNumber => {
           if (phoneNumber != '-') {
             return phoneNumber;
           }
@@ -100,72 +100,96 @@ export class CreatePage {
           }
         })
         .join('');
-      if (+phoneNumber == NaN || +emergencyContactPhoneNumber == NaN) {
+      if (!+phoneNumber) {
         options = {
           ...options, title: 'Warning!',
           subTitle: 'Phone numbers can only have numbers or \'-\'.',
           buttons: [...['OK']]
         }
         this.showSimpleAlert(options);
-      } else if (phoneNumber.length < 10 && phoneNumber.length > 0) {
+        return;
+      }
+      if ((phoneNumber.length < 10 || phoneNumber.length > 12)) {
         options = {
           ...options, title: 'Warning!',
           subTitle: 'Phone numbers have to be a 10 digit number.',
           buttons: [...['OK']]
         }
         this.showSimpleAlert(options);
-      } else if (emergencyContactPhoneNumber.length < 10 && emergencyContactPhoneNumber.length > 0) {
-        options = {
-          ...options, title: 'Warning!',
-          subTitle: 'Emergency contact phone numbers have to be a 10 digit number.',
-          buttons: [...['OK']]
+        return;
+      }
+      if (emergencyContactPhoneNumber.length >= 10 && emergencyContactPhoneNumber.length <= 12) {
+        if (!+emergencyContactPhoneNumber) {
+          options = {
+            ...options, title: 'Warning!',
+            subTitle: 'Phone numbers can only have numbers or \'-\'.',
+            buttons: [...['OK']]
+          }
+          this.showSimpleAlert(options);
+          return;
+        }
+      }
+      if ((emergencyContactPhoneNumber.length < 10 || emergencyContactPhoneNumber.length > 12) && emergencyContactPhoneNumber) {
+        if (!+emergencyContactPhoneNumber) {
+          options = {
+            ...options, title: 'Warning!',
+            subTitle: 'Phone numbers can only have numbers or \'-\'.',
+            buttons: [...['OK']]
+          }
+        } else {
+          options = {
+            ...options, title: 'Warning!',
+            subTitle: 'Emergency contact phone numbers have to be a 10 digit number.',
+            buttons: [...['OK']]
+          }
         }
         this.showSimpleAlert(options);
-      } else {
-        opts = { ...opts, phoneNumber: phoneNumber, emergencyContactPhoneNumber: emergencyContactPhoneNumber };
-        const picture = this.validatePicture({ gender: this.gender, picture: this.picture });
-        const student: IStudent = { ...opts, picture: picture, gender: this.gender, isActive: true };
-        const alert = this.alertCtrl.create({
-          title: 'Warning!',
-          subTitle: `Are you sure you want to create a new record for ${opts.firstName} ${opts.lastName}?`,
-          buttons: [
-            {
-              text: 'No'
-            },
-            {
-              text: 'Yes',
-              handler: () => {
-                // user has clicked the alert button
-                // begin the alert's dismiss transition
-                const navTransition = alert.dismiss();
-                this.db.insertStudent(student)
-                  .then((response) => {
-                    if (response.success == true) {
-                      navTransition.then(() => {
-                        options = {
-                          title: 'Success!',
-                          subTitle: `${opts.firstName} ${opts.lastName} was created.`
-                        };
-                        this.showAdvancedAlert(options);
-                      });
-                    } else {
-                      options = {
-                        title: 'Error',
-                        subTitle: response.error
-                      }
-                      navTransition.then(() => this.showAdvancedAlert(options));
-                    }
-                  })
-                  .catch(error => handleError(error));
-                ;
-                return false;
-              }
-            }
-          ]
-        });
-        alert.present();
+        return;
       }
+      opts = { ...opts, phoneNumber: phoneNumber, emergencyContactPhoneNumber: emergencyContactPhoneNumber };
+      const picture = this.validatePicture({ gender: this.gender, picture: this.picture });
+      const student: IStudent = { ...opts, picture: picture, gender: this.gender, isActive: true };
+      const alert = this.alertCtrl.create({
+        title: 'Warning!',
+        subTitle: `Are you sure you want to create a new record for ${opts.firstName} ${opts.lastName}?`,
+        buttons: [
+          {
+            text: 'No'
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              // user has clicked the alert button
+              // begin the alert's dismiss transition
+              const navTransition = alert.dismiss();
+              this.db.insertStudent(student)
+                .then((response) => {
+                  if (response.success == true) {
+                    navTransition.then(() => {
+                      options = {
+                        title: 'Success!',
+                        subTitle: `${opts.firstName} ${opts.lastName} was created.`
+                      };
+                      this.showAdvancedAlert(options);
+                    });
+                  } else {
+                    options = {
+                      title: 'Error',
+                      subTitle: response.error
+                    }
+                    navTransition.then(() => this.showAdvancedAlert(options));
+                  }
+                })
+                .catch(error => handleError(error));
+              ;
+              return false;
+            }
+          }
+        ]
+      });
+      alert.present();
     }
+
   }
 
   showAdvancedAlert(options: ISimpleAlertOptions) {

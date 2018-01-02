@@ -45,7 +45,9 @@ export interface IRecord {
     year: number;
     month: number;
     day: number;
-    name?: string;
+    firstName?: string;
+    lastName?: string;
+    fullName?: string;
     picture?: string;
 }
 

@@ -10,7 +10,7 @@ import {CalendarPage} from '../../pages/calendar/calendar';
   selector: 'page-tabs',
   template: `
   <ion-tabs>
-     <ion-tab tabTitle="Take Attendance" [root]="tab1"></ion-tab>
+     <ion-tab tabTitle="Main" [root]="tab1"></ion-tab>
      <ion-tab tabTitle="Calendar" [root]="tab4"></ion-tab>     
      <ion-tab tabTitle="Table" [root]="tab2"></ion-tab>
      <ion-tab tabTitle="Roster" [root]="tab3"></ion-tab>     

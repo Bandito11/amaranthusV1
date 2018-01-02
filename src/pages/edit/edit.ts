@@ -143,7 +143,7 @@ export class EditPage implements OnInit {
           }
         })
         .join('');
-      if (!+phoneNumber || !phoneNumber) {
+      if (!+phoneNumber) {
         options = {
           ...options, title: 'Warning!',
           subTitle: 'Phone numbers can only have numbers or \'-\'.',
@@ -152,7 +152,7 @@ export class EditPage implements OnInit {
         this.showSimpleAlert(options);
         return;
       }
-      if (phoneNumber.length < 10 || phoneNumber.length > 12) {
+      if ((phoneNumber.length < 10 || phoneNumber.length > 12)) {
         options = {
           ...options, title: 'Warning!',
           subTitle: 'Phone numbers have to be a 10 digit number.',
@@ -161,18 +161,18 @@ export class EditPage implements OnInit {
         this.showSimpleAlert(options);
         return;
       }
-      if ((emergencyContactPhoneNumber.length >=10 ||  emergencyContactPhoneNumber.length <= 12)) {
+      if (emergencyContactPhoneNumber.length >= 10 && emergencyContactPhoneNumber.length <= 12) {
         if (!+emergencyContactPhoneNumber) {
           options = {
             ...options, title: 'Warning!',
             subTitle: 'Phone numbers can only have numbers or \'-\'.',
             buttons: [...['OK']]
           }
-        this.showSimpleAlert(options);
-        return;
+          this.showSimpleAlert(options);
+          return;
+        }
       }
-      }
-      if ((emergencyContactPhoneNumber.length < 10 ||  emergencyContactPhoneNumber.length > 12) && emergencyContactPhoneNumber) {
+      if ((emergencyContactPhoneNumber.length < 10 || emergencyContactPhoneNumber.length > 12) && emergencyContactPhoneNumber) {
         if (!+emergencyContactPhoneNumber) {
           options = {
             ...options, title: 'Warning!',

@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Calendar</ion-title>
   </ion-navbar>
 
@@ -16,6 +16,8 @@
 <ion-content padding>
   <calendar-component (getDate)="getDate($event)"></calendar-component>
   <h4>{{currentDate}}</h4>
+  <ion-searchbar (ionInput)="searchStudent($event)">
+    </ion-searchbar>  
   <ion-list *ngIf="students">
     <ion-item-sliding *ngFor="let student of students">
       <ion-item>
