@@ -79,8 +79,12 @@ export class AmaranthusDBProvider {
   }
 
   insertStudent(student: IStudent): Promise<IResponse<null>> {
-    let response;
+    let response: IResponse<null>;
     return new Promise((resolve, reject) => {
+      if(studentsColl.count() > 10){
+        response = {success: false, error: 'If you want to create more than 10 users at a time please consider buying the app!', data: null};
+        resolve(response)
+      }
       this.checkIfUserExists({ id: student.id })
         .then(value => {
           try {

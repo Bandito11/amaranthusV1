@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { handleError } from '../../common/handleError';
 import { StudentProfilePage } from '../student-profile/student-profile';
 import { CreatePage } from '../create/create';
-import { ISimpleAlertOptions, IStudent } from '../../common/interface';
+import { IStudent } from '../../common/interface';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 
 /**
