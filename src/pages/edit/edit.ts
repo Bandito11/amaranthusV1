@@ -103,9 +103,14 @@ export class EditPage implements OnInit {
   }
 
   validatePhoneNumber(phoneNumber) {
-    if (phoneNumber.length >= 10 && phoneNumber.length <= 12) {
+    // if (phoneNumber.length >= 10 && phoneNumber.length <= 12) {
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+    if(phoneNumber.length > 0){
       return false;
-    } else {
+    }else{
       return true;
     }
   }
@@ -143,26 +148,15 @@ export class EditPage implements OnInit {
           }
         })
         .join('');
-      if (!+phoneNumber) {
-        options = {
-          ...options, title: 'Warning!',
-          subTitle: 'Phone numbers can only have numbers or \'-\'.',
-          buttons: [...['OK']]
-        }
-        this.showSimpleAlert(options);
-        return;
-      }
-      if ((phoneNumber.length < 10 || phoneNumber.length > 12)) {
-        options = {
-          ...options, title: 'Warning!',
-          subTitle: 'Phone numbers have to be a 10 digit number.',
-          buttons: [...['OK']]
-        }
-        this.showSimpleAlert(options);
-        return;
-      }
-      if (emergencyContactPhoneNumber.length >= 10 && emergencyContactPhoneNumber.length <= 12) {
-        if (!+emergencyContactPhoneNumber) {
+        if(!phoneNumber){
+          options = {
+            ...options, title: 'Warning!',
+            subTitle: 'You have to write a valid phone number.',
+            buttons: [...['OK']]
+          }
+          this.showSimpleAlert(options);
+          return;
+        } else if (!+phoneNumber) {
           options = {
             ...options, title: 'Warning!',
             subTitle: 'Phone numbers can only have numbers or \'-\'.',
@@ -170,25 +164,56 @@ export class EditPage implements OnInit {
           }
           this.showSimpleAlert(options);
           return;
+
         }
-      }
-      if ((emergencyContactPhoneNumber.length < 10 || emergencyContactPhoneNumber.length > 12) && emergencyContactPhoneNumber) {
-        if (!+emergencyContactPhoneNumber) {
-          options = {
-            ...options, title: 'Warning!',
-            subTitle: 'Phone numbers can only have numbers or \'-\'.',
-            buttons: [...['OK']]
+        if(emergencyContactPhoneNumber){
+          if (!+emergencyContactPhoneNumber) {
+            options = {
+              ...options, title: 'Warning!',
+              subTitle: 'Phone numbers can only have numbers or \'-\'.',
+              buttons: [...['OK']]
+            }
+            this.showSimpleAlert(options);
+            return;
           }
-        } else {
-          options = {
-            ...options, title: 'Warning!',
-            subTitle: 'Emergency contact phone numbers have to be a 10 digit number.',
-            buttons: [...['OK']]
-          }
-        }
-        this.showSimpleAlert(options);
-        return;
       }
+      // if ((phoneNumber.length < 10 || phoneNumber.length > 12)) {
+      //   options = {
+      //     ...options, title: 'Warning!',
+      //     subTitle: 'Phone numbers have to be a 10 digit number.',
+      //     buttons: [...['OK']]
+      //   }
+      //   this.showSimpleAlert(options);
+      //   return;
+      // }
+      // if (emergencyContactPhoneNumber.length >= 10 && emergencyContactPhoneNumber.length <= 12) {
+      //   if (!+emergencyContactPhoneNumber) {
+      //     options = {
+      //       ...options, title: 'Warning!',
+      //       subTitle: 'Phone numbers can only have numbers or \'-\'.',
+      //       buttons: [...['OK']]
+      //     }
+      //     this.showSimpleAlert(options);
+      //     return;
+      //   }
+      // }
+      // if ((emergencyContactPhoneNumber.length < 10 || emergencyContactPhoneNumber.length > 12) && emergencyContactPhoneNumber) {
+      //   if (!+emergencyContactPhoneNumber) {
+      //     options = {
+      //       ...options, title: 'Warning!',
+      //       subTitle: 'Phone numbers can only have numbers or \'-\'.',
+      //       buttons: [...['OK']]
+      //     }
+      //   } else {
+      //     options = {
+      //       ...options, title: 'Warning!',
+      //       subTitle: 'Emergency contact phone numbers have to be a 10 digit number.',
+      //       buttons: [...['OK']]
+      //     }
+      //   }
+      //   this.showSimpleAlert(options);
+      //   return;
+      // }
       opts = { ...opts, phoneNumber: phoneNumber, emergencyContactPhoneNumber: emergencyContactPhoneNumber };
       const picture = this.validatePicture({ gender: this.gender, picture: this.picture })
       const student = {
