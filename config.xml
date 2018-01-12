@@ -2,14 +2,14 @@
 <widget id="io.attendance.book" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Attendance Book</name>
     <description>Take attendance the easy way!</description>
-    <author email="esteban.a.morales.morales@gmail.com">Esteban Morales</author>
+    <author email="bandito-dev@outlook.com">Esteban Morales</author>
     <content src="index.html" />
     <access origin="*" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
+    <allow-intent href="http://www.attendancebook.xyz" />
+    <allow-intent href="https://www.attendancebook.xyz" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
+    <allow-intent href="mailto:bandito-dev@outlook.com" />
     <allow-intent href="geo:*" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="16" />
