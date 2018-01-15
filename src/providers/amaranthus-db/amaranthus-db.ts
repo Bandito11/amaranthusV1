@@ -6,8 +6,8 @@ import * as Loki from 'lokijs';
 // import { STUDENTS, RECORDS } from './../../mock/mock-students';
 ///////////////////////////////////
 
-let studentsColl: LokiCollection<IStudent>;
-let recordsColl: LokiCollection<IRecord>;
+let studentsColl: Collection<IStudent>;
+let recordsColl: Collection<IRecord>;
 let db: Loki;
 const dbName = 'amaranthus.db';
 @Injectable()
@@ -34,7 +34,7 @@ export class AmaranthusDBProvider {
 
   createDB() {
     const ionicStorageAdapter = new IonicStorageAdapter();
-    const lokiOptions: LokiConfigureOptions = {
+    const lokiOptions: LokiConfigOptions = {
       autosave: true,
       autoload: true,
       adapter: ionicStorageAdapter,
