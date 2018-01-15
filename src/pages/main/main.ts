@@ -26,7 +26,6 @@ export class MainPage implements OnInit {
   private untouchedStudentList: IStudent[];
   query: string;
   selectOptions: string[];
-  // records: IRecord[];
 
   ionViewDidEnter() {
     this.query = "None";
@@ -40,8 +39,6 @@ export class MainPage implements OnInit {
 
   ngOnInit() {
     this.students = [];
-    this.students = [];
-    // this.records = [];
     this.untouchedStudentList = [];
     this.selectOptions = ['Id', 'Name', 'None'];
     this.query = "None";
@@ -50,21 +47,6 @@ export class MainPage implements OnInit {
   private initializeStudentsList() {
     this.students = [...this.untouchedStudentList];
   };
-
-  // getStudentRecord(opts: { studentId: string }) {
-  //   return new Promise((resolve, reject) => {
-  //     this.db.getQueriedRecordsByCurrentDate({
-  //       studentId: opts.studentId,
-  //       month: this.currentDate.month,
-  //       year: this.currentDate.year,
-  //       day: this.currentDate.day
-  //     })
-  //       .then(response => {this.attended = true;
-  //         resolve(response)
-  //       })
-  //       .catch(error => handleError(error));
-  //   })
-  // }
 
   private async getStudents() {
     try {
@@ -83,7 +65,6 @@ export class MainPage implements OnInit {
   }
 
   searchStudent(event) {
-    // TODO: implement query of the list by searchbar value
     let query: string = event.target.value;
     query ? this.queryStudentsList(query) : this.initializeStudentsList();
   }
