@@ -18,6 +18,8 @@ import { Camera } from '@ionic-native/camera';
 import { IonicStorageModule } from '@ionic/storage';
 import {CalendarComponent} from './../components/calendar/calendar';
 import { CalendarPage } from '../pages/calendar/calendar';
+import { LogFileProvider } from '../providers/log-file/log-file';
+import { File } from '@ionic-native/file';
 
 @NgModule({
   declarations: [
@@ -54,9 +56,11 @@ import { CalendarPage } from '../pages/calendar/calendar';
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: ErrorHandler, useClass: IonicErrorHandler },
     AmaranthusDBProvider,
-    Camera
+    Camera,
+    File,
+    LogFileProvider,
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
 export class AppModule { }

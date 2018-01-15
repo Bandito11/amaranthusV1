@@ -2,9 +2,10 @@ import { StudentProfilePage } from './../student-profile/student-profile';
 import { CreatePage } from './../create/create';
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
 import { ISimpleAlertOptions, IStudent } from '../../common/interface';
+import { LogFileProvider } from '../../providers/log-file/log-file';
 
 @IonicPage()
 @Component({
@@ -14,10 +15,10 @@ import { ISimpleAlertOptions, IStudent } from '../../common/interface';
 export class MainPage implements OnInit {
 
   constructor(
-    public alertCtrl: AlertController,
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public db: AmaranthusDBProvider
+    private logFile: LogFileProvider,
+    private alertCtrl: AlertController,
+    private navCtrl: NavController,
+    private db: AmaranthusDBProvider
   ) { }
 
 
@@ -38,6 +39,7 @@ export class MainPage implements OnInit {
   }
 
   ngOnInit() {
+    this.students = [];
     this.students = [];
     // this.records = [];
     this.untouchedStudentList = [];
@@ -136,6 +138,7 @@ export class MainPage implements OnInit {
   }
 
   goToCreate() {
+    this.logFile.exportFile()
     this.navCtrl.push(CreatePage);
   }
 
