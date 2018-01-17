@@ -15,31 +15,35 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { AmaranthusDBProvider } from '../providers/amaranthus-db/amaranthus-db';
 import { Camera } from '@ionic-native/camera';
-import { IonicStorageModule } from '@ionic/storage';
-import {CalendarComponent} from './../components/calendar/calendar';
 import { CalendarPage } from '../pages/calendar/calendar';
 import { LogFileProvider } from '../providers/log-file/log-file';
 import { File } from '@ionic-native/file';
+import { TabsPageModule } from '../pages/tabs/tabs.module';
+import { MainPageModule } from '../pages/main/main.module';
+import { TablePageModule } from '../pages/table/table.module';
+import { EditPageModule } from '../pages/edit/edit.module';
+import { CreatePageModule } from '../pages/create/create.module';
+import { StudentProfilePageModule } from '../pages/student-profile/student-profile.module';
+import { StudentListPageModule } from '../pages/student-list/student-list.module';
+import { CalendarPageModule } from '../pages/calendar/calendar.module';
 
 @NgModule({
   declarations: [
     MyApp,
-    TabsPage,
-    MainPage,
-    TablePage,
-    EditPage,
-    CreatePage,
-    PhoneNumberPipe,
-    StudentProfilePage,
-    StudentListPage,
-    CalendarPage,
-    CalendarComponent
+    PhoneNumberPipe
     ],
   imports: [
+    TabsPageModule,
+    MainPageModule,
+    TablePageModule,
+    EditPageModule,
+    CreatePageModule,
+    StudentProfilePageModule,
+    StudentListPageModule,
+    CalendarPageModule,
     BrowserModule,
     FormsModule,
-    IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [

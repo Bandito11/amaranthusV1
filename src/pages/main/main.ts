@@ -5,7 +5,6 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
 import { ISimpleAlertOptions, IStudent } from '../../common/interface';
-import { LogFileProvider } from '../../providers/log-file/log-file';
 
 @IonicPage()
 @Component({
@@ -15,12 +14,10 @@ import { LogFileProvider } from '../../providers/log-file/log-file';
 export class MainPage implements OnInit {
 
   constructor(
-    private logFile: LogFileProvider,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private db: AmaranthusDBProvider
   ) { }
-
 
   students: IStudent[];
   private untouchedStudentList: IStudent[];
@@ -114,15 +111,6 @@ export class MainPage implements OnInit {
     this.students = [...newQuery];
   }
 
-  goToStudentProfile(id: string) {
-    this.navCtrl.push(StudentProfilePage, { id: id })
-  }
-
-  goToCreate() {
-    this.logFile.exportFile()
-    this.navCtrl.push(CreatePage);
-  }
-
   addAttendance(opts: { id: string }) {
     this.db.addAttendance({ date: new Date(), id: opts.id })
       .then(response => {
@@ -169,14 +157,6 @@ export class MainPage implements OnInit {
     this.students = [...results];
     this.untouchedStudentList = [...results];
   }
-  private showSimpleAlert(options: ISimpleAlertOptions) {
-    return this.alertCtrl.create({
-      title: options.title,
-      subTitle: options.subTitle,
-      buttons: options.buttons
-    })
-      .present();;
-  }
 
   getAttendance(opts: { attended: boolean }) {
     if (opts.attended == true) {
@@ -186,5 +166,22 @@ export class MainPage implements OnInit {
     } else {
       return null;
     }
+  }
+
+  private showSimpleAlert(options: ISimpleAlertOptions) {
+    return this.alertCtrl.create({
+      title: options.title,
+      subTitle: options.subTitle,
+      buttons: options.buttons
+    })
+      .present();;
+  }
+
+  goToStudentProfile(id: string) {
+    this.navCtrl.push(StudentProfilePage, { id: id })
+  }
+
+  goToCreate() {
+    this.navCtrl.push(CreatePage);
   }
 }
