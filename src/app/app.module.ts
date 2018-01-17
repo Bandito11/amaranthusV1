@@ -63,6 +63,7 @@ import { CalendarPageModule } from '../pages/calendar/calendar.module';
     AmaranthusDBProvider,
     Camera,
     File,
+    // InAppPurchase,
     LogFileProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
