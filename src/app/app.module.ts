@@ -26,6 +26,7 @@ import { CreatePageModule } from '../pages/create/create.module';
 import { StudentProfilePageModule } from '../pages/student-profile/student-profile.module';
 import { StudentListPageModule } from '../pages/student-list/student-list.module';
 import { CalendarPageModule } from '../pages/calendar/calendar.module';
+import { InAppPurchase } from '@ionic-native/in-app-purchase';
 
 @NgModule({
   declarations: [
@@ -63,8 +64,8 @@ import { CalendarPageModule } from '../pages/calendar/calendar.module';
     AmaranthusDBProvider,
     Camera,
     File,
-    // InAppPurchase,
-    LogFileProvider,
+    InAppPurchase,
+    // LogFileProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
