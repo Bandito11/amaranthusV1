@@ -16,8 +16,6 @@ import { MyApp } from './app.component';
 import { AmaranthusDBProvider } from '../providers/amaranthus-db/amaranthus-db';
 import { Camera } from '@ionic-native/camera';
 import { CalendarPage } from '../pages/calendar/calendar';
-import { LogFileProvider } from '../providers/log-file/log-file';
-import { File } from '@ionic-native/file';
 import { TabsPageModule } from '../pages/tabs/tabs.module';
 import { MainPageModule } from '../pages/main/main.module';
 import { TablePageModule } from '../pages/table/table.module';
@@ -27,6 +25,7 @@ import { StudentProfilePageModule } from '../pages/student-profile/student-profi
 import { StudentListPageModule } from '../pages/student-list/student-list.module';
 import { CalendarPageModule } from '../pages/calendar/calendar.module';
 import { InAppPurchase } from '@ionic-native/in-app-purchase';
+import { AppPurchaseProvider } from '../providers/app-purchase/app-purchase';
 
 @NgModule({
   declarations: [
@@ -63,9 +62,10 @@ import { InAppPurchase } from '@ionic-native/in-app-purchase';
     SplashScreen,
     AmaranthusDBProvider,
     Camera,
-    File,
+    // File,
     InAppPurchase,
     // LogFileProvider,
+    AppPurchaseProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
