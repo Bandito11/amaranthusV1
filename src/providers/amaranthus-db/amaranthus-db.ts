@@ -34,7 +34,7 @@ export class AmaranthusDBProvider {
 
   createDB() {
     const ionicStorageAdapter = new IonicStorageAdapter();
-    const lokiOptions: LokiConfigOptions = {
+    const lokiOptions: Partial<LokiConfigOptions> = {
       autosave: true,
       autoload: true,
       adapter: ionicStorageAdapter,
