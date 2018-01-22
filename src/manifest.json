@@ -9,5 +9,6 @@
     "type": "image/png"
   }],
   "background_color": "#4e8ef7",
-  "theme_color": "#4e8ef7"
+  "theme_color": "#4e8ef7",
+  "play_store_key": "<Base64-encoded public key from the Google Play Store>"
 }

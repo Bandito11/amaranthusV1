@@ -24,8 +24,9 @@ import { CreatePageModule } from '../pages/create/create.module';
 import { StudentProfilePageModule } from '../pages/student-profile/student-profile.module';
 import { StudentListPageModule } from '../pages/student-list/student-list.module';
 import { CalendarPageModule } from '../pages/calendar/calendar.module';
-import { InAppPurchase } from '@ionic-native/in-app-purchase';
-import { AppPurchaseProvider } from '../providers/app-purchase/app-purchase';
+// import { InAppPurchase } from '@ionic-native/in-app-purchase';
+// import { AppPurchaseProvider } from '../providers/app-purchase/app-purchase';
+// import { File } from '@ionic-native/file';
 
 @NgModule({
   declarations: [
@@ -63,9 +64,9 @@ import { AppPurchaseProvider } from '../providers/app-purchase/app-purchase';
     AmaranthusDBProvider,
     Camera,
     // File,
-    InAppPurchase,
+    // InAppPurchase,
     // LogFileProvider,
-    AppPurchaseProvider,
+    // AppPurchaseProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
