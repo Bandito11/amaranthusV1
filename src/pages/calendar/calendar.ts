@@ -22,11 +22,12 @@ export class CalendarPage implements OnInit {
   currentDate: string;
   students: IRecord[];
   private untouchedStudentList: IRecord[];
-private date: Calendar;
+  private date: Calendar;
 
   ionViewWillEnter(){
     this.getStudentsRecords(this.date);
   }
+  
   ngOnInit() {
     this.students = [];
     this.untouchedStudentList = [];
@@ -86,15 +87,6 @@ private date: Calendar;
     this.untouchedStudentList = [...results];
   }
   
-  private showSimpleAlert(options: ISimpleAlertOptions) {
-    return this.alertCtrl.create({
-      title: options.title,
-      subTitle: options.subTitle,
-      buttons: options.buttons
-    })
-      .present();;
-  }
-
   addAbsence(opts: { id: string }) {
     this.db.addAbsence({ date: this.date, id: opts.id })
       .then(response => {
@@ -111,11 +103,24 @@ private date: Calendar;
       })
       .catch(error => handleError(error));
   }
+  
+  
+  
+  private showSimpleAlert(options: ISimpleAlertOptions) {
+    return this.alertCtrl.create({
+      title: options.title,
+      subTitle: options.subTitle,
+      buttons: options.buttons
+    })
+      .present();;
+  }
+
   searchStudent(event) {
     // TODO: implement query of the list by searchbar value
     let query: string = event.target.value;
     query ? this.queryStudentsList(query) : this.initializeStudentsList();
   }
+  
   private initializeStudentsList() {
     this.students = [...this.untouchedStudentList];
   };
