@@ -58,7 +58,7 @@ private date: Calendar;
   }
 
   addAttendance(opts: { id: string }) {
-    this.db.addAttendance({ date: new Date(), id: opts.id })
+    this.db.addAttendance({ date: this.date, id: opts.id })
       .then(response => {
         if (response.success == true) {
           this.updateStudentAttendance({ id: opts.id, absence: false, attendance: true });
@@ -96,7 +96,7 @@ private date: Calendar;
   }
 
   addAbsence(opts: { id: string }) {
-    this.db.addAbsence({ date: new Date(), id: opts.id })
+    this.db.addAbsence({ date: this.date, id: opts.id })
       .then(response => {
         if (response.success == true) {
           this.updateStudentAttendance({ id: opts.id, absence: true, attendance: false });
