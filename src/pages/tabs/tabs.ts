@@ -28,5 +28,5 @@ export class TabsPage {
   tab2=CalendarPage;
   tab3 = TablePage;
   tab4 = StudentListPage;
-  tab4 = StudentListPage;
+  tab5 = SettingsPage;
 }
