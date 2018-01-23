@@ -5,8 +5,7 @@ import { CalendarComponent } from '../../components/calendar/calendar';
 
 @NgModule({
   declarations: [
-    CalendarPage,
-    CalendarComponent
+    CalendarPage
   ],
   imports: [
     IonicPageModule.forChild(CalendarPage),

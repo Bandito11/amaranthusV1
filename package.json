@@ -22,15 +22,15 @@
     "@ionic-native/camera": "^4.4.2",
     "@ionic-native/core": "4.4.0",
     "@ionic-native/file": "4.5.2",
-    "@ionic-native/in-app-purchase": "4.5.2",
+    "@ionic-native/in-app-purchase-2": "^4.5.2",
     "@ionic-native/splash-screen": "4.4.0",
     "@ionic-native/status-bar": "4.4.0",
     "@ionic/storage": "2.1.3",
+    "cc.fovea.cordova.purchase": "^7.1.0",
     "cordova-android": "7.0.0",
     "cordova-plugin-camera": "^4.0.1",
     "cordova-plugin-device": "^2.0.1",
     "cordova-plugin-file": "^6.0.1",
-    "cordova-plugin-inapppurchase": "^1.2.0",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^1.1.16",
     "cordova-plugin-splashscreen": "^5.0.1",
@@ -60,7 +60,10 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-file": {},
       "cordova-plugin-statusbar": {},
-      "cordova-plugin-ionic-keyboard": {}
+      "cordova-plugin-ionic-keyboard": {},
+      "cc.fovea.cordova.purchase": {
+        "BILLING_KEY": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhkAbo4hMku/chbWuCFwed5t8ohtR13/LHagfyMk3SRjQFn2v1fAqozoh246VPzFtblETcqlQPOLThUOUb2eV8YWLfZ5UcO8jjWmwm1k6ErOT7BEg52ox8vlokKZ15oTTHDeAN9wmIRu1m5007ODNqXIVkHTXm8RS5XOrfHF7eZ+hMb+avlbGY7ol2DeNx1JinWyVhUotQmTmkVu0JUv2PIKsVvSR3rI1tnN8VXhinCar5+iyjznor1Wh7itHRxu5esCo2rz4Q8+WXkWGK5zNfP5DgYo58vFQm22h+W6IlfgrXVO9JQBY5TGug1ymMvlpjZKyzqYNppxKKr2hIo9pSQIDAQAB"
+      }
     },
     "platforms": [
       "android"

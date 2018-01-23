@@ -24,9 +24,12 @@ import { CreatePageModule } from '../pages/create/create.module';
 import { StudentProfilePageModule } from '../pages/student-profile/student-profile.module';
 import { StudentListPageModule } from '../pages/student-list/student-list.module';
 import { CalendarPageModule } from '../pages/calendar/calendar.module';
-// import { InAppPurchase } from '@ionic-native/in-app-purchase';
-// import { AppPurchaseProvider } from '../providers/app-purchase/app-purchase';
+import { AppPurchaseProvider } from '../providers/app-purchase/app-purchase';
 // import { File } from '@ionic-native/file';
+import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2';
+import { ComponentsModule } from '../components/components.module';
+import { SettingsPageModule } from '../pages/settings/settings.module';
+import { SettingsPage } from '../pages/settings/settings';
 
 @NgModule({
   declarations: [
@@ -42,6 +45,8 @@ import { CalendarPageModule } from '../pages/calendar/calendar.module';
     StudentProfilePageModule,
     StudentListPageModule,
     CalendarPageModule,
+    ComponentsModule,
+    SettingsPageModule,
     BrowserModule,
     FormsModule,
     IonicModule.forRoot(MyApp)
@@ -56,17 +61,18 @@ import { CalendarPageModule } from '../pages/calendar/calendar.module';
     CreatePage,
     StudentProfilePage,
     StudentListPage,
-    CalendarPage
+    CalendarPage,
+    SettingsPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     AmaranthusDBProvider,
     Camera,
+    InAppPurchase2,
     // File,
-    // InAppPurchase,
     // LogFileProvider,
-    // AppPurchaseProvider,
+    AppPurchaseProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
