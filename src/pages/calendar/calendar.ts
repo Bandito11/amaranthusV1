@@ -22,11 +22,12 @@ export class CalendarPage implements OnInit {
   currentDate: string;
   students: IRecord[];
   private untouchedStudentList: IRecord[];
-private date: Calendar;
+  private date: Calendar;
 
   ionViewWillEnter(){
     this.getStudentsRecords(this.date);
   }
+  
   ngOnInit() {
     this.students = [];
     this.untouchedStudentList = [];
@@ -58,7 +59,7 @@ private date: Calendar;
   }
 
   addAttendance(opts: { id: string }) {
-    this.db.addAttendance({ date: new Date(), id: opts.id })
+    this.db.addAttendance({ date: this.date, id: opts.id })
       .then(response => {
         if (response.success == true) {
           this.updateStudentAttendance({ id: opts.id, absence: false, attendance: true });
@@ -86,17 +87,8 @@ private date: Calendar;
     this.untouchedStudentList = [...results];
   }
   
-  private showSimpleAlert(options: ISimpleAlertOptions) {
-    return this.alertCtrl.create({
-      title: options.title,
-      subTitle: options.subTitle,
-      buttons: options.buttons
-    })
-      .present();;
-  }
-
   addAbsence(opts: { id: string }) {
-    this.db.addAbsence({ date: new Date(), id: opts.id })
+    this.db.addAbsence({ date: this.date, id: opts.id })
       .then(response => {
         if (response.success == true) {
           this.updateStudentAttendance({ id: opts.id, absence: true, attendance: false });
@@ -111,11 +103,24 @@ private date: Calendar;
       })
       .catch(error => handleError(error));
   }
+  
+  
+  
+  private showSimpleAlert(options: ISimpleAlertOptions) {
+    return this.alertCtrl.create({
+      title: options.title,
+      subTitle: options.subTitle,
+      buttons: options.buttons
+    })
+      .present();;
+  }
+
   searchStudent(event) {
     // TODO: implement query of the list by searchbar value
     let query: string = event.target.value;
     query ? this.queryStudentsList(query) : this.initializeStudentsList();
   }
+  
   private initializeStudentsList() {
     this.students = [...this.untouchedStudentList];
   };
