@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AppPurchaseProvider } from '../../providers/app-purchase/app-purchase';
+import { IAPProduct } from '@ionic-native/in-app-purchase-2';
 
 /**
  * Generated class for the SettingsPage page.
@@ -15,11 +17,27 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SettingsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private store: AppPurchaseProvider
+  ) {
   }
 
+  products: IAPProduct[];
+  owned: boolean;
+
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SettingsPage');
+    this.products = [];
+    this.store.listIAPProduct()
+      .then(res => {
+        if (res.success) {
+          this.products = [...res.data];
+        }
+      });
+
   }
+
+  purchaseProduct(product: IAPProduct) { };
 
 }

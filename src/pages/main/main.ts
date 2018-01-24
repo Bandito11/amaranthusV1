@@ -4,7 +4,7 @@ import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
-import { ISimpleAlertOptions, IStudent } from '../../common/interface';
+import { ISimpleAlertOptions, IStudent, Calendar } from '../../common/interface';
 
 @IonicPage()
 @Component({
@@ -112,7 +112,12 @@ export class MainPage implements OnInit {
   }
 
   addAttendance(opts: { id: string }) {
-    this.db.addAttendance({ date: new Date(), id: opts.id })
+    const date: Calendar = {
+      month: new Date().getMonth() + 1,
+      year: new Date().getFullYear(),
+      day: new Date().getDate()
+    }
+    this.db.addAttendance({ date: date, id: opts.id })
       .then(response => {
         if (response.success == true) {
           this.updateStudentAttendance({ id: opts.id, attended: true });
@@ -129,7 +134,12 @@ export class MainPage implements OnInit {
   }
 
   addAbsence(opts: { id: string }) {
-    this.db.addAbsence({ date: new Date(), id: opts.id })
+    const date: Calendar = {
+      month: new Date().getMonth() + 1,
+      year: new Date().getFullYear(),
+      day: new Date().getDate()
+    }
+    this.db.addAbsence({ date: date, id: opts.id })
       .then(response => {
         if (response.success == true) {
           this.updateStudentAttendance({ id: opts.id, attended: false });

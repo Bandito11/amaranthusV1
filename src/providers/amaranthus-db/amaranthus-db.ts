@@ -104,7 +104,7 @@ export class AmaranthusDBProvider {
     });
   }
 
-  addAbsence(opts: { date: Date, id: string }): Promise<IResponse<null>> {
+  addAbsence(opts: { date: Calendar, id: string }): Promise<IResponse<null>> {
     return new Promise((resolve, reject) => {
       this.updateRecord({ ...opts, attendance: false, absence: true })
         .then(res => resolve(res))
@@ -112,7 +112,7 @@ export class AmaranthusDBProvider {
     })
   }
 
-  addAttendance(opts: { date: Date, id: string }): Promise<IResponse<null>> {
+  addAttendance(opts: { date: Calendar, id: string }): Promise<IResponse<null>> {
     return new Promise((resolve, reject) => {
       this.updateRecord({ ...opts, attendance: true, absence: false })
         .then(res => resolve(res))
@@ -120,14 +120,14 @@ export class AmaranthusDBProvider {
     });
   }
 
-  updateRecord(opts: { attendance: boolean, absence: boolean, date: Date, id: string }): Promise<IResponse<null>> {
+  updateRecord(opts: { attendance: boolean, absence: boolean, date: Calendar, id: string }): Promise<IResponse<null>> {
     return new Promise((resolve, reject) => {
       try {
         const record: IRecord = {
           id: opts.id,
-          month: opts.date.getMonth() + 1,
-          year: opts.date.getFullYear(),
-          day: opts.date.getDate(),
+          month: opts.date.month,
+          year: opts.date.year,
+          day: opts.date.day,
           attendance: opts.attendance,
           absence: opts.absence
         }
