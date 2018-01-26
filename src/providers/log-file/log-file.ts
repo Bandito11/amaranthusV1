@@ -9,7 +9,8 @@ export class LogFileProvider {
 
   constructor(private file: File, db: AmaranthusDBProvider) { }
 
-  exportFile() {
+  exportFile(): Promise<string> {
+    const fileName = 'attendancelog.txt'
     let response: IResponse<boolean> = {
       success: false,
       error: '',
@@ -19,7 +20,8 @@ export class LogFileProvider {
       replace: true
     };
     let text = 'erterte';
-    this.file.writeFile(`${this.file.dataDirectory}`, 'attendancelog.txt', text, options)
+    return new Promise((resolve, reject) => {
+      this.file.writeFile(`${this.file.dataDirectory}`, fileName, text, options)
         .then(res => {
           response = {
             ...response,
@@ -27,47 +29,9 @@ export class LogFileProvider {
             error: res,
             data: res
           };
-          console.log('File saved!');
+          resolve(`${this.file.dataDirectory}${fileName}`);
+        })
+        .catch(error => reject(error));
     });
-
-    // this.file.checkDir(this.file.dataDirectory, 'attendanceLog')
-    // .then(dir => {console.log(dir)
-    //   if(dir == true){
-    //     this.file.writeFile(`${this.file.dataDirectory}/attendanceLog`, 'attendancelog.txt', text, options)
-    //     .then(res => {
-    //       response = {
-    //         ...response,
-    //         success: true,
-    //         error: res,
-    //         data: res
-    //       };
-    //       console.log('File saved!');
-    //     });
-    //   }
-    // })
-    // .catch(err => {
-    //   for (let prop in err){
-    //     if(prop || prop != '1'){
-    //       console.log(err[prop]);
-    //     }
-    //   }
-    //    this.file.createDir(this.file.dataDirectory, `attendanceLog`, true)
-    //         .then(newDir => {console.log(newDir.fullPath)
-    //           this.file.writeFile(`${this.file.dataDirectory}${newDir.fullPath}`, 'attendancelog.txt', text, options)
-    //             .then(res => {
-    //               response = {
-    //                 ...response,
-    //                 success: true,
-    //                 error: res,
-    //                 data: res
-    //               };
-    //               console.log('File saved!');
-    //             });
-    //         });
-    // });
-  }
-
-  createExportRecord() {
-
   }
 }
