@@ -7,7 +7,6 @@ import { DropboxProvider } from '../../providers/dropbox/dropbox';
 import { Table2excelProvider } from '../../providers/table2excel/table2excel';
 import { SecurityContext } from '@angular/compiler/src/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
 @IonicPage()
 @Component({
   selector: 'page-settings',
@@ -23,13 +22,12 @@ export class SettingsPage {
     private dropbox: DropboxProvider,
     private table2Excel: Table2excelProvider,
     private sanitizer: DomSanitizer,
-    private iab: InAppBrowser
   ) { }
 
   // products: IAPProduct[];
   // owned: boolean;
   fileName: string;
-  ionViewDidLoad() { }
+  ionViewDidLoad() {}
 
   exportFileToDropbox() {
 
@@ -40,8 +38,5 @@ export class SettingsPage {
 
   exportToFile() {
     this.href = this.sanitizer.bypassSecurityTrustUrl(this.table2Excel.exportSpreadSheetToFile());
-    const browser = this.iab.create(this.table2Excel.exportSpreadSheetToFile(), '_blank');
-    browser.show();
-    console.log(this.table2Excel.exportSpreadSheetToFile())
   }
 }

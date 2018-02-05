@@ -15,11 +15,13 @@ import {SettingsPage} from '../../pages/settings/settings';
      <ion-tab tabIcon="home" [root]="tab1"></ion-tab>
      <ion-tab tabIcon="calendar" [root]="tab2"></ion-tab>     
      <ion-tab tabIcon="stats" [root]="tab3"></ion-tab>
-     <ion-tab tabIcon="people" [root]="tab4"></ion-tab>     
-     <ion-tab tabIcon="cog" [root]="tab5"></ion-tab> 
+     <ion-tab tabIcon="people" [root]="tab4"></ion-tab>
   </ion-tabs>
 `
 })
+
+// <ion-tab tabIcon="cog" [root]="tab5"></ion-tab> 
+
 export class TabsPage {
 
   constructor() { }

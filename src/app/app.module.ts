@@ -31,7 +31,6 @@ import { SettingsPageModule } from '../pages/settings/settings.module';
 import { SettingsPage } from '../pages/settings/settings';
 import { CalendarComponent } from '../components/calendar/calendar';
 import { LogFileProvider } from '../providers/log-file/log-file';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { DropboxProvider } from '../providers/dropbox/dropbox';
 import { Table2excelProvider } from '../providers/table2excel/table2excel';
 import { HttpClientModule } from '@angular/common/http';
@@ -78,7 +77,6 @@ import { HttpClientModule } from '@angular/common/http';
     File,
     LogFileProvider,
     // AppPurchaseProvider,
-    InAppBrowser,
     DropboxProvider,
     Table2excelProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
