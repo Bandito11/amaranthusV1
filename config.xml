@@ -5,7 +5,7 @@
     <author email="esteban.a.morales.morales@gmail.com">Esteban Morales</author>
     <content src="index.html" />
     <access origin="*" />
-    <allow-intent href="https://www.attendancelog.xyz" />
+    <allow-intent href="https://attendancelog.xyz" />
     <allow-intent href="https://www.attendancelog.xyz" />
     <allow-intent href="mailto:bandito-dev@outlook.com" />
     <allow-intent href="geo:*" />
@@ -20,8 +20,11 @@
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <allow-navigation href="http://192.168.1.247:8100" />
     <allow-navigation href="http://192.168.1.247:8101" />
+    <allow-navigation href="http://172.29.94.225:8100" />
+    <engine name="android" spec="7.0.0" />
     <plugin name="cordova-sqlite-storage" spec="^2.2.0" />
     <plugin name="cordova-plugin-camera" spec="^4.0.1" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-device" spec="^2.0.1" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.1" />
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
@@ -31,6 +34,6 @@
         <variable name="BILLING_KEY" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhkAbo4hMku/chbWuCFwed5t8ohtR13/LHagfyMk3SRjQFn2v1fAqozoh246VPzFtblETcqlQPOLThUOUb2eV8YWLfZ5UcO8jjWmwm1k6ErOT7BEg52ox8vlokKZ15oTTHDeAN9wmIRu1m5007ODNqXIVkHTXm8RS5XOrfHF7eZ+hMb+avlbGY7ol2DeNx1JinWyVhUotQmTmkVu0JUv2PIKsVvSR3rI1tnN8VXhinCar5+iyjznor1Wh7itHRxu5esCo2rz4Q8+WXkWGK5zNfP5DgYo58vFQm22h+W6IlfgrXVO9JQBY5TGug1ymMvlpjZKyzqYNppxKKr2hIo9pSQIDAQAB" />
     </plugin>
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
-    <engine name="android" spec="7.0.0" />
-    <plugin name="cordova-plugin-inappbrowser" spec="^2.0.1" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^2.0.2" />
+    
 </widget>
