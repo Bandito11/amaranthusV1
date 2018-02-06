@@ -113,7 +113,7 @@ export class MainPage implements OnInit {
 
   addAttendance(opts: { id: string }) {
     const date: Calendar = {
-      month: new Date().getMonth() + 1,
+      month: new Date().getMonth(),
       year: new Date().getFullYear(),
       day: new Date().getDate()
     }

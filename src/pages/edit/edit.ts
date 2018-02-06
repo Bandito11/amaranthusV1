@@ -38,6 +38,7 @@ export class EditPage implements OnInit {
       phoneNumber: '',
       town: '',
       state: '',
+      class: '',
       fatherFirstName: '',
       fatherLastName: '',
       motherFirstName: '',
@@ -108,9 +109,9 @@ export class EditPage implements OnInit {
     // } else {
     //   return true;
     // }
-    if(phoneNumber.length > 0){
+    if (phoneNumber.length > 0) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
@@ -148,15 +149,26 @@ export class EditPage implements OnInit {
           }
         })
         .join('');
-        if(!phoneNumber){
-          options = {
-            ...options, title: 'Warning!',
-            subTitle: 'You have to write a valid phone number.',
-            buttons: [...['OK']]
-          }
-          this.showSimpleAlert(options);
-          return;
-        } else if (!+phoneNumber) {
+      if (!phoneNumber) {
+        options = {
+          ...options, title: 'Warning!',
+          subTitle: 'You have to write a valid phone number.',
+          buttons: [...['OK']]
+        }
+        this.showSimpleAlert(options);
+        return;
+      } else if (!+phoneNumber) {
+        options = {
+          ...options, title: 'Warning!',
+          subTitle: 'Phone numbers can only have numbers or \'-\'.',
+          buttons: [...['OK']]
+        }
+        this.showSimpleAlert(options);
+        return;
+
+      }
+      if (emergencyContactPhoneNumber) {
+        if (!+emergencyContactPhoneNumber) {
           options = {
             ...options, title: 'Warning!',
             subTitle: 'Phone numbers can only have numbers or \'-\'.',
@@ -164,18 +176,7 @@ export class EditPage implements OnInit {
           }
           this.showSimpleAlert(options);
           return;
-
         }
-        if(emergencyContactPhoneNumber){
-          if (!+emergencyContactPhoneNumber) {
-            options = {
-              ...options, title: 'Warning!',
-              subTitle: 'Phone numbers can only have numbers or \'-\'.',
-              buttons: [...['OK']]
-            }
-            this.showSimpleAlert(options);
-            return;
-          }
       }
       // if ((phoneNumber.length < 10 || phoneNumber.length > 12)) {
       //   options = {

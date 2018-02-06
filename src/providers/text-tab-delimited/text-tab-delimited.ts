@@ -5,11 +5,11 @@ import { IResponse } from '../../common/interface';
 import { AmaranthusDBProvider } from '../amaranthus-db/amaranthus-db';
 
 @Injectable()
-export class LogFileProvider {
+export class TextTabDelimitedProvider {
 
-  constructor(private file: File, db: AmaranthusDBProvider) { }
+  constructor(private file: File, private db: AmaranthusDBProvider) { }
 
-  exportFile(): Promise<string> {
+  exportTextTabDelimited(): Promise<string> {
     const fileName = 'attendancelog.txt'
     let response: IResponse<boolean> = {
       success: false,
@@ -19,9 +19,11 @@ export class LogFileProvider {
     const options: IWriteOptions = {
       replace: true
     };
-    let text = 'erterte';
+    const text = this.createTextTabTable();
+    for(let prop in this.file){
+    }
     return new Promise((resolve, reject) => {
-      this.file.writeFile(`${this.file.dataDirectory}`, fileName, text, options)
+      this.file.writeFile(`${this.file.externalRootDirectory}/Download/`, fileName, text, options)
         .then(res => {
           response = {
             ...response,
@@ -29,9 +31,15 @@ export class LogFileProvider {
             error: res,
             data: res
           };
-          resolve(`${this.file.dataDirectory}${fileName}`);
+          resolve(`File Downloaded!`);
         })
         .catch(error => reject(error));
     });
   }
+
+  createTextTabTable(){
+    let textTab = 'Id\tName';
+    return textTab;
+  }
+
 }

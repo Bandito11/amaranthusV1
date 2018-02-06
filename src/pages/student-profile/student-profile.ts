@@ -20,10 +20,10 @@ export class StudentProfilePage implements OnInit {
     public navParams: NavParams
   ) { }
 
-/**
- * 
- * @param id 
- */
+  /**
+   * 
+   * @param id 
+   */
   goToEdit(id: string) {
     this.navCtrl.push(EditPage, { id: id });
   }
@@ -44,6 +44,7 @@ export class StudentProfilePage implements OnInit {
       lastName: '',
       address: '',
       phoneNumber: '',
+      class: '',
       town: '',
       state: '',
       fatherFirstName: '',
@@ -61,7 +62,7 @@ export class StudentProfilePage implements OnInit {
     this.gender = 'male';
     this.isActive = false;
   }
-  
+
   ionViewDidLoad() {
     this.student = { ...this.student, id: this.navParams.get('id') };
     this.getStudentFromDB(this.student)
@@ -73,10 +74,10 @@ export class StudentProfilePage implements OnInit {
       })
       .catch(error => handleError(error))
   }
-/**
- * 
- * @param student 
- */
+  /**
+   * 
+   * @param student 
+   */
   getStudentFromDB(student: IStudent): Promise<IStudent> {
     return new Promise((resolve, reject) => {
       this.db.getStudentById(student)

@@ -102,7 +102,7 @@ export class AmaranthusDBProvider {
 
   addAbsence(opts: { date: Calendar, id: string }): Promise<IResponse<null>> {
     return new Promise((resolve, reject) => {
-      this.updateRecord({ ...opts, attendance: false, absence: true })
+      this.updateRecord({ ...opts, date:{...opts.date, month: opts.date.month + 1}, attendance: false, absence: true })
         .then(res => resolve(res))
         .catch(error => reject(error))
     })
@@ -110,7 +110,7 @@ export class AmaranthusDBProvider {
 
   addAttendance(opts: { date: Calendar, id: string }): Promise<IResponse<null>> {
     return new Promise((resolve, reject) => {
-      this.updateRecord({ ...opts, attendance: true, absence: false })
+      this.updateRecord({ ...opts, date:{...opts.date, month: opts.date.month + 1}, attendance: true, absence: false })
         .then(res => resolve(res))
         .catch(error => reject(error))
     });
@@ -251,8 +251,8 @@ export class AmaranthusDBProvider {
                   id: student.id
                 }]
               };
-            } 
-          }else {
+            }
+          } else {
             response = {
               ...response,
               data: [...response.data, {
@@ -306,16 +306,34 @@ export class AmaranthusDBProvider {
                 absence++;
               }
             });
-            response = {
-              ...response,
-              data: [...response.data, {
-                id: student.id,
-                name: `${student.firstName} ${student.lastName}`,
-                attendance: attendance,
-                absence: absence,
-                picture: student.picture
-              }]
-            };
+            const percent = attendance / (attendance + absence);
+            if (percent) {
+              response = {
+                ...response,
+                data: [...response.data, {
+                  id: student.id,
+                  name: `${student.firstName} ${student.lastName}`,
+                  attendance: attendance,
+                  percent: percent,
+                  absence: absence,
+
+                  picture: student.picture
+                }]
+              };
+            } else {
+              response = {
+                ...response,
+                data: [...response.data, {
+                  id: student.id,
+                  name: `${student.firstName} ${student.lastName}`,
+                  attendance: attendance,
+                  percent: 0,
+                  absence: absence,
+
+                  picture: student.picture
+                }]
+              };
+            }
           };
         });
         resolve(response);

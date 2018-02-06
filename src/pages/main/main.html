@@ -28,7 +28,7 @@
   </ion-item>
   <ion-list *ngIf="students">
     <ion-item-sliding *ngFor="let student of students">
-      <ion-item (click)="goToStudentProfile(student.id)">
+      <ion-item>
         <ion-avatar item-left>
           <img src="{{student.picture}}" alt="no image">
         </ion-avatar>
@@ -40,12 +40,18 @@
           <p>
             <span class="label">ID: </span>{{student.id}}
           </p>
+          <button ion-button small color="primary" (click)="addAttendance({id: student.id})">
+            Attended
+          </button>
+          <button ion-button small color="secondary" (click)="addAbsence({id: student.id})">
+            Absent
+          </button>
           <div>
               <p class="left attended" *ngIf="student.attended == true">
-                  {{student.firstName}} {{student.lastName}} is present today!
+                  {{student.firstName}}'s present today!
                 </p>
                 <p class="left attended" *ngIf="student.attended == false">
-                  {{student.firstName}} {{student.lastName}} is absent today!
+                  {{student.firstName}}'s absent today!
                 </p>
             <p class="right">
               Swipe for more options
@@ -54,11 +60,8 @@
         </div>
       </ion-item>
       <ion-item-options>
-        <button ion-button color="primary" (click)="addAttendance({id: student.id})">
-          Attended
-        </button>
-        <button ion-button color="secondary" (click)="addAbsence({id: student.id})">
-          Absent
+        <button ion-button color="primary" (click)="goToStudentProfile(student.id)">
+          Profile
         </button>
       </ion-item-options>
     </ion-item-sliding>

@@ -18,6 +18,7 @@ export interface IStudent {
     emergencyContactPhoneNumber: string;
     isActive: boolean;
     attended?: boolean;
+    class:string
 }
 
 export interface IAssistance {

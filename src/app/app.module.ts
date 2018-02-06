@@ -30,7 +30,7 @@ import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2';
 import { SettingsPageModule } from '../pages/settings/settings.module';
 import { SettingsPage } from '../pages/settings/settings';
 import { CalendarComponent } from '../components/calendar/calendar';
-import { LogFileProvider } from '../providers/log-file/log-file';
+import { TextTabDelimitedProvider } from '../providers/text-tab-delimited/text-tab-delimited';
 import { DropboxProvider } from '../providers/dropbox/dropbox';
 import { Table2excelProvider } from '../providers/table2excel/table2excel';
 import { HttpClientModule } from '@angular/common/http';
@@ -75,7 +75,7 @@ import { HttpClientModule } from '@angular/common/http';
     Camera,
     // InAppPurchase2,
     File,
-    LogFileProvider,
+    TextTabDelimitedProvider,
     // AppPurchaseProvider,
     DropboxProvider,
     Table2excelProvider,
