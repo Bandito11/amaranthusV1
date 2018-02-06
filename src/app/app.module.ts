@@ -34,6 +34,8 @@ import { TextTabDelimitedProvider } from '../providers/text-tab-delimited/text-t
 import { DropboxProvider } from '../providers/dropbox/dropbox';
 import { Table2excelProvider } from '../providers/table2excel/table2excel';
 import { HttpClientModule } from '@angular/common/http';
+import { CSVProvider } from '../providers/csv/csv';
+import { FileProvider } from '../providers/file/file';
 @NgModule({
   declarations: [
     MyApp,
@@ -81,7 +83,9 @@ import { HttpClientModule } from '@angular/common/http';
     Table2excelProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     DropboxProvider,
-    Table2excelProvider
+    Table2excelProvider,
+    CSVProvider,
+    FileProvider
   ]
 })
 export class AppModule { }
