@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { handleError } from '../../common/handleError';
-import { IRecord, Calendar } from '../../common/interface';
+import { IRecord, Calendar, ISimpleAlertOptions } from '../../common/interface';
+import { TextTabDelimitedProvider } from '../../providers/text-tab-delimited/text-tab-delimited';
+import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 
 
 @IonicPage()
@@ -15,9 +17,11 @@ import { IRecord, Calendar } from '../../common/interface';
 export class TablePage implements OnInit {
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public db: AmaranthusDBProvider
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private db: AmaranthusDBProvider,
+    private textTabDelimited: TextTabDelimitedProvider,
+    private alertCtrl: AlertController
   ) { }
 
   students: IRecord[];
@@ -168,4 +172,18 @@ export class TablePage implements OnInit {
       return 0;
     })];
   }
+
+  async exportToFile() {
+    //TODO: Create a Modal Window
+  }
+
+  private showSimpleAlert(options: ISimpleAlertOptions) {
+    return this.alertCtrl.create({
+      title: options.title,
+      subTitle: options.subTitle,
+      buttons: options.buttons
+    })
+      .present();;
+  }
+
 }

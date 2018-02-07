@@ -50,6 +50,7 @@ export interface IRecord {
     lastName?: string;
     fullName?: string;
     picture?: string;
+    percent:number;
 }
 
 export interface Calendar {

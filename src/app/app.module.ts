@@ -32,7 +32,6 @@ import { SettingsPage } from '../pages/settings/settings';
 import { CalendarComponent } from '../components/calendar/calendar';
 import { TextTabDelimitedProvider } from '../providers/text-tab-delimited/text-tab-delimited';
 import { DropboxProvider } from '../providers/dropbox/dropbox';
-import { Table2excelProvider } from '../providers/table2excel/table2excel';
 import { HttpClientModule } from '@angular/common/http';
 import { CSVProvider } from '../providers/csv/csv';
 import { FileProvider } from '../providers/file/file';
@@ -80,10 +79,8 @@ import { FileProvider } from '../providers/file/file';
     TextTabDelimitedProvider,
     // AppPurchaseProvider,
     DropboxProvider,
-    Table2excelProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     DropboxProvider,
-    Table2excelProvider,
     CSVProvider,
     FileProvider
   ]

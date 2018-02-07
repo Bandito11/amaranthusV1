@@ -306,7 +306,7 @@ export class AmaranthusDBProvider {
                 absence++;
               }
             });
-            const percent = attendance / (attendance + absence);
+            const percent = 100 * attendance / (attendance + absence);
             if (percent) {
               response = {
                 ...response,

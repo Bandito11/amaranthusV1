@@ -3,7 +3,11 @@
   <ion-navbar color="primary">
     <ion-title>Records</ion-title>
   </ion-navbar>
-
+  <ion-buttons end>
+    <button ion-button (click)="exportToFile()">
+      Export
+    </button>
+  </ion-buttons>
 </ion-header>
 
 
@@ -16,17 +20,17 @@
   </ion-item>
   <div *ngIf="query == 'Date'">
     <ion-item>
-    <ion-label>Year</ion-label>
-    <ion-select [(ngModel)]="yearQuery" multiple="false" >
-      <ion-option *ngFor="let year of years" value="{{year}}" (ionSelect)="queryDataByYear(year)">{{year}}</ion-option>
-    </ion-select>
-  </ion-item>
-  <ion-item >
-    <ion-label>Months: </ion-label>
-    <ion-select [(ngModel)]="monthQuery" multiple="false">
-      <ion-option *ngFor="let month of months; let i = index" value="{{month}}" (ionSelect)="queryDataByMonth(i)">{{month}}</ion-option>
-    </ion-select>
-  </ion-item>
+      <ion-label>Year</ion-label>
+      <ion-select [(ngModel)]="yearQuery" multiple="false">
+        <ion-option *ngFor="let year of years" value="{{year}}" (ionSelect)="queryDataByYear(year)">{{year}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Months: </ion-label>
+      <ion-select [(ngModel)]="monthQuery" multiple="false">
+        <ion-option *ngFor="let month of months; let i = index" value="{{month}}" (ionSelect)="queryDataByMonth(i)">{{month}}</ion-option>
+      </ion-select>
+    </ion-item>
     <!-- <ion-item>
       <ion-label>Date</ion-label>
       <ion-datetime displayFormat="M YYYY" [(ngModel)]="dateQuery"></ion-datetime>
