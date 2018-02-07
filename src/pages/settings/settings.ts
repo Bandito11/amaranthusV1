@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 // import { AppPurchaseProvider } from '../../providers/app-purchase/app-purchase';
 // import { IAPProduct } from '@ionic-native/in-app-purchase-2';
 import { TextTabDelimitedProvider } from '../../providers/text-tab-delimited/text-tab-delimited';
-import { DropboxProvider } from '../../providers/dropbox/dropbox';
 // import { DomSanitizer } from '@angular/platform-browser';
 import { ISimpleAlertOptions } from '../../common/interface';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
@@ -19,7 +18,6 @@ export class SettingsPage {
     private navParams: NavParams,
     // private store: AppPurchaseProvider,
     private textTabDelimited: TextTabDelimitedProvider,
-    private dropbox: DropboxProvider,
     // private sanitizer: DomSanitizer,
     private alertCtrl: AlertController
   ) { }
