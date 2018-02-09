@@ -2,12 +2,12 @@
 
   <ion-navbar color="primary">
     <ion-title>Records</ion-title>
-  </ion-navbar>
   <ion-buttons end>
-    <button ion-button (click)="exportToFile()">
+    <button ion-button (click)="ToExportPage()">
       Export
     </button>
   </ion-buttons>
+  </ion-navbar>
 </ion-header>
 
 
@@ -66,7 +66,7 @@
           {{student.id}}
         </td>
         <td>
-          {{student.name}}
+          {{student.fullName}}
         </td>
         <td>
           {{student.attendance}}

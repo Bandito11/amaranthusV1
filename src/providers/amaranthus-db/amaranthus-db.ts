@@ -32,7 +32,7 @@ export class AmaranthusDBProvider {
   // oldRecordsData: IResponse<IRecord[]>;
   /////////////////////////////////////////
 
-  createDB() {
+  private createDB() {
     const ionicStorageAdapter = new IonicStorageAdapter();
     const lokiOptions: Partial<LokiConfigOptions> = {
       autosave: true,
@@ -50,11 +50,11 @@ export class AmaranthusDBProvider {
     ////////////////////////////////////
   }
 
-  saveDatabase() {
+  private saveDatabase() {
     db.saveDatabase();
   }
 
-  loadDatabase() {
+  private loadDatabase() {
     studentsColl = db.getCollection<IStudent>('students');
     recordsColl = db.getCollection<IRecord>('records');
     if (!studentsColl && !recordsColl) {
@@ -102,7 +102,7 @@ export class AmaranthusDBProvider {
 
   addAbsence(opts: { date: Calendar, id: string }): Promise<IResponse<null>> {
     return new Promise((resolve, reject) => {
-      this.updateRecord({ ...opts, date:{...opts.date, month: opts.date.month + 1}, attendance: false, absence: true })
+      this.updateRecord({ ...opts, date: { ...opts.date, month: opts.date.month + 1 }, attendance: false, absence: true })
         .then(res => resolve(res))
         .catch(error => reject(error))
     })
@@ -110,7 +110,7 @@ export class AmaranthusDBProvider {
 
   addAttendance(opts: { date: Calendar, id: string }): Promise<IResponse<null>> {
     return new Promise((resolve, reject) => {
-      this.updateRecord({ ...opts, date:{...opts.date, month: opts.date.month + 1}, attendance: true, absence: false })
+      this.updateRecord({ ...opts, date: { ...opts.date, month: opts.date.month + 1 }, attendance: true, absence: false })
         .then(res => resolve(res))
         .catch(error => reject(error))
     });
@@ -244,7 +244,7 @@ export class AmaranthusDBProvider {
                 data: [...response.data, {
                   firstName: student.firstName,
                   lastName: student.lastName,
-                  name: `${student.firstName} ${student.lastName}`,
+                  fullName: `${student.firstName} ${student.lastName}`,
                   picture: student.picture,
                   attendance: record.attendance,
                   absence: record.absence,
@@ -258,7 +258,7 @@ export class AmaranthusDBProvider {
               data: [...response.data, {
                 firstName: student.firstName,
                 lastName: student.lastName,
-                name: `${student.firstName} ${student.lastName}`,
+                fullName: `${student.firstName} ${student.lastName}`,
                 picture: student.picture,
                 attendance: false,
                 absence: false,
@@ -306,17 +306,19 @@ export class AmaranthusDBProvider {
                 absence++;
               }
             });
-            const percent = 100 * attendance / (attendance + absence);
+            let percent = '0';
+            if(attendance + absence != 0){
+              percent = (100 * attendance / (attendance + absence)).toFixed(2);
+            }
             if (percent) {
               response = {
                 ...response,
                 data: [...response.data, {
                   id: student.id,
-                  name: `${student.firstName} ${student.lastName}`,
+                  fullName: `${student.firstName} ${student.lastName}`,
                   attendance: attendance,
                   percent: percent,
                   absence: absence,
-
                   picture: student.picture
                 }]
               };
@@ -325,7 +327,7 @@ export class AmaranthusDBProvider {
                 ...response,
                 data: [...response.data, {
                   id: student.id,
-                  name: `${student.firstName} ${student.lastName}`,
+                  fullName: `${student.firstName} ${student.lastName}`,
                   attendance: attendance,
                   percent: 0,
                   absence: absence,
@@ -391,15 +393,9 @@ export class AmaranthusDBProvider {
             })
           };
           if (record != null && record.id == student.id) {
-            if (record.attendance == true) {
-              return { ...student, attended: true };
-            } else if (record.absence == true) {
-              return { ...student, attended: false };
-            } else {
-              return { ...student, attended: null };
-            }
+            return { ...student, attendance: record.attendance, absence: record.absence };
           } else {
-            return { ...student, attended: null };
+            return { ...student, attendance: false, absence: false };
           }
         });
         resolve({ success: true, error: null, data: results });

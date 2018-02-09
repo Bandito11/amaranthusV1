@@ -15,7 +15,7 @@ export class FileProvider {
     private file: File
   ) { }
 
-  exportFile(opts: {fileName:string, text:string}): Promise<string> {
+  exportFile(opts: {fileName:string, text:string}): Promise<IResponse<any>> {
     let response: IResponse<boolean> = {
       success: false,
       error: '',
@@ -35,7 +35,7 @@ export class FileProvider {
             error: res,
             data: res
           };
-          resolve(`File Downloaded!`);
+          resolve(response);
         })
         .catch(error => reject(error));
     });

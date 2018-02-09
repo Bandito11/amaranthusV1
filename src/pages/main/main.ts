@@ -23,8 +23,14 @@ export class MainPage implements OnInit {
   private untouchedStudentList: IStudent[];
   query: string;
   selectOptions: string[];
-
+  date: Calendar;
   ionViewDidEnter() {
+    const currentDate = new Date();
+    this.date = {
+      month: currentDate.getMonth(),
+      day: currentDate.getDate(),
+      year: currentDate.getFullYear()
+    }
     this.query = "None";
     let studentInterval = setInterval(() => {
       this.getStudents();
@@ -112,15 +118,10 @@ export class MainPage implements OnInit {
   }
 
   addAttendance(opts: { id: string }) {
-    const date: Calendar = {
-      month: new Date().getMonth(),
-      year: new Date().getFullYear(),
-      day: new Date().getDate()
-    }
-    this.db.addAttendance({ date: date, id: opts.id })
+    this.db.addAttendance({ date: this.date, id: opts.id })
       .then(response => {
         if (response.success == true) {
-          this.updateStudentAttendance({ id: opts.id, attended: true });
+          this.updateStudentAttendance({ id: opts.id, absence: false, attendance: true });
           this.showSimpleAlert({
             title: 'Success!',
             subTitle: 'Student was marked present!',
@@ -133,16 +134,23 @@ export class MainPage implements OnInit {
       .catch(error => handleError(error));
   }
 
+  updateStudentAttendance(opts: { id: string, absence: boolean, attendance: boolean }) {
+    const results = this.students.map(student => {
+      if (student.id == opts.id) {
+        return { ...student, attendance: opts.attendance, absence: opts.absence };
+      } else {
+        return student;
+      }
+    });
+    this.students = [...results];
+    this.untouchedStudentList = [...results];
+  }
+
   addAbsence(opts: { id: string }) {
-    const date: Calendar = {
-      month: new Date().getMonth() + 1,
-      year: new Date().getFullYear(),
-      day: new Date().getDate()
-    }
-    this.db.addAbsence({ date: date, id: opts.id })
+    this.db.addAbsence({ date: this.date, id: opts.id })
       .then(response => {
         if (response.success == true) {
-          this.updateStudentAttendance({ id: opts.id, attended: false });
+          this.updateStudentAttendance({ id: opts.id, absence: true, attendance: false });
           this.showSimpleAlert({
             title: 'Success!',
             subTitle: 'Student was marked absent!',
@@ -153,29 +161,6 @@ export class MainPage implements OnInit {
         }
       })
       .catch(error => handleError(error));
-
-  }
-
-  updateStudentAttendance(opts: { id: string, attended: boolean }) {
-    const results = this.students.map(student => {
-      if (student.id == opts.id) {
-        return { ...student, attended: opts.attended };
-      } else {
-        return student;
-      }
-    });
-    this.students = [...results];
-    this.untouchedStudentList = [...results];
-  }
-
-  getAttendance(opts: { attended: boolean }) {
-    if (opts.attended == true) {
-      return true;
-    } else if (opts.attended == false) {
-      return false;
-    } else {
-      return null;
-    }
   }
 
   private showSimpleAlert(options: ISimpleAlertOptions) {

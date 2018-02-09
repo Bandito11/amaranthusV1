@@ -34,6 +34,8 @@ import { TextTabDelimitedProvider } from '../providers/text-tab-delimited/text-t
 import { HttpClientModule } from '@angular/common/http';
 import { CSVProvider } from '../providers/csv/csv';
 import { FileProvider } from '../providers/file/file';
+import { ExportPageModule } from '../pages/export/export.module';
+import { ExportPage } from '../pages/export/export';
 @NgModule({
   declarations: [
     MyApp,
@@ -51,6 +53,7 @@ import { FileProvider } from '../providers/file/file';
     SettingsPageModule,
     BrowserModule,
     HttpClientModule,
+    ExportPageModule,
     FormsModule,
     IonicModule.forRoot(MyApp)
   ],
@@ -66,7 +69,8 @@ import { FileProvider } from '../providers/file/file';
     StudentListPage,
     CalendarPage,
     SettingsPage,
-    CalendarComponent
+    CalendarComponent,
+    ExportPage
   ],
   providers: [
     StatusBar,

@@ -39,7 +39,7 @@ export class TextTabDelimitedProvider {
     });
   }
 
-  asyncConcatenate(data: IRecord[], length: number): Promise<string> {
+  private asyncConcatenate(data: IRecord[], length: number): Promise<string> {
     return new Promise((resolve, reject) => {
       let i = 0;
       let value = 'Id\tName\tAttendance\tAbsence\tAttendance %\n';

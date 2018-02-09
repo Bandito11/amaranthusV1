@@ -1,12 +1,13 @@
 import { monthsLabels, yearLabels } from './../../common/labels';
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { handleError } from '../../common/handleError';
 import { IRecord, Calendar, ISimpleAlertOptions } from '../../common/interface';
 import { TextTabDelimitedProvider } from '../../providers/text-tab-delimited/text-tab-delimited';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
-
+import { ModalController } from 'ionic-angular/components/modal/modal-controller';
+import { ExportPage } from '../export/export';
 
 @IonicPage()
 @Component({
@@ -17,11 +18,10 @@ import { AlertController } from 'ionic-angular/components/alert/alert-controller
 export class TablePage implements OnInit {
 
   constructor(
-    private navCtrl: NavController,
-    private navParams: NavParams,
     private db: AmaranthusDBProvider,
     private textTabDelimited: TextTabDelimitedProvider,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private modalCtrl: ModalController
   ) { }
 
   students: IRecord[];
@@ -173,8 +173,11 @@ export class TablePage implements OnInit {
     })];
   }
 
-  async exportToFile() {
-    //TODO: Create a Modal Window
+  async ToExportPage() {
+    const exportModal = this.modalCtrl.create(ExportPage, { students: this.students });
+    exportModal.onDidDismiss(message => this.showSimpleAlert({ title: 'Information!', subTitle: message }));
+    exportModal.present();
+
   }
 
   private showSimpleAlert(options: ISimpleAlertOptions) {

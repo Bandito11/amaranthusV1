@@ -1,0 +1,28 @@
+<!--
+  Generated template for the ExportPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Export</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+<button ion-button color="primary" (click)="exportTextTabToFile()">
+  Export as Text Tab Delimited
+</button>
+
+<button ion-button color="primary" (click)="exportCSVToFile()">
+  Export as CSV
+</button>
+
+<button ion-button color="primary" (click)="exportXLSXToFile()">
+  Export as XLSX
+</button>
+</ion-content>

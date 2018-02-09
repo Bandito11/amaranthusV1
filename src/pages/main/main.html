@@ -47,10 +47,10 @@
             Absent
           </button>
           <div>
-              <p class="left attended" *ngIf="student.attended == true">
+              <p class="left attended" *ngIf="student.attendance">
                   {{student.firstName}}'s present today!
                 </p>
-                <p class="left attended" *ngIf="student.attended == false">
+                <p class="left attended" *ngIf="student.absence">
                   {{student.firstName}}'s absent today!
                 </p>
             <p class="right">
@@ -60,7 +60,7 @@
         </div>
       </ion-item>
       <ion-item-options>
-        <button ion-button color="primary" (click)="goToStudentProfile(student.id)">
+        <button ion-button color="secondary" (click)="goToStudentProfile(student.id)">
           Profile
         </button>
       </ion-item-options>

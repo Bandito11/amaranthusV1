@@ -17,7 +17,6 @@ export interface IStudent {
     emergencyRelationship: string;
     emergencyContactPhoneNumber: string;
     isActive: boolean;
-    attended?: boolean;
     class:string
 }
 
@@ -50,7 +49,7 @@ export interface IRecord {
     lastName?: string;
     fullName?: string;
     picture?: string;
-    percent:number;
+    percent?:number;
 }
 
 export interface Calendar {

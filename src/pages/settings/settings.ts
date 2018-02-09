@@ -6,6 +6,7 @@ import { TextTabDelimitedProvider } from '../../providers/text-tab-delimited/tex
 // import { DomSanitizer } from '@angular/platform-browser';
 import { ISimpleAlertOptions } from '../../common/interface';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
+import { CSVProvider } from '../../providers/csv/csv';
 @IonicPage()
 @Component({
   selector: 'page-settings',
@@ -19,7 +20,8 @@ export class SettingsPage {
     // private store: AppPurchaseProvider,
     private textTabDelimited: TextTabDelimitedProvider,
     // private sanitizer: DomSanitizer,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private csv: CSVProvider
   ) { }
 
   // products: IAPProduct[];
@@ -35,7 +37,7 @@ export class SettingsPage {
   // purchaseProduct(product: IAPProduct) { };
 
   async exportToFile() {
-    // this.href = this.sanitizer.bypassSecurityTrustUrl(this.table2Excel.exportSpreadSheetToFile());
+    
   }
 
   private showSimpleAlert(options: ISimpleAlertOptions) {

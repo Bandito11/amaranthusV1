@@ -27,17 +27,17 @@
         <div class="amaranthus">
           <p>
             <span class="label name">Name: </span>
-            <span class="name">{{student.name}}</span>
+            <span class="name">{{student.fullName}}</span>
           </p>
           <p>
             <span class="label">ID: </span>{{student.id}}
           </p>
           <div>
-            <p class="left attended" *ngIf="student.attendance == true">
-              {{student.name}} is present this day!
+            <p class="left attended" *ngIf="student.attendance">
+              {{student.firstName}}'s is present this day!
             </p>
-            <p class="left attended" *ngIf="student.absence == true">
-              {{student.name}} is absent this day!
+            <p class="left attended" *ngIf="student.absence">
+              {{student.firstName}}'s is absent this day!
             </p>
 
             <p class="right">
