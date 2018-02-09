@@ -8,10 +8,7 @@ import { IRecord } from '../../common/interface';
 import { handleError } from '../../common/handleError';
 
 /**
- * Generated class for the ExportPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
+ * TODO: Remember to add animation to every export method. 
  */
 
 @IonicPage()
