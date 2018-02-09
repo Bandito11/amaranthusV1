@@ -40,7 +40,7 @@ export class ExportPage {
         try {
           const fileResponse = await this.file.exportFile({ fileName: 'Attendance-Log-TextTabDelimited.txt', text: textTabResponse.data });
           if (fileResponse.success) {
-            this.viewCtrl.dismiss('File was downloaded successfully to your Download folder!');
+            this.viewCtrl.dismiss('Attendance-Log-TextTabDelimited.txt was downloaded successfully to your Download folder!');
           }
         } catch (error) {//If FileProvider err
           this.viewCtrl.dismiss('Error while saving the data, please try again!');
@@ -50,11 +50,25 @@ export class ExportPage {
     } catch (error) {// If TextTabDelimited Provider err
       this.viewCtrl.dismiss('There was an error while creating the file. Please try again later!');
     }
-
   }
 
   async exportCSVToFile() {
+    try {
+      const csvResponse = await this.csv.exportCSV(this.students);
+      if (csvResponse.success) {
+        try {
+          const fileResponse = await this.file.exportFile({ fileName: 'Attendance-Log.csv', text: csvResponse.data });
+          if (fileResponse.success) {
+            this.viewCtrl.dismiss('Attendance-Log.csv was downloaded successfully to your Download folder!');
+          }
+        } catch (error) {//If FileProvider err
+          this.viewCtrl.dismiss('Error while saving the data, please try again!');
+        }
 
+      }
+    } catch (error) {// If TextTabDelimited Provider err
+      this.viewCtrl.dismiss('There was an error while creating the file. Please try again later!');
+    }
   }
 
   async exportXLSXToFile() {
