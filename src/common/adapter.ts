@@ -1,7 +1,7 @@
 import { Storage } from '@ionic/storage';
 
 const storage = new Storage({
-    driverOrder: ['sqlite', 'localstorage', 'websql', 'indexeddb']
+    driverOrder: ['sqlite', 'indexeddb',  'websql', 'localstorage' ]
 });
 /**
  * A loki persistence adapter which persists to web browser's local storage object
