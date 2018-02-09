@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AlertController } from 'ionic-angular';
 import { Calendar } from './../../common/interface';
 import { weekDaysHeader, weekDaysLabels, monthsLabels } from './../../common/labels'
 
@@ -9,7 +8,7 @@ import { weekDaysHeader, weekDaysLabels, monthsLabels } from './../../common/lab
 })
 
 export class CalendarComponent implements OnInit {
-  constructor(public alertCtrl: AlertController) {
+  constructor() {
     this.currentDate = new Date();
   }
   /**weekDaysHeader html properties*/
@@ -114,13 +113,4 @@ export class CalendarComponent implements OnInit {
       this.createCalendar(this.month, this.year - 1);
     }
   }
-
-  // private showAlert(title: string, subTitle: string, buttons: string) {
-  //   let alert = this.alertCtrl.create({
-  //     title: title,
-  //     subTitle: subTitle,
-  //     buttons: [buttons]
-  //   });
-  //   alert.present();
-  // }
 }
