@@ -63,7 +63,7 @@ export class ExportPage {
         }
 
       }
-    } catch (error) {// If TextTabDelimited Provider err
+    } catch (error) {// If CSV Provider err
       this.viewCtrl.dismiss('There was an error while creating the file. Please try again later!');
     }
   }
