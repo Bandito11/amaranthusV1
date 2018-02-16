@@ -6,6 +6,7 @@ import { FileProvider } from '../../providers/file/file';
 import { ViewController } from 'ionic-angular/navigation/view-controller';
 import { IRecord } from '../../common/interface';
 import { handleError } from '../../common/handleError';
+import { XLSXProvider } from '../../providers/xslx/xslx';
 
 /**
  * TODO: Remember to add animation to every export method. 
@@ -24,7 +25,8 @@ export class ExportPage {
     private navParams: NavParams,
     private csv: CSVProvider,
     private textTab: TextTabDelimitedProvider,
-    private file: FileProvider
+    private file: FileProvider,
+    private xlsx: XLSXProvider
   ) {
   }
   ionViewDidEnter() {
@@ -33,9 +35,10 @@ export class ExportPage {
   async exportTextTabToFile() {
     try {
       const textTabResponse = await this.textTab.exportTextTabDelimited(this.students);
+      const fileName = 'AttendanceLog-TextTabDelimited.txt';
       if (textTabResponse.success) {
         try {
-          const fileResponse = await this.file.exportFile({ fileName: 'Attendance-Log-TextTabDelimited.txt', text: textTabResponse.data });
+          const fileResponse = await this.file.exportFile({ fileName: fileName, text: textTabResponse.data });
           if (fileResponse.success) {
             this.viewCtrl.dismiss('Attendance-Log-TextTabDelimited.txt was downloaded successfully to your Download folder!');
           }
@@ -52,9 +55,10 @@ export class ExportPage {
   async exportCSVToFile() {
     try {
       const csvResponse = await this.csv.exportCSV(this.students);
+      const fileName = 'AttendanceLog.csv';
       if (csvResponse.success) {
         try {
-          const fileResponse = await this.file.exportFile({ fileName: 'Attendance-Log.csv', text: csvResponse.data });
+          const fileResponse = await this.file.exportFile({ fileName: fileName, text: csvResponse.data });
           if (fileResponse.success) {
             this.viewCtrl.dismiss('Attendance-Log.csv was downloaded successfully to your Download folder!');
           }
@@ -69,6 +73,22 @@ export class ExportPage {
   }
 
   async exportXLSXToFile() {
+    try {
+      const xlsxResponse = await this.xlsx.exportXLSXToFile(this.students);
+      const fileName = 'AttendanceLog.xlsx';
+      if (xlsxResponse.success) {
+        try {
+          const fileResponse = await this.file.exportFile({ fileName: fileName, text: xlsxResponse.data });
+          if (fileResponse.success) {
+            this.viewCtrl.dismiss('Attendance-Log.csv was downloaded successfully to your Download folder!');
+          }
+        } catch (error) {//If FileProvider err
+          this.viewCtrl.dismiss('Error while saving the data, please try again!');
+        }
 
+      }
+    } catch (error) {// If CSV Provider err
+      this.viewCtrl.dismiss('There was an error while creating the file. Please try again later!');
+    }
   }
 }

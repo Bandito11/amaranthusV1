@@ -15,7 +15,7 @@ export class FileProvider {
     private file: File
   ) { }
 
-  exportFile(opts: {fileName:string, text:string}): Promise<IResponse<any>> {
+  exportFile(opts: {fileName:string, text:any}): Promise<IResponse<any>> {
     let response: IResponse<boolean> = {
       success: false,
       error: '',

@@ -36,6 +36,7 @@ import { CSVProvider } from '../providers/csv/csv';
 import { FileProvider } from '../providers/file/file';
 import { ExportPageModule } from '../pages/export/export.module';
 import { ExportPage } from '../pages/export/export';
+import { XLSXProvider } from '../providers/xslx/xslx';
 @NgModule({
   declarations: [
     MyApp,
@@ -83,7 +84,8 @@ import { ExportPage } from '../pages/export/export';
     // AppPurchaseProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     CSVProvider,
-    FileProvider
+    FileProvider,
+    XLSXProvider
   ]
 })
 export class AppModule { }

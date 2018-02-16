@@ -144,8 +144,8 @@
         <ion-label>Is {{student.firstName}} {{student.lastName}} active?</ion-label>
         <ion-checkbox name="isActive" [(ngModel)]='isActive'></ion-checkbox>
       </ion-item>
-      <button type="submit" ion-button color="primary">Edit</button>
-      <button type="button" ion-button color="danger" (click)="deleteStudent({id:id.value})">Delete</button>
     </ion-item-group>
+    <button type="submit" ion-button color="primary">Edit</button>
+    <button type="button" ion-button color="danger" (click)="deleteStudent({id:id.value})">Delete</button>
   </form>
 </ion-content>

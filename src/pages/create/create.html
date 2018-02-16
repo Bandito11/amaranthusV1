@@ -140,7 +140,8 @@
         <ion-input type="text" #emergencyContactPhoneNumber></ion-input>
         <!-- <ion-icon id="form-icon" item-right name="warning" *ngIf="validatePhoneNumber(emergencyContactPhoneNumber.value)"></ion-icon> -->
       </ion-item>
-      <button type="submit" ion-button color="primary">Create</button>
+    </ion-item-group>
+    <button type="submit" ion-button color="primary">Create</button>
       <button ion-button type="button" color="secondary" (click)="
       firstName.value = '';
       initial.value = '';
@@ -161,6 +162,5 @@
       picture = '';
       gender = 'male';
       ">Reset</button>
-    </ion-item-group>
   </form>
 </ion-content>
