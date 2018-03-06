@@ -149,24 +149,36 @@ export class EditPage implements OnInit {
           }
         })
         .join('');
-      if (!phoneNumber) {
-        options = {
-          ...options, title: 'Warning!',
-          subTitle: 'You have to write a valid phone number.',
-          buttons: [...['OK']]
-        }
-        this.showSimpleAlert(options);
-        return;
-      } else if (!+phoneNumber) {
-        options = {
-          ...options, title: 'Warning!',
-          subTitle: 'Phone numbers can only have numbers or \'-\'.',
-          buttons: [...['OK']]
-        }
-        this.showSimpleAlert(options);
-        return;
+      // if(!phoneNumber){
+      //   options = {
+      //     ...options, title: 'Warning!',
+      //     subTitle: 'You have to write a valid phone number.',
+      //     buttons: [...['OK']]
+      //   }
+      //   this.showSimpleAlert(options);
+      //   return;
+      // } else if (!+phoneNumber) {
+      //   options = {
+      //     ...options, title: 'Warning!',
+      //     subTitle: 'Phone numbers can only have numbers or \'-\'.',
+      //     buttons: [...['OK']]
+      //   }
+      //   this.showSimpleAlert(options);
+      //   return;
 
+      // }
+      if (phoneNumber) {
+        if (!+phoneNumber) {
+          options = {
+            ...options, title: 'Warning!',
+            subTitle: 'Phone numbers can only have numbers or \'-\'.',
+            buttons: [...['OK']]
+          }
+          this.showSimpleAlert(options);
+          return;
+        }
       }
+
       if (emergencyContactPhoneNumber) {
         if (!+emergencyContactPhoneNumber) {
           options = {
@@ -304,7 +316,7 @@ export class EditPage implements OnInit {
       .then((imageData) => {
         this.picture = `data:image/jpeg;base64,${imageData}`;
       },
-      error => handleError(error)
+        error => handleError(error)
       )
   }
 

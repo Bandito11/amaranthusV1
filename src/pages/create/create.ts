@@ -78,10 +78,10 @@ export class CreatePage {
     if (
       !opts.firstName ||
       !opts.lastName ||
-      !opts.id ||
-      !opts.address ||
-      !opts.town ||
-      !opts.state
+      !opts.id //||
+      // !opts.address ||
+      // !opts.town ||
+      // !opts.state
     ) {
       options = {
         ...options, title: 'Warning!',
@@ -106,24 +106,36 @@ export class CreatePage {
           }
         })
         .join('');
-        if(!phoneNumber){
-          options = {
-            ...options, title: 'Warning!',
-            subTitle: 'You have to write a valid phone number.',
-            buttons: [...['OK']]
-          }
-          this.showSimpleAlert(options);
-          return;
-        } else if (!+phoneNumber) {
-          options = {
-            ...options, title: 'Warning!',
-            subTitle: 'Phone numbers can only have numbers or \'-\'.',
-            buttons: [...['OK']]
-          }
-          this.showSimpleAlert(options);
-          return;
+        // if(!phoneNumber){
+        //   options = {
+        //     ...options, title: 'Warning!',
+        //     subTitle: 'You have to write a valid phone number.',
+        //     buttons: [...['OK']]
+        //   }
+        //   this.showSimpleAlert(options);
+        //   return;
+        // } else if (!+phoneNumber) {
+        //   options = {
+        //     ...options, title: 'Warning!',
+        //     subTitle: 'Phone numbers can only have numbers or \'-\'.',
+        //     buttons: [...['OK']]
+        //   }
+        //   this.showSimpleAlert(options);
+        //   return;
 
-        }
+        // }
+        if(phoneNumber){
+          if (!+phoneNumber) {
+            options = {
+              ...options, title: 'Warning!',
+              subTitle: 'Phone numbers can only have numbers or \'-\'.',
+              buttons: [...['OK']]
+            }
+            this.showSimpleAlert(options);
+            return;
+          }
+      }
+
         if(emergencyContactPhoneNumber){
           if (!+emergencyContactPhoneNumber) {
             options = {

@@ -32,6 +32,10 @@ export class ExportPage {
   ionViewDidEnter() {
     this.students = this.navParams.get('students');
   }
+
+  goBack(){
+    this.viewCtrl.dismiss();
+  }
   async exportTextTabToFile() {
     try {
       const textTabResponse = await this.textTab.exportTextTabDelimited(this.students);

@@ -127,16 +127,16 @@ export class TablePage implements OnInit {
     // Will get all Students queried by today's date.
     this.db.getQueriedRecords({ query: this.query })
       .then(
-      response => {
-        if (response.success == true) {
-          this.students = [...response.data];
-          this.untouchedStudentList = [...response.data];
-        } else {
-          // TODO:  implement an alert message if it fails
-          // message should say no students can be retrieved.
-          handleError(response.error);
+        response => {
+          if (response.success == true) {
+            this.students = [...response.data];
+            this.untouchedStudentList = [...response.data];
+          } else {
+            // TODO:  implement an alert message if it fails
+            // message should say no students can be retrieved.
+            handleError(response.error);
+          }
         }
-      }
       )
       .catch(error => handleError(error));
   }
@@ -173,9 +173,14 @@ export class TablePage implements OnInit {
     })];
   }
 
-  async ToExportPage() {
+
+  toExportPage() {
     const exportModal = this.modalCtrl.create(ExportPage, { students: this.students });
-    exportModal.onDidDismiss(message => this.showSimpleAlert({ title: 'Information!', subTitle: message }));
+    exportModal.onDidDismiss(message => {
+      if (message) {
+        this.showSimpleAlert({ title: 'Information!', subTitle: message });
+      };
+    });
     exportModal.present();
 
   }
