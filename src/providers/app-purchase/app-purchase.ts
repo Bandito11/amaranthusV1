@@ -1,66 +1,60 @@
 import { Injectable } from '@angular/core';
-import { InAppPurchase2, IAPProduct } from '@ionic-native/in-app-purchase-2';
+import { InAppPurchase } from '@ionic-native/in-app-purchase';
 import { IResponse } from '../../common/interface';
 
-interface IIAPProducts {
-  id: string;
-  alias: string;
+interface productGet {
+  productId: string;
+  title: string;
+  description:string;
+  currency:string;
+  price:any;
+  priceAsDecimal:any;
 }
+
+interface productRestore{
+  productId: string;
+  state: any;
+  transactionId:string;
+  date:string;
+  productType:string;
+  receipt:string;
+  signature:string;
+}
+
+
 @Injectable()
 export class AppPurchaseProvider {
 
-  constructor(private store: InAppPurchase2) {
-    this.createProducts();
-    this.register();
-  }
-
-  private products: IIAPProducts[];
-
- /**
-  * Register each product to IAP
-  */
-  private register() {
-    this.products.forEach(product => {
-      this.store.register({
-        id: product.id,
-        alias: product.alias,
-        type: this.store.NON_CONSUMABLE
-      });
-    });
+  constructor(private iap: InAppPurchase) {
   }
 
   /**
-   * Create Product Array
+   * Restore purchase
    */
-  private createProducts() {
-    this.products = [
-      {
-        id: 'nodblimits',
-        alias: 'Unlimited user creation'
-      }
-    ];
+  restore():Promise<productRestore[]> {
+    return new Promise((resolve, reject) => {
+      this.iap.restorePurchases()
+        .then(purchased => resolve(purchased))
+        .catch(err => reject(err))
+    })
+  }
+  /**
+   * Buy Product
+   */
+  buy(productId) {
+    this.iap.buy(productId)
+      .then(product => alert(product))
+      .catch(err => console.log(err))
   }
 
   /**
    * Return an array of products. 
    */
-  listIAPProduct(): Promise<IResponse<IAPProduct[]>>{
+  getProducts():Promise<productGet[]> {
     return new Promise((resolve, reject) => {
-      let iAPProduct: IAPProduct;
-      let response: IResponse<IAPProduct[]> = {
-        success: true,
-        error: '',
-        data: []
-      }
-      this.products.forEach(product => {
-        iAPProduct = this.store.get(product.id);
-        if(iAPProduct){
-          response = {...response, data: [...response.data, iAPProduct]};
-        }else{
-          response = {...response, success: false};
-        }
-      });
-      resolve(response)
+      this.iap.getProducts(['xyz.attendancelog.amaranthus.everything'])
+        .then(products => resolve(products))
+        .catch(err => reject(err))
     });
   }
 }

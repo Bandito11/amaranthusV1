@@ -32,8 +32,8 @@ export class MainPage implements OnInit {
       year: currentDate.getFullYear()
     }
     this.query = "None";
+    this.getStudents();
     let studentInterval = setInterval(() => {
-      this.getStudents();
       if (this.students.length > -1) {
         clearInterval(studentInterval);
       }
