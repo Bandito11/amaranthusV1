@@ -5,7 +5,6 @@ import { TextTabDelimitedProvider } from '../../providers/text-tab-delimited/tex
 import { FileProvider } from '../../providers/file/file';
 import { ViewController } from 'ionic-angular/navigation/view-controller';
 import { IRecord } from '../../common/interface';
-import { handleError } from '../../common/handleError';
 import { XLSXProvider } from '../../providers/xslx/xslx';
 
 /**

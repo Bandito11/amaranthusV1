@@ -8,6 +8,7 @@ import { TextTabDelimitedProvider } from '../../providers/text-tab-delimited/tex
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { ExportPage } from '../export/export';
+import { AppPurchaseProvider } from '../../providers/app-purchase/app-purchase';
 
 @IonicPage()
 @Component({
@@ -19,9 +20,9 @@ export class TablePage implements OnInit {
 
   constructor(
     private db: AmaranthusDBProvider,
-    private textTabDelimited: TextTabDelimitedProvider,
     private alertCtrl: AlertController,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private iap: AppPurchaseProvider
   ) { }
 
   students: IRecord[];
@@ -34,8 +35,10 @@ export class TablePage implements OnInit {
   years: number[];
   selectOptions: string[];
   // dateQuery: string; // Will be used with the date time component
+  bought: boolean;
 
   ngOnInit() {
+    this.bought = false;
     this.currentDate = new Date();
     // this.dateQuery = `${this.currentDate.getFullYear()}-${this.currentDate.getMonth() - 1}`; // will be used with the date time component
     this.months = [...monthsLabels];
@@ -55,7 +58,24 @@ export class TablePage implements OnInit {
 
   ionViewDidLoad() {
     this.getStudentsRecords();
+    this.checkIfBought();
+    const boughtInterval = setInterval(() => {
+      if (this.bought = true) {
+        clearInterval(boughtInterval);
+      }
+    }, 500);
   }
+
+  checkIfBought() {
+    this.iap.restore()
+      .then(() => {
+        if (this.iap.boughtEverything) {
+          this.bought = true;
+        }
+      })
+      .catch(err => handleError(err));
+  }
+
 
   initializeStudents() {
     this.students = [...this.untouchedStudentList];

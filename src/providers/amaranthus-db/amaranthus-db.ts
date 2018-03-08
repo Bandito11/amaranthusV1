@@ -2,6 +2,8 @@ import { IStudent, IResponse, IRecord, Calendar } from './../../common/interface
 import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './../../common/adapter';
 import * as Loki from 'lokijs';
+import { AppPurchaseProvider } from '../app-purchase/app-purchase';
+import { stateAndroid } from '../../common/app-purchase';
 ///////np ///// Only for dev purposes ////////////////
 // import { STUDENTS, RECORDS } from './../../mock/mock-students';
 ///////////////////////////////////
@@ -13,7 +15,9 @@ const dbName = 'amaranthus.db';
 @Injectable()
 export class AmaranthusDBProvider {
 
-  constructor() {
+  constructor(
+    private iap: AppPurchaseProvider
+  ) {
     this.createDB();
   }
 
@@ -81,22 +85,50 @@ export class AmaranthusDBProvider {
   insertStudent(student: IStudent): Promise<IResponse<null>> {
     let response: IResponse<null>;
     return new Promise((resolve, reject) => {
-      this.checkIfUserExists({ id: student.id })
-        .then(value => {
-          try {
-            if (value == false) {
-              studentsColl.insert(student);
-              response = { success: true, error: null, data: null };
-            } else {
-              response = { success: false, error: 'User already exists in the database', data: null };
+      if (studentsColl.data.length > 10) {
+        this.iap.restore()
+          .then(products => {
+            products.forEach(product => {
+              if (product.productId == 'everything' && stateAndroid[product.state] == ('ACTIVE' || 0)) {
+                this.checkIfUserExists({ id: student.id })
+                  .then(value => {
+                    try {
+                      if (value == false) {
+                        studentsColl.insert(student);
+                        response = { success: true, error: null, data: null };
+                      } else {
+                        response = { success: false, error: 'User already exists in the database', data: null };
+                      }
+                      this.saveDatabase();
+                      resolve(response);
+                    } catch (error) {
+                      reject(error);
+                    }
+                  })
+                  .catch(error => reject(error));
+              } else {
+                response = { success: false, error: 'Reached the limit of 10 persons in database. If you want to get rid of this limit please consider buying the app!', data: null };
+              }
+            });
+          })
+      } else {
+        this.checkIfUserExists({ id: student.id })
+          .then(value => {
+            try {
+              if (value == false) {
+                studentsColl.insert(student);
+                response = { success: true, error: null, data: null };
+              } else {
+                response = { success: false, error: 'User already exists in the database', data: null };
+              }
+              this.saveDatabase();
+              resolve(response);
+            } catch (error) {
+              reject(error);
             }
-            this.saveDatabase();
-            resolve(response);
-          } catch (error) {
-            reject(error);
-          }
-        })
-        .catch(error => reject(error));
+          })
+          .catch(error => reject(error));
+      }
     });
   }
 
@@ -307,7 +339,7 @@ export class AmaranthusDBProvider {
               }
             });
             let percent = '0';
-            if(attendance + absence != 0){
+            if (attendance + absence != 0) {
               percent = (100 * attendance / (attendance + absence)).toFixed(2);
             }
             if (percent) {

@@ -56,7 +56,7 @@ export class CreatePage {
       .then((imageData) => {
         this.picture = `data:image/png;base64,${imageData}`;
       },
-      error => handleError(error)
+        error => handleError(error)
       )
   }
 
@@ -66,9 +66,9 @@ export class CreatePage {
     // } else {
     //   return true;
     // }
-    if(phoneNumber.length > 0){
+    if (phoneNumber.length > 0) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
@@ -106,46 +106,46 @@ export class CreatePage {
           }
         })
         .join('');
-        // if(!phoneNumber){
-        //   options = {
-        //     ...options, title: 'Warning!',
-        //     subTitle: 'You have to write a valid phone number.',
-        //     buttons: [...['OK']]
-        //   }
-        //   this.showSimpleAlert(options);
-        //   return;
-        // } else if (!+phoneNumber) {
-        //   options = {
-        //     ...options, title: 'Warning!',
-        //     subTitle: 'Phone numbers can only have numbers or \'-\'.',
-        //     buttons: [...['OK']]
-        //   }
-        //   this.showSimpleAlert(options);
-        //   return;
+      // if(!phoneNumber){
+      //   options = {
+      //     ...options, title: 'Warning!',
+      //     subTitle: 'You have to write a valid phone number.',
+      //     buttons: [...['OK']]
+      //   }
+      //   this.showSimpleAlert(options);
+      //   return;
+      // } else if (!+phoneNumber) {
+      //   options = {
+      //     ...options, title: 'Warning!',
+      //     subTitle: 'Phone numbers can only have numbers or \'-\'.',
+      //     buttons: [...['OK']]
+      //   }
+      //   this.showSimpleAlert(options);
+      //   return;
 
-        // }
-        if(phoneNumber){
-          if (!+phoneNumber) {
-            options = {
-              ...options, title: 'Warning!',
-              subTitle: 'Phone numbers can only have numbers or \'-\'.',
-              buttons: [...['OK']]
-            }
-            this.showSimpleAlert(options);
-            return;
+      // }
+      if (phoneNumber) {
+        if (!+phoneNumber) {
+          options = {
+            ...options, title: 'Warning!',
+            subTitle: 'Phone numbers can only have numbers or \'-\'.',
+            buttons: [...['OK']]
           }
+          this.showSimpleAlert(options);
+          return;
+        }
       }
 
-        if(emergencyContactPhoneNumber){
-          if (!+emergencyContactPhoneNumber) {
-            options = {
-              ...options, title: 'Warning!',
-              subTitle: 'Phone numbers can only have numbers or \'-\'.',
-              buttons: [...['OK']]
-            }
-            this.showSimpleAlert(options);
-            return;
+      if (emergencyContactPhoneNumber) {
+        if (!+emergencyContactPhoneNumber) {
+          options = {
+            ...options, title: 'Warning!',
+            subTitle: 'Phone numbers can only have numbers or \'-\'.',
+            buttons: [...['OK']]
           }
+          this.showSimpleAlert(options);
+          return;
+        }
       }
       // if ((phoneNumber.length < 10 || phoneNumber.length > 12)) {
       //   options = {
@@ -218,7 +218,7 @@ export class CreatePage {
                     navTransition.then(() => this.showAdvancedAlert(options));
                   }
                 })
-                .catch(error => handleError(error));
+                .catch(error => this.showSimpleAlert({ title: 'Error', subTitle: error }));
               ;
               return false;
             }

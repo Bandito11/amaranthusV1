@@ -1,29 +1,27 @@
 import { Injectable } from '@angular/core';
 import { InAppPurchase } from '@ionic-native/in-app-purchase';
-import { IResponse } from '../../common/interface';
-
-interface productGet {
-  productId: string;
-  title: string;
-  description:string;
-  currency:string;
-  price:any;
-  priceAsDecimal:any;
-}
-
-interface productRestore{
-  productId: string;
-  state: any;
-  transactionId:string;
-  date:string;
-  productType:string;
-  receipt:string;
-  signature:string;
-}
-
+import { productRestore, productGet, productBought } from '../../common/app-purchase';
 
 @Injectable()
 export class AppPurchaseProvider {
+
+  private _boughtEverything = false;
+
+  public get boughtEverything(): boolean {
+    return this._boughtEverything;
+  }
+
+
+  public set boughtEverything(v: boolean) {
+    this._boughtEverything = v;
+  }
+
+  getProofOfPurchase() {
+    return new Promise((resolve, reject) => {
+      this.restore()
+        .catch(err => reject(err));
+    });
+  }
 
   constructor(private iap: InAppPurchase) {
   }
@@ -31,7 +29,7 @@ export class AppPurchaseProvider {
   /**
    * Restore purchase
    */
-  restore():Promise<productRestore[]> {
+  restore():Promise<productRestore[]>{
     return new Promise((resolve, reject) => {
       this.iap.restorePurchases()
         .then(purchased => resolve(purchased))
@@ -41,18 +39,20 @@ export class AppPurchaseProvider {
   /**
    * Buy Product
    */
-  buy(productId) {
-    this.iap.buy(productId)
-      .then(product => alert(product))
-      .catch(err => console.log(err))
+  buy(productId): Promise<productBought> {
+    return new Promise((resolve, reject) => {
+      this.iap.buy(productId)
+        .then(product => resolve(product))
+        .catch(err => console.log(err))
+    });
   }
 
   /**
    * Return an array of products. 
    */
-  getProducts():Promise<productGet[]> {
+  getProducts(): Promise<productGet[]> {
     return new Promise((resolve, reject) => {
-      this.iap.getProducts(['xyz.attendancelog.amaranthus.everything'])
+      this.iap.getProducts(['everything'])
         .then(products => resolve(products))
         .catch(err => reject(err))
     });

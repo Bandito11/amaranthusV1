@@ -63,7 +63,6 @@ export class XLSXProvider {
   private asyncConcatenate(data: IRecord[], length: number): Promise<any[][]> {
     return new Promise((resolve, reject) => {
       let i = 0;
-      let percent = 0;
       let studentsRecords: any[][] = [['Id', 'Name', 'Attendance', 'Absence', 'Attendance %']];
       try {
         data.length;

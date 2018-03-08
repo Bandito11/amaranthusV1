@@ -15,7 +15,7 @@ export class FileProvider {
     private file: File
   ) { }
 
-  exportFile(opts: {fileName:string, text:any}): Promise<IResponse<any>> {
+  exportFile(opts: { fileName: string, text: any }): Promise<IResponse<any>> {
     let response: IResponse<boolean> = {
       success: false,
       error: '',
@@ -24,8 +24,6 @@ export class FileProvider {
     const options: IWriteOptions = {
       replace: true
     };
-    for(let prop in this.file){
-    }
     return new Promise((resolve, reject) => {
       this.file.writeFile(`${this.file.externalRootDirectory}/Download/`, opts.fileName, opts.text, options)
         .then(res => {
@@ -40,6 +38,4 @@ export class FileProvider {
         .catch(error => reject(error));
     });
   }
-
-
 }

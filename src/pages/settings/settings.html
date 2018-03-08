@@ -9,13 +9,13 @@
 
 <ion-content padding>
   <div *ngFor="let product of products">
-    <p>{{product.title}}</p>
+    <ion-icon name="pricetag"></ion-icon>
+    <span>
+      {{product.title}}
+    </span>
     <p>
       {{product.description}}
     </p>
-    <p>
-      {{product.priceAsDecimal}}
-    </p>
-    <button ion-button color="primary" (click)="buyProduct(product.productId)" large>buy</button>
+    <button ion-button color="primary" (click)="buyProduct(product.productId)">Buy Now for only {{product.priceAsDecimal}}!</button>
   </div>
 </ion-content>
