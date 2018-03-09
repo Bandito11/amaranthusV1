@@ -25,7 +25,7 @@ export class AppPurchaseProvider {
     return new Promise((resolve, reject) => {
       this.iap.buy(productId)
         .then(product => resolve(product))
-        .catch(err => console.log(err))
+        .catch(err => reject(err))
     });
   }
 
