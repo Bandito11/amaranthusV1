@@ -5,24 +5,6 @@ import { productRestore, productGet, productBought } from '../../common/app-purc
 @Injectable()
 export class AppPurchaseProvider {
 
-  private _boughtEverything = false;
-
-  public get boughtEverything(): boolean {
-    return this._boughtEverything;
-  }
-
-
-  public set boughtEverything(v: boolean) {
-    this._boughtEverything = v;
-  }
-
-  getProofOfPurchase() {
-    return new Promise((resolve, reject) => {
-      this.restore()
-        .catch(err => reject(err));
-    });
-  }
-
   constructor(private iap: InAppPurchase) {
   }
 

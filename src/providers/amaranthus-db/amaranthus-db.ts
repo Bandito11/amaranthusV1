@@ -67,7 +67,7 @@ export class AmaranthusDBProvider {
     }
   }
 
-  checkIfUserExists(opts: { id: string }): Promise<boolean> {
+  checkIfStudentExists(opts: { id: string }): Promise<boolean> {
     return new Promise((resolve, reject) => {
       try {
         let results = studentsColl.findOne({
@@ -90,7 +90,7 @@ export class AmaranthusDBProvider {
           .then(products => {
             products.forEach(product => {
               if (product.productId == 'everything' && stateAndroid[product.state] == ('ACTIVE' || 0)) {
-                this.checkIfUserExists({ id: student.id })
+                this.checkIfStudentExists({ id: student.id })
                   .then(value => {
                     try {
                       if (value == false) {
@@ -108,11 +108,12 @@ export class AmaranthusDBProvider {
                   .catch(error => reject(error));
               } else {
                 response = { success: false, error: 'Reached the limit of 10 persons in database. If you want to get rid of this limit please consider buying the app!', data: null };
+                resolve(response);
               }
             });
           })
       } else {
-        this.checkIfUserExists({ id: student.id })
+        this.checkIfStudentExists({ id: student.id })
           .then(value => {
             try {
               if (value == false) {

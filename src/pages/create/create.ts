@@ -35,7 +35,7 @@ export class CreatePage {
   getNewId(): Promise<string> {
     return new Promise((resolve, reject) => {
       this.idInput = `XY${Math.ceil(Math.random() * 100000000)}`;
-      this.db.checkIfUserExists({ id: this.idInput })
+      this.db.checkIfStudentExists({ id: this.idInput })
         .then(value => {
           value == false ? resolve(this.idInput) : this.getNewId();
         })

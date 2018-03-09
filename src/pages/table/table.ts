@@ -9,6 +9,7 @@ import { AlertController } from 'ionic-angular/components/alert/alert-controller
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { ExportPage } from '../export/export';
 import { AppPurchaseProvider } from '../../providers/app-purchase/app-purchase';
+import { stateAndroid } from '../../common/app-purchase';
 
 @IonicPage()
 @Component({
@@ -68,10 +69,12 @@ export class TablePage implements OnInit {
 
   checkIfBought() {
     this.iap.restore()
-      .then(() => {
-        if (this.iap.boughtEverything) {
-          this.bought = true;
-        }
+      .then((products) => {
+        products.forEach(product => {
+          if (product.productId == 'everything' && stateAndroid[product.state] == ('ACTIVE' || 0)) {
+            this.bought = true;
+          }
+        })
       })
       .catch(err => handleError(err));
   }
