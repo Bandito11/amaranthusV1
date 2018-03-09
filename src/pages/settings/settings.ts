@@ -43,7 +43,7 @@ export class SettingsPage {
       .then(product => {
         this.showSimpleAlert({ title: 'Success!', subTitle: `${product.transactionId} was successfully bought.` })
       })
-      .catch(err => this.showSimpleAlert({ title: 'Error!', subTitle: err }))
+      .catch(err => this.showSimpleAlert({ title: 'Error!', subTitle: err }));
   }
 
   private showSimpleAlert(options: ISimpleAlertOptions) {
