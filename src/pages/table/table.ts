@@ -61,7 +61,7 @@ export class TablePage implements OnInit {
     this.getStudentsRecords();
     this.checkIfBought();
     const boughtInterval = setInterval(() => {
-      if (this.bought = true) {
+      if (this.bought == true) {
         clearInterval(boughtInterval);
       }
     }, 500);
