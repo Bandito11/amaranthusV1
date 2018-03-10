@@ -4,7 +4,6 @@ import { CSVProvider } from '../../providers/csv/csv';
 import { TextTabDelimitedProvider } from '../../providers/text-tab-delimited/text-tab-delimited';
 import { FileProvider } from '../../providers/file/file';
 import { ViewController } from 'ionic-angular/navigation/view-controller';
-import { IRecord } from '../../common/interface';
 import { XLSXProvider } from '../../providers/xslx/xslx';
 
 /**

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
 import { StudentProfilePage } from '../student-profile/student-profile';
@@ -18,7 +18,7 @@ import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-d
   selector: 'page-student-list',
   templateUrl: 'student-list.html',
 })
-export class StudentListPage implements OnInit {
+export class StudentListPage {
 
   constructor(
     public alertCtrl: AlertController,
@@ -29,7 +29,7 @@ export class StudentListPage implements OnInit {
   }
 
 
-  ionViewDidEnter() {
+  ionViewWillEnter() {
     this.query = "None";
     let interval = setInterval(() => {
       this.getStudents();
@@ -47,8 +47,7 @@ export class StudentListPage implements OnInit {
   private initializeStudentsList() {
     this.students = [...this.untouchedStudentList];
   };
-
-  ngOnInit() {
+  ionViewDidLoad() {
     this.students = [];
     this.untouchedStudentList = [];
     this.selectOptions = ['Id', 'Name', 'Active', 'Not Active', 'None'];

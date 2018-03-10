@@ -4,7 +4,6 @@ import { IonicPage } from 'ionic-angular';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { handleError } from '../../common/handleError';
 import { IRecord, Calendar, ISimpleAlertOptions } from '../../common/interface';
-import { TextTabDelimitedProvider } from '../../providers/text-tab-delimited/text-tab-delimited';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { ExportPage } from '../export/export';
@@ -55,17 +54,14 @@ export class TablePage implements OnInit {
   ionViewWillEnter() {
     this.query = "None";
     this.getStudentsRecords();
-  }
-
-  ionViewDidLoad() {
-    this.getStudentsRecords();
-    this.checkIfBought();
     const boughtInterval = setInterval(() => {
+      this.checkIfBought();
       if (this.bought == true) {
         clearInterval(boughtInterval);
       }
     }, 500);
   }
+
 
   checkIfBought() {
     this.iap.restore()

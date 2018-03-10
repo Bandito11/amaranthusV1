@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, } from 'ionic-angular';
 import { AppPurchaseProvider } from '../../providers/app-purchase/app-purchase';
 import { ISimpleAlertOptions } from '../../common/interface';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
@@ -17,8 +17,6 @@ export class SettingsPage {
   private purchasedProducts: productRestore[];
 
   constructor(
-    private navCtrl: NavController,
-    private navParams: NavParams,
     private iap: AppPurchaseProvider,
     private alertCtrl: AlertController,
   ) { }
@@ -30,7 +28,7 @@ export class SettingsPage {
   getProducts() {
     this.iap.getProducts()
       .then(products => this.products = products)
-      .catch(err => this.showSimpleAlert({ title: 'Success!', subTitle: err }));
+      .catch(err => this.showSimpleAlert({ title: 'Error!', subTitle: err }));
     let productInterval = setInterval(() => {
       if (this.products.length > -1) {
         clearInterval(productInterval);

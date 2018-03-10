@@ -8,15 +8,28 @@ export class AppPurchaseProvider {
   constructor(private iap: InAppPurchase) {
   }
 
+  handleError(err) {
+    let message = "";
+    for (let prop in err) {
+      try {
+        message += err[prop];
+      } catch (error) { }
+    }
+    return message;
+  }
+
   /**
    * Restore purchase
    */
-  restore():Promise<productRestore[]>{
+  restore(): Promise<productRestore[]> {
     return new Promise((resolve, reject) => {
       this.iap.restorePurchases()
         .then(purchased => resolve(purchased))
-        .catch(err => reject(err))
-    })
+        .catch(err => {
+          const message = this.handleError(err);
+          reject(message);
+        });
+    });
   }
   /**
    * Buy Product
@@ -25,7 +38,10 @@ export class AppPurchaseProvider {
     return new Promise((resolve, reject) => {
       this.iap.buy(productId)
         .then(product => resolve(product))
-        .catch(err => reject(err))
+        .catch(err => {
+          const message = this.handleError(err);
+          reject(message);
+        });
     });
   }
 
@@ -36,7 +52,10 @@ export class AppPurchaseProvider {
     return new Promise((resolve, reject) => {
       this.iap.getProducts(['everything'])
         .then(products => resolve(products))
-        .catch(err => reject(err))
+        .catch(err => {
+          const message = this.handleError(err);
+          reject(message);
+        });
     });
   }
 }
