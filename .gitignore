@@ -34,6 +34,7 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 
+package-lock.json
 amaranthus-key.jks
 amaranthus-password.txt
 attendancelog.apk
