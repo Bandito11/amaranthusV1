@@ -12,7 +12,7 @@ export class AppPurchaseProvider {
     let message = "";
     for (let prop in err) {
       try {
-        message += err[prop];
+        message += `${err[prop]}\n`;
       } catch (error) { }
     }
     return message;
