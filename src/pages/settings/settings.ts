@@ -14,7 +14,6 @@ import { productRestore, productGet } from '../../common/app-purchase';
 export class SettingsPage {
 
   private products: productGet[];
-  private purchasedProducts: productRestore[];
 
   constructor(
     private iap: AppPurchaseProvider,
