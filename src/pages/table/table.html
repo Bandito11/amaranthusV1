@@ -6,6 +6,9 @@
     <button *ngIf="bought" ion-button (click)="toExportPage()">
       Export
     </button>
+    <button class="exportColor" *ngIf="!bought" ion-button (click)="exportMessage()">
+      Export
+    </button>
   </ion-buttons>
   </ion-navbar>
 </ion-header>

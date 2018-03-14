@@ -3,7 +3,7 @@ import { IonicPage, } from 'ionic-angular';
 import { AppPurchaseProvider } from '../../providers/app-purchase/app-purchase';
 import { ISimpleAlertOptions } from '../../common/interface';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
-import { productRestore, productGet } from '../../common/app-purchase';
+import { productGet } from '../../common/app-purchase';
 
 @IonicPage()
 @Component({
