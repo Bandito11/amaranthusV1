@@ -126,7 +126,7 @@ export class MainPage {
           this.showSimpleAlert({
             title: 'Success!',
             subTitle: 'Student was marked present!',
-            buttons: ['Ok']
+            buttons:['OK'],
           });
         } else {
           handleError(response.error)
@@ -155,7 +155,7 @@ export class MainPage {
           this.showSimpleAlert({
             title: 'Success!',
             subTitle: 'Student was marked absent!',
-            buttons: ['Ok']
+            buttons:['OK']
           });
         } else {
           handleError(response.error);

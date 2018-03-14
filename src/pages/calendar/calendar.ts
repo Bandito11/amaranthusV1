@@ -66,7 +66,7 @@ export class CalendarPage implements OnInit {
           this.showSimpleAlert({
             title: 'Success!',
             subTitle: 'Student was marked present!',
-            buttons: ['Ok']
+            buttons:['OK']
           });
         } else {
           handleError(response.error)

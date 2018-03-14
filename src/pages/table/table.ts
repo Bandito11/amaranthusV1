@@ -61,6 +61,7 @@ export class TablePage implements OnInit {
 
   exportMessage() {
     const opts = {
+      buttons:['OK'],
       subTitle: 'If you want to export the records to a file please consider buying the product :' +
           ')',
       title: 'Information!'
@@ -245,7 +246,7 @@ export class TablePage implements OnInit {
       .create(ExportPage, {students: this.students});
     exportModal.onDidDismiss(message => {
       if (message) {
-        this.showSimpleAlert({title: 'Information!', subTitle: message});
+        this.showSimpleAlert({buttons:['OK'], title: 'Information!', subTitle: message});
       };
     });
     exportModal.present();

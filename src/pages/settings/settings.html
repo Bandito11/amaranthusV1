@@ -8,6 +8,12 @@
 
 
 <ion-content padding>
+  <div *ngIf="products.length < 1">
+      <div id="loader"></div> 
+      <p>
+        Please wait while we get the in app products.
+      </p>
+  </div>
   <div *ngFor="let product of products">
     <ion-icon name="pricetag"></ion-icon>
     <span>
