@@ -10,10 +10,14 @@ export class AppPurchaseProvider {
 
   handleError(err) {
     let message = "";
+    try {
     for (let prop in err) {
       try {
         message += `${err[prop]}\n`;
       } catch (error) { }
+    }
+    } catch (error) {
+      message = err;
     }
     return message;
   }

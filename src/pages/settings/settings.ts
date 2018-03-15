@@ -16,7 +16,6 @@ export class SettingsPage implements OnInit {
 
   ngOnInit() {
     this.products = [];
-    this.getProducts();
   }
 
   ionViewWillEnter() {
@@ -28,7 +27,7 @@ export class SettingsPage implements OnInit {
       .then(products => this.products = products)
       .catch(err => this.showSimpleAlert({buttons:['OK'], title: 'Error!', subTitle: err}));
     let productInterval = setInterval(() => {
-      if (this.products.length > -1) {
+      if (this.products.length > 0) {
         clearInterval(productInterval);
       }
     }, 500);
