@@ -86,12 +86,8 @@ export class TablePage implements OnInit {
       .restore()
       .then((products) => {
         products.forEach(product => {
-          for(let prop in product){
-            alert(prop);
-            alert(product[prop])
-          }
-          this.bought == true;
-          if (product.productId == 'master.key' && stateAndroid[product.state] == ('ACTIVE' || 0)) {
+          const receipt = JSON.parse(product.receipt)
+          if (product.productId == 'master.key' && stateAndroid[receipt.purchaseState] == ('ACTIVE' || 0)) {
             this.bought = true;
           }
         })

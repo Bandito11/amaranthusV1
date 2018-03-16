@@ -22,8 +22,9 @@ export interface productRestore {
     productId: string;
     state: string | number;
     transactionId: string;
+    type:string;
     date: string;
     productType: string;
-    receipt: string;
+    receipt;
     signature: string;
 }
