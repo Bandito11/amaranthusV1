@@ -26,6 +26,7 @@ export class MainPage {
   date: Calendar;
 
   ionViewWillEnter() {
+    this.selectOptions = ['Id', 'Name', 'None'];
     const currentDate = new Date();
     this.date = {
       month: currentDate.getMonth(),
@@ -33,20 +34,14 @@ export class MainPage {
       year: currentDate.getFullYear()
     }
     this.query = "None";
+    this.students = [];
     let studentInterval = setInterval(() => {
       this.getStudents();
-      if (this.students.length > 0) {
+      if (this.students.length > -1) {
         clearInterval(studentInterval);
       }
     }, 500);
   }
-
-  ionViewDidLoad() {
-    this.students = [];
-    this.untouchedStudentList = [];
-    this.selectOptions = ['Id', 'Name', 'None'];
-  }
-
 
   private initializeStudentsList() {
     this.students = [...this.untouchedStudentList];
@@ -56,8 +51,8 @@ export class MainPage {
     try {
       const studentResponse = await this.db.getAllActiveStudents();
       if (studentResponse.success == true) {
-        this.students = studentResponse.data;
-        this.untouchedStudentList = studentResponse.data;
+        this.students = [...studentResponse.data];
+        this.untouchedStudentList = [...studentResponse.data];
       } else {
         // TODO:  implement an alert message if it fails
         // message should say no students can be retrieved.

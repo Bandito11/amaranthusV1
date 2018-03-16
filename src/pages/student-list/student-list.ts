@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { handleError } from '../../common/handleError';
-import { StudentProfilePage } from '../student-profile/student-profile';
-import { CreatePage } from '../create/create';
-import { IStudent } from '../../common/interface';
-import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams, AlertController} from 'ionic-angular';
+import {handleError} from '../../common/handleError';
+import {StudentProfilePage} from '../student-profile/student-profile';
+import {CreatePage} from '../create/create';
+import {IStudent} from '../../common/interface';
+import {AmaranthusDBProvider} from '../../providers/amaranthus-db/amaranthus-db';
 
 /**
  * Generated class for the StudentListPage page.
@@ -14,53 +14,42 @@ import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-d
  */
 
 @IonicPage()
-@Component({
-  selector: 'page-student-list',
-  templateUrl: 'student-list.html',
-})
+@Component({selector: 'page-student-list', templateUrl: 'student-list.html'})
 export class StudentListPage {
 
-  constructor(
-    public alertCtrl: AlertController,
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public db: AmaranthusDBProvider
-  ) {
-  }
+  constructor(public alertCtrl : AlertController, public navCtrl : NavController, public navParams : NavParams, public db : AmaranthusDBProvider) {}
 
+  students : IStudent[];
+  private untouchedStudentList : IStudent[];
+  query : string;
+  selectOptions : string[];
 
   ionViewWillEnter() {
+    this.selectOptions = ['Id', 'Name', 'Active', 'Not Active', 'None'];
     this.query = "None";
-    let interval = setInterval(() => {
+    this.students = [];
+    let studentInterval = setInterval(() => {
       this.getStudents();
-      if (this.students.length > 0) {
-        clearInterval(interval);
+      if (this.students.length > -1) {
+        clearInterval(studentInterval);
       }
     }, 500);
   }
 
-  students: IStudent[];
-  private untouchedStudentList: IStudent[];
-  query: string;
-  selectOptions: string[];
-
   private initializeStudentsList() {
     this.students = [...this.untouchedStudentList];
   };
-  ionViewDidLoad() {
-    this.students = [];
-    this.untouchedStudentList = [];
-    this.selectOptions = ['Id', 'Name', 'Active', 'Not Active', 'None'];
-    this.query = "None";
-  }
+  ionViewDidLoad() {}
 
   searchStudent(event) {
     // TODO: implement query of the list by searchbar value
-    let query: string = event.target.value;
-    query ? this.queryStudentsList(query) : this.initializeStudentsList();
+    let query : string = event.target.value;
+    query
+      ? this.queryStudentsList(query)
+      : this.initializeStudentsList();
   }
 
-  queryData(option: string) {
+  queryData(option : string) {
     switch (option) {
       case 'Id':
         this.queryStudentsbyId();
@@ -77,48 +66,71 @@ export class StudentListPage {
     }
   }
 
-  queryByIsActive(query: string) {
+  queryByIsActive(query : string) {
     if (query == 'Active') {
-      this.students = [...this.students.sort((a, b) => {
-        if (a.isActive == true) return -1;
-        if (a.isActive == false) return 1;
-        return 0;
-      })];
+      this.students = [
+        ...this
+          .students
+          .sort((a, b) => {
+            if (a.isActive == true) 
+              return -1;
+            if (a.isActive == false) 
+              return 1;
+            return 0;
+          })
+      ];
     } else {
-      this.students = [...this.students.sort((a, b) => {
-        if (a.isActive == false) return -1;
-        if (a.isActive == true) return 1;
-        return 0;
-      })];
+      this.students = [
+        ...this
+          .students
+          .sort((a, b) => {
+            if (a.isActive == false) 
+              return -1;
+            if (a.isActive == true) 
+              return 1;
+            return 0;
+          })
+      ];
     }
   }
 
   queryStudentsbyId() {
-    this.students = [...this.students.sort((a, b) => {
-      if (a.id < b.id) return -1;
-      if (a.id > b.id) return 1;
-      return 0;
-    })];
+    this.students = [
+      ...this
+        .students
+        .sort((a, b) => {
+          if (a.id < b.id) 
+            return -1;
+          if (a.id > b.id) 
+            return 1;
+          return 0;
+        })
+    ];
   }
 
   queryStudentsName() {
-    this.students = [...this.students.sort((a, b) => {
-      if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
-      if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
-      return 0;
-    })];
+    this.students = [
+      ...this
+        .students
+        .sort((a, b) => {
+          if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) 
+            return -1;
+          if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) 
+            return 1;
+          return 0;
+        })
+    ];
   }
 
-  private queryStudentsList(query: string) {
+  private queryStudentsList(query : string) {
     const students = [...this.untouchedStudentList];
-    let fullName: string;
+    let fullName : string;
     const newQuery = students.filter(student => {
-      fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
-      if (student.id == query ||
-        student.firstName.toLowerCase() == query.toLowerCase() ||
-        student.lastName.toLowerCase() == query.toLowerCase() ||
-        fullName == query.toLowerCase()
-      ) {
+      fullName = `${student
+        .firstName} ${student
+        .lastName}`
+        .toLowerCase();
+      if (student.id == query || student.firstName.toLowerCase() == query.toLowerCase() || student.lastName.toLowerCase() == query.toLowerCase() || fullName == query.toLowerCase()) {
         return student;
       }
     });
@@ -127,13 +139,15 @@ export class StudentListPage {
 
   private async getStudents() {
     try {
-      const response = await this.db.getAllStudents();
+      const response = await this
+        .db
+        .getAllStudents();
       if (response.success == true) {
         this.students = [...response.data];
         this.untouchedStudentList = [...response.data];
       } else {
-        // TODO:  implement an alert message if it fails
-        // message should say no students can be retrieved.
+        // TODO:  implement an alert message if it fails message should say no students
+        // can be retrieved.
         handleError(response.error);
       }
     } catch (error) {
@@ -141,12 +155,15 @@ export class StudentListPage {
     }
   }
 
-
-  goToStudentProfile(id: string) {
-    this.navCtrl.push(StudentProfilePage, { id: id })
+  goToStudentProfile(id : string) {
+    this
+      .navCtrl
+      .push(StudentProfilePage, {id: id})
   }
 
   goToCreate() {
-    this.navCtrl.push(CreatePage);
+    this
+      .navCtrl
+      .push(CreatePage);
   }
 }

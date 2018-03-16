@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Calendar, IRecord, ISimpleAlertOptions } from '../../common/interface';
 import { monthsLabels, weekDaysHeader } from '../../common/labels';
@@ -10,7 +10,7 @@ import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-d
   selector: 'page-calendar',
   templateUrl: 'calendar.html',
 })
-export class CalendarPage implements OnInit {
+export class CalendarPage {
 
   constructor(
     public alertCtrl: AlertController,
@@ -28,10 +28,6 @@ export class CalendarPage implements OnInit {
     this.getStudentsRecords(this.date);
   }
   
-  ngOnInit() {
-    this.students = [];
-    this.untouchedStudentList = [];
-  }
 
   getStudentsRecords(opts: Calendar) {
     // Will get all Students queried by today's date.

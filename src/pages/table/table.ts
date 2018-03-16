@@ -29,6 +29,12 @@ export class TablePage implements OnInit {
   // dateQuery: string; // Will be used with the date time component
   bought : boolean;
 
+  ionViewWillEnter() {
+    this.query = "None";
+    this.getStudentsRecords();
+    this.checkIfBought();
+  }
+  
   ngOnInit() {
     this.bought = false;
     this.currentDate = new Date();
@@ -67,17 +73,6 @@ export class TablePage implements OnInit {
       title: 'Information!'
     };
     this.showSimpleAlert(opts);
-  }
-
-  ionViewWillEnter() {
-    this.query = "None";
-    this.getStudentsRecords();
-    const boughtInterval = setInterval(() => {
-      this.checkIfBought();
-      if (this.bought == true) {
-        clearInterval(boughtInterval);
-      }
-    }, 500);
   }
 
   checkIfBought() {

@@ -24,13 +24,8 @@ export class SettingsPage implements OnInit {
 
   getProducts() {
     this.iap.getProducts()
-      .then(products => this.products = products)
+      .then(products => this.products = [...products])
       .catch(err => this.showSimpleAlert({buttons:['OK'], title: 'Error!', subTitle: err}));
-    let productInterval = setInterval(() => {
-      if (this.products.length > 0) {
-        clearInterval(productInterval);
-      }
-    }, 500);
   }
 
   buyProduct(productId: string) {
