@@ -33,7 +33,7 @@ export class SettingsPage implements OnInit {
     }, 500);
   }
 
-  buyProduct(productId) {
+  buyProduct(productId: string) {
     this.iap.buy(productId)
       .then(product => {
         this.showSimpleAlert({buttons:['OK'], title: 'Success!', subTitle: `${product.transactionId} was successfully bought.`})

@@ -38,7 +38,7 @@ export class AppPurchaseProvider {
   /**
    * Buy Product
    */
-  buy(productId): Promise<productBought> {
+  buy(productId :string): Promise<productBought> {
     return new Promise((resolve, reject) => {
       this.iap.buy(productId)
         .then(product => resolve(product))
@@ -54,7 +54,7 @@ export class AppPurchaseProvider {
    */
   getProducts(): Promise<productGet[]> {
     return new Promise((resolve, reject) => {
-      this.iap.getProducts(['everything'])
+      this.iap.getProducts(['master.key'])
         .then(products => resolve(products))
         .catch(err => {
           const message = this.handleError(err);
