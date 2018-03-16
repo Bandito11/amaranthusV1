@@ -53,6 +53,10 @@ export class AppPurchaseProvider {
    * Return an array of products. 
    */
   getProducts(): Promise<productGet[]> {
+    alert(this.iap.toString())
+    for(let prop in this.iap){
+alert(this.iap[prop]);
+    }
     return new Promise((resolve, reject) => {
       this.iap.getProducts(['everything'])
         .then(products => resolve(products))

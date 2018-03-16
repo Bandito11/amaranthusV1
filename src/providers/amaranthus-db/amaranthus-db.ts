@@ -89,7 +89,7 @@ export class AmaranthusDBProvider {
         this.iap.restore()
           .then(products => {
             products.forEach(product => {
-              if (product.productId == 'everything' && stateAndroid[product.state] == ('ACTIVE' || 0)) {
+              if (product.productId == 'master.key' && stateAndroid[product.state] == ('ACTIVE' || 0)) {
                 this.checkIfStudentExists({ id: student.id })
                   .then(value => {
                     try {
