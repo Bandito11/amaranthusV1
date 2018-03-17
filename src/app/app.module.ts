@@ -1,3 +1,4 @@
+import { IonicStorageModule } from '@ionic/storage';
 import { StudentProfilePage } from './../pages/student-profile/student-profile';
 import { StudentListPage } from './../pages/student-list/student-list';
 import { PhoneNumberPipe } from './../common/phonenumber.pipe';
@@ -37,6 +38,7 @@ import { FileProvider } from '../providers/file/file';
 import { ExportPageModule } from '../pages/export/export.module';
 import { ExportPage } from '../pages/export/export';
 import { XLSXProvider } from '../providers/xslx/xslx';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -56,7 +58,8 @@ import { XLSXProvider } from '../providers/xslx/xslx';
     HttpClientModule,
     ExportPageModule,
     FormsModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

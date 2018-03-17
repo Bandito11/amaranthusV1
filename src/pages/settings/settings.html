@@ -7,13 +7,8 @@
 </ion-header>
 
 
-<ion-content>
-  <div id="not-loaded" *ngIf="products.length < 1">
-      <div id="loader"></div> 
-      <p>
-        Please wait while we get the products.
-      </p>
-  </div>
+<ion-content padding>
+  <div id="loader"></div>
   <div *ngFor="let product of products">
     <ion-icon name="pricetag"></ion-icon>
     <span>

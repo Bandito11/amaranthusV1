@@ -3,9 +3,9 @@ page-settings {
         font-size: 12px;
     }
     #loader {
-        position: inherit;
-        left: 50%;
-        top: 10%;
+        position: absolute;
+        left: 65%;
+        top: 20%;
         z-index: 1;
         margin: -75px 0 0 -75px;
         border: 9px solid #f3f3f3;
@@ -31,17 +31,5 @@ page-settings {
         100% {
             transform: rotate(360deg);
         }
-    }
-    #not-loaded {
-        position: absolute;
-        left:25%;
-        top:15%;
-    }
-    @media only screen and (orientation:landscape) {
-      #not-loaded {
-        position: absolute;
-        left:40%;
-        top:20%;
-    }
     }
 }
