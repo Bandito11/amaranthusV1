@@ -1,34 +1,34 @@
-import {Storage} from '@ionic/storage';
-import {monthsLabels, yearLabels} from './../../common/labels';
-import {Component, OnInit} from '@angular/core';
-import {IonicPage} from 'ionic-angular';
-import {AmaranthusDBProvider} from '../../providers/amaranthus-db/amaranthus-db';
-import {handleError} from '../../common/handleError';
-import {IRecord, Calendar, ISimpleAlertOptions} from '../../common/interface';
-import {AlertController} from 'ionic-angular/components/alert/alert-controller';
-import {ModalController} from 'ionic-angular/components/modal/modal-controller';
-import {ExportPage} from '../export/export';
-import {AppPurchaseProvider} from '../../providers/app-purchase/app-purchase';
-import {stateAndroid} from '../../common/app-purchase';
+import { Storage } from '@ionic/storage';
+import { monthsLabels, yearLabels } from './../../common/labels';
+import { Component, OnInit } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
+import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
+import { handleError } from '../../common/handleError';
+import { IRecord, Calendar, ISimpleAlertOptions } from '../../common/interface';
+import { AlertController } from 'ionic-angular/components/alert/alert-controller';
+import { ModalController } from 'ionic-angular/components/modal/modal-controller';
+import { ExportPage } from '../export/export';
+import { AppPurchaseProvider } from '../../providers/app-purchase/app-purchase';
+import { stateAndroid } from '../../common/app-purchase';
 
 @IonicPage()
-@Component({selector: 'page-table', templateUrl: 'table.html'})
+@Component({ selector: 'page-table', templateUrl: 'table.html' })
 
 export class TablePage implements OnInit {
 
-  constructor(private storage : Storage, private db : AmaranthusDBProvider, private alertCtrl : AlertController, private modalCtrl : ModalController, private iap : AppPurchaseProvider) {}
+  constructor(private storage: Storage, private db: AmaranthusDBProvider, private alertCtrl: AlertController, private modalCtrl: ModalController, private iap: AppPurchaseProvider) { }
 
-  students : IRecord[];
-  private untouchedStudentList : IRecord[];
-  query : string;
-  monthQuery : string;
-  months : string[];
-  currentDate : Date;
-  yearQuery : string;
-  years : number[];
-  selectOptions : string[];
+  students: IRecord[];
+  private untouchedStudentList: IRecord[];
+  query: string;
+  monthQuery: string;
+  months: string[];
+  currentDate: Date;
+  yearQuery: string;
+  years: number[];
+  selectOptions: string[];
   // dateQuery: string; // Will be used with the date time component
-  bought : boolean;
+  bought: boolean;
 
   ionViewWillEnter() {
     this.query = "None";
@@ -79,7 +79,6 @@ export class TablePage implements OnInit {
       .storage
       .get('bought')
       .then(bought => {
-        console.log(bought)
         if (bought) {
           this.bought = bought;
         } else {
@@ -94,10 +93,12 @@ export class TablePage implements OnInit {
                   this
                     .storage
                     .set('bought', this.bought)
+                } else {
+                  this.storage.set('bought', false);
                 }
               })
             })
-            .catch(err => this.showSimpleAlert({buttons: ['OK'], title: 'Error!', subTitle: err}));
+            .catch(err => this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: err }));
         }
       })
       .catch(err => handleError(err));
@@ -107,7 +108,7 @@ export class TablePage implements OnInit {
     this.students = [...this.untouchedStudentList];
   }
 
-  queryData(option : string) {
+  queryData(option: string) {
     this.initializeStudents();
     switch (option) {
       case 'Id':
@@ -130,8 +131,8 @@ export class TablePage implements OnInit {
     }
   }
 
-  queryDataByYear(year : number) {
-    const date : Calendar = {
+  queryDataByYear(year: number) {
+    const date: Calendar = {
       year: + year,
       month: this
         .months
@@ -149,8 +150,8 @@ export class TablePage implements OnInit {
       .catch(error => handleError(error));
   }
 
-  queryDataByMonth(index : number) {
-    let date : Calendar;
+  queryDataByMonth(index: number) {
+    let date: Calendar;
     if (index) {
       date = {
         year: + this.yearQuery,
@@ -179,7 +180,7 @@ export class TablePage implements OnInit {
     // Will get all Students queried by today's date.
     this
       .db
-      .getQueriedRecords({query: this.query})
+      .getQueriedRecords({ query: this.query })
       .then(response => {
         if (response.success == true) {
           this.students = [...response.data];
@@ -198,9 +199,9 @@ export class TablePage implements OnInit {
       ...this
         .students
         .sort((a, b) => {
-          if (a.fullName.toLowerCase() < b.fullName.toLowerCase()) 
+          if (a.fullName.toLowerCase() < b.fullName.toLowerCase())
             return -1;
-          if (a.fullName.toLowerCase() > b.fullName.toLowerCase()) 
+          if (a.fullName.toLowerCase() > b.fullName.toLowerCase())
             return 1;
           return 0;
         })
@@ -212,9 +213,9 @@ export class TablePage implements OnInit {
       ...this
         .students
         .sort((a, b) => {
-          if (a.attendance < b.attendance) 
+          if (a.attendance < b.attendance)
             return 1;
-          if (a.attendance > b.attendance) 
+          if (a.attendance > b.attendance)
             return -1;
           return 0;
         })
@@ -226,9 +227,9 @@ export class TablePage implements OnInit {
       ...this
         .students
         .sort((a, b) => {
-          if (a.absence < b.absence) 
+          if (a.absence < b.absence)
             return 1;
-          if (a.absence > b.absence) 
+          if (a.absence > b.absence)
             return -1;
           return 0;
         })
@@ -240,9 +241,9 @@ export class TablePage implements OnInit {
       ...this
         .students
         .sort((a, b) => {
-          if (a.id < b.id) 
+          if (a.id < b.id)
             return -1;
-          if (a.id > b.id) 
+          if (a.id > b.id)
             return 1;
           return 0;
         })
@@ -252,20 +253,20 @@ export class TablePage implements OnInit {
   toExportPage() {
     const exportModal = this
       .modalCtrl
-      .create(ExportPage, {students: this.students});
+      .create(ExportPage, { students: this.students });
     exportModal.onDidDismiss(message => {
       if (message) {
-        this.showSimpleAlert({buttons: ['OK'], title: 'Information!', subTitle: message});
+        this.showSimpleAlert({ buttons: ['OK'], title: 'Information!', subTitle: message });
       };
     });
     exportModal.present();
 
   }
 
-  private showSimpleAlert(options : ISimpleAlertOptions) {
+  private showSimpleAlert(options: ISimpleAlertOptions) {
     return this
       .alertCtrl
-      .create({title: options.title, subTitle: options.subTitle, buttons: options.buttons})
+      .create({ title: options.title, subTitle: options.subTitle, buttons: options.buttons })
       .present();;
   }
 
