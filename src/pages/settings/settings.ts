@@ -11,11 +11,13 @@ import {productGet} from '../../common/app-purchase';
 export class SettingsPage implements OnInit {
 
   private products : productGet[];
-
+  private noProducts : boolean;
+  
   constructor(private iap : AppPurchaseProvider, private alertCtrl : AlertController,) {}
 
   ngOnInit() {
     this.products = [];
+    this.noProducts = true;
   }
 
   ionViewWillEnter() {
@@ -23,21 +25,30 @@ export class SettingsPage implements OnInit {
   }
 
   getProducts() {
-    this.iap.getProducts()
-      .then(products => this.products = [...products])
-      .catch(err => this.showSimpleAlert({buttons:['OK'], title: 'Error!', subTitle: err}));
+    this
+      .iap
+      .getProducts()
+      .then(products => {
+        this.noProducts = false;
+        this.products = [...products]
+      })
+      .catch(err => this.showSimpleAlert({buttons: ['OK'], title: 'Error!', subTitle: err}));
   }
 
-  buyProduct(productId: string) {
-    this.iap.buy(productId)
+  buyProduct(productId : string) {
+    this
+      .iap
+      .buy(productId)
       .then(product => {
-        this.showSimpleAlert({buttons:['OK'], title: 'Success!', subTitle: `${product.transactionId} was successfully bought.`})
+        this.showSimpleAlert({buttons: ['OK'], title: 'Success!', subTitle: `${product.transactionId} was successfully bought.`})
       })
-      .catch(err => this.showSimpleAlert({buttons:['OK'], title: 'Error!', subTitle: err}));
+      .catch(err => this.showSimpleAlert({buttons: ['OK'], title: 'Error!', subTitle: err}));
   }
 
   private showSimpleAlert(options : ISimpleAlertOptions) {
-    return this.alertCtrl.create({title: options.title, subTitle: options.subTitle, buttons: options.buttons})
+    return this
+      .alertCtrl
+      .create({title: options.title, subTitle: options.subTitle, buttons: options.buttons})
       .present();;
   }
 
