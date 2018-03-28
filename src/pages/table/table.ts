@@ -33,11 +33,11 @@ export class TablePage implements OnInit {
   ionViewWillEnter() {
     this.query = "None";
     this.getStudentsRecords();
-    this.checkIfBought();
+    // this.checkIfBought();
   }
 
   ngOnInit() {
-    this.bought = false;
+    // this.bought = false;
     this.currentDate = new Date();
     // this.dateQuery =
     // `${this.currentDate.getFullYear()}-${this.currentDate.getMonth() - 1}`; //
@@ -74,35 +74,35 @@ export class TablePage implements OnInit {
     this.showSimpleAlert(opts);
   }
 
-  checkIfBought() {
-    this
-      .storage
-      .get('bought')
-      .then(bought => {
-        if (bought) {
-          this.bought = bought;
-        } else {
-          this
-            .iap
-            .restore()
-            .then((products) => {
-              products.forEach(product => {
-                const receipt = JSON.parse(product.receipt);
-                if (product.productId == 'master.key' && stateAndroid[receipt.purchaseState] == ('ACTIVE' || 0)) {
-                  this.bought = true;
-                  this
-                    .storage
-                    .set('bought', this.bought)
-                } else {
-                  this.storage.set('bought', false);
-                }
-              })
-            })
-            .catch(err => this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: err }));
-        }
-      })
-      .catch(err => handleError(err));
-  }
+  // checkIfBought() {
+  //   this
+  //     .storage
+  //     .get('bought')
+  //     .then(bought => {
+  //       if (bought) {
+  //         this.bought = bought;
+  //       } else {
+  //         this
+  //           .iap
+  //           .restore()
+  //           .then((products) => {
+  //             products.forEach(product => {
+  //               const receipt = JSON.parse(product.receipt);
+  //               if (product.productId == 'master.key' && stateAndroid[receipt.purchaseState] == ('ACTIVE' || 0)) {
+  //                 this.bought = true;
+  //                 this
+  //                   .storage
+  //                   .set('bought', this.bought)
+  //               } else {
+  //                 this.storage.set('bought', false);
+  //               }
+  //             })
+  //           })
+  //           .catch(err => this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: err }));
+  //       }
+  //     })
+  //     .catch(err => handleError(err));
+  // }
 
   initializeStudents() {
     this.students = [...this.untouchedStudentList];

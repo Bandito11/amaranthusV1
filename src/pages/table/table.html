@@ -3,12 +3,12 @@
   <ion-navbar color="primary">
     <ion-title>Records</ion-title>
   <ion-buttons end>
-    <button *ngIf="bought" ion-button (click)="toExportPage()">
+    <button ion-button (click)="toExportPage()">
       Export
     </button>
-    <button class="exportColor" *ngIf="!bought" ion-button (click)="exportMessage()">
+    <!-- <button class="exportColor" *ngIf="!bought" ion-button (click)="exportMessage()">
       Export
-    </button>
+    </button> -->
   </ion-buttons>
   </ion-navbar>
 </ion-header>
