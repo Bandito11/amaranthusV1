@@ -1,4 +1,3 @@
-import { IonicStorageModule } from '@ionic/storage';
 import { StudentProfilePage } from './../pages/student-profile/student-profile';
 import { StudentListPage } from './../pages/student-list/student-list';
 import { PhoneNumberPipe } from './../common/phonenumber.pipe';
@@ -59,7 +58,6 @@ import { XLSXProvider } from '../providers/xslx/xslx';
     ExportPageModule,
     FormsModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
