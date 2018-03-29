@@ -89,7 +89,7 @@ export class ExportPage {
         }
 
       }
-    } catch (error) {// If CSV Provider err
+    } catch (error) {// If XLSX Provider err
       this.viewCtrl.dismiss('There was an error while creating the file. Please try again later!');
     }
   }

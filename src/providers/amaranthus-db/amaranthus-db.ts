@@ -4,7 +4,7 @@ import {IonicStorageAdapter} from './../../common/adapter';
 import * as Loki from 'lokijs';
 import {AppPurchaseProvider} from '../app-purchase/app-purchase';
 import {stateAndroid} from '../../common/app-purchase';
-// /////np ///// Only for dev purposes //////////////// import { STUDENTS,
+///// Only for dev purposes //////////////// import { STUDENTS,
 // RECORDS } from './../../mock/mock-students';
 // /////////////////////////////////
 

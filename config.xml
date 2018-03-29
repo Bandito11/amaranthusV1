@@ -18,6 +18,8 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
+    <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="BackupWebStorage" value="none" />
     <allow-navigation href="http://192.168.1.247:8100" />
     <allow-navigation href="http://192.168.1.247:8101" />
     <allow-navigation href="http://172.29.94.225:8100" />

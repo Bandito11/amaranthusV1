@@ -1,4 +1,3 @@
-import { Storage } from '@ionic/storage';
 import { monthsLabels, yearLabels } from './../../common/labels';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
@@ -8,15 +7,13 @@ import { IRecord, Calendar, ISimpleAlertOptions } from '../../common/interface';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { ExportPage } from '../export/export';
-import { AppPurchaseProvider } from '../../providers/app-purchase/app-purchase';
-import { stateAndroid } from '../../common/app-purchase';
 
 @IonicPage()
 @Component({ selector: 'page-table', templateUrl: 'table.html' })
 
 export class TablePage implements OnInit {
 
-  constructor(private storage: Storage, private db: AmaranthusDBProvider, private alertCtrl: AlertController, private modalCtrl: ModalController, private iap: AppPurchaseProvider) { }
+  constructor(private db: AmaranthusDBProvider, private alertCtrl: AlertController, private modalCtrl: ModalController) { }
 
   students: IRecord[];
   private untouchedStudentList: IRecord[];

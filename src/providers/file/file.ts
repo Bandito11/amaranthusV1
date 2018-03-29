@@ -12,9 +12,6 @@ export class FileProvider {
     fileName: string,
     text: any
   }) : Promise < IResponse < any >> {
-    const options: IWriteOptions = {
-      replace: true
-    };
     return new Promise((resolve, reject) => {
       if (this.platform.is('ios')) {
         this
@@ -73,19 +70,47 @@ export class FileProvider {
       replace: true
     };
     return new Promise((resolve, reject) => {
+      const path = this.file.documentsDirectory;
+      const directory = 'Attendance Log';
       this
         .file
-        .writeFile(this.file.documentsDirectory, opts.fileName, opts.text, options)
-        .then(res => {
-          response = {
-            ...response,
-            success: true,
-            error: res,
-            data: res
-          };
-          resolve(response);
+        .checkDir(path, directory)
+        .then(res => {console.log('in checkdir')
+          this
+            .file
+            .writeFile(path + directory, opts.fileName, opts.text, options)
+            .then(res => {
+              response = {
+                ...response,
+                success: true,
+                error: res,
+                data: res
+              };
+              resolve(response);
+            })
+            .catch(error => reject(error));
         })
-        .catch(error => reject(error));
+        .catch(() => {console.log('in createdir')
+          this
+            .file
+            .createDir(path, directory, true)
+            .then(directory => {
+              this
+                .file
+                .writeFile(path + directory.name, opts.fileName, opts.text, options)
+                .then(res => {
+                  response = {
+                    ...response,
+                    success: true,
+                    error: res,
+                    data: res
+                  };
+                  resolve(response);
+                })
+                .catch(error => reject(error));
+            })
+            .catch(error => reject(error));
+        });
     });
   }
 }

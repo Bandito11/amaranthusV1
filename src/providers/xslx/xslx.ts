@@ -12,9 +12,7 @@ import * as XLSX from 'xlsx';
 @Injectable()
 export class XLSXProvider {
 
-  constructor(public http: HttpClient) {
-    console.log('Hello XslxProvider Provider');
-  }
+  constructor(public http: HttpClient) {}
 
   exportXLSXToFile(tableRecords: IRecord[]): Promise<IResponse<Blob>> {
     let response: IResponse<Blob> = {

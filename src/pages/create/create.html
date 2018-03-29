@@ -8,6 +8,28 @@
 
   <ion-navbar color="primary">
     <ion-title>Create Record</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="createStudent({
+        firstName: firstName.value,
+        initial: initial.value,
+        lastName: lastName.value,
+        id: id.value,
+        address: address.value,
+        phoneNumber:phoneNumber.value,
+        town:town.value,
+        state:state.value,
+        class: class.value,
+        fatherFirstName:fatherFirstName.value,
+        fatherLastName:fatherLastName.value,
+        motherFirstName:motherFirstName.value,
+        motherLastName:motherLastName.value,
+        emergencyContactName:emergencyContactName.value,
+        emergencyRelationship:emergencyRelationship.value,
+        emergencyContactPhoneNumber:emergencyContactPhoneNumber.value
+      })">
+        Create
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>

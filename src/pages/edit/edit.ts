@@ -121,10 +121,10 @@ export class EditPage implements OnInit {
     if (
       !opts.firstName ||
       !opts.lastName ||
-      !opts.id ||
-      !opts.address ||
-      !opts.town ||
-      !opts.state
+      !opts.id //||
+      // !opts.address ||
+      // !opts.town ||
+      // !opts.state
     ) {
       options = {
         ...options, title: 'Warning!',
