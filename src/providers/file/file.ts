@@ -75,7 +75,7 @@ export class FileProvider {
       this
         .file
         .checkDir(path, directory)
-        .then(res => {console.log('in checkdir')
+        .then(res => {
           this
             .file
             .writeFile(path + directory, opts.fileName, opts.text, options)
@@ -90,7 +90,7 @@ export class FileProvider {
             })
             .catch(error => reject(error));
         })
-        .catch(() => {console.log('in createdir')
+        .catch(() => {
           this
             .file
             .createDir(path, directory, true)
