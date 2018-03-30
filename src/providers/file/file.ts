@@ -40,10 +40,12 @@ export class FileProvider {
     const options: IWriteOptions = {
       replace: true
     };
+    const directory = '/Download/';
+    const path = this.file.externalRootDirectory + directory;
     return new Promise((resolve, reject) => {
       this
         .file
-        .writeFile(`${this.file.externalRootDirectory}/Download/`, opts.fileName, opts.text, options)
+        .writeFile(path, opts.fileName, opts.text, options)
         .then(res => {
           response = {
             ...response,
@@ -69,9 +71,9 @@ export class FileProvider {
     const options: IWriteOptions = {
       replace: true
     };
+    const path = this.file.documentsDirectory;
+    const directory = 'Attendance Log';
     return new Promise((resolve, reject) => {
-      const path = this.file.documentsDirectory;
-      const directory = 'Attendance Log';
       this
         .file
         .checkDir(path, directory)
