@@ -10,7 +10,10 @@ import {ISimpleAlertOptions, IStudent, Calendar} from '../../common/interface';
 @Component({selector: 'page-main', templateUrl: 'main.html'})
 export class MainPage {
 
-  constructor(private alertCtrl : AlertController, private navCtrl : NavController, private db : AmaranthusDBProvider) {}
+  constructor(private alertCtrl : AlertController, private navCtrl : NavController, private db : AmaranthusDBProvider) {
+    this.students = [];
+    this.untouchedStudentList = [];
+  }
 
   students : IStudent[];
   private untouchedStudentList : IStudent[];
