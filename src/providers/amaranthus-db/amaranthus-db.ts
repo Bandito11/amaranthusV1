@@ -80,7 +80,7 @@ export class AmaranthusDBProvider {
   insertStudent(student : IStudent) : Promise < IResponse < null >> {
     let response: IResponse < null >;
     return new Promise((resolve, reject) => {
-      if (studentsColl.data.length > 10) {
+      if (studentsColl.data.length >= 10) {
         this
           .iap
           .restore()
@@ -117,8 +117,7 @@ export class AmaranthusDBProvider {
                 } else {
                   response = {
                     success: false,
-                    error: 'Reached the limit of 10 persons in database. If you want to get rid of this limi' +
-                        't please consider buying the app!',
+                    error: `Reached the limit of 10 persons in database. If you want to get rid of this limit please consider buying the app!`,
                     data: null
                   };
                   resolve(response);
