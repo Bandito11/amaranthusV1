@@ -1,12 +1,10 @@
+import {Storage} from '@ionic/storage';
 import {IStudent, IResponse, IRecord, Calendar} from './../../common/interface';
 import {Injectable} from '@angular/core';
 import {IonicStorageAdapter} from './../../common/adapter';
 import * as Loki from 'lokijs';
-import {AppPurchaseProvider} from '../app-purchase/app-purchase';
-import {stateAndroid} from '../../common/app-purchase';
-///// Only for dev purposes //////////////// import { STUDENTS,
-// RECORDS } from './../../mock/mock-students';
-// /////////////////////////////////
+// /// Only for dev purposes //////////////// import { STUDENTS, RECORDS } from
+// './../../mock/mock-students'; /////////////////////////////////
 
 let studentsColl : Collection < IStudent >;
 let recordsColl : Collection < IRecord >;
@@ -16,7 +14,7 @@ const dbName = 'amaranthus.db';
 @Injectable()
 export class AmaranthusDBProvider {
 
-  constructor(private iap : AppPurchaseProvider) {
+  constructor(private storage : Storage) {
     this.createDB();
   }
 
@@ -77,80 +75,64 @@ export class AmaranthusDBProvider {
     });
   }
 
+  insertStudentIntoDB(student : IStudent) : Promise < IResponse < null >> {
+    return new Promise((resolve, reject) => {
+      let response;
+      this
+        .checkIfStudentExists({id: student.id})
+        .then(value => {
+          try {
+            if (value == false) {
+              studentsColl.insert(student);
+              response = {
+                success: true,
+                error: null,
+                data: null
+              };
+            } else {
+              response = {
+                success: false,
+                error: 'User already exists in the database',
+                data: null
+              };
+            }
+            this.saveDatabase();
+            resolve(response);
+          } catch (error) {
+            reject(error);
+          }
+        })
+        .catch(error => reject(error));
+    });
+  }
+
   insertStudent(student : IStudent) : Promise < IResponse < null >> {
     let response: IResponse < null >;
     return new Promise((resolve, reject) => {
-      if (studentsColl.data.length >= 10) {
+      if (studentsColl.data.length > 9) {
         this
-          .iap
-          .restore()
-          .then(products => {
-            products.forEach(product => {
-              const receipt = JSON.parse(product.receipt);
-              if (product.productId != 'everything') {
-                if (product.productId == 'master.key' && stateAndroid[receipt.purchaseState] == ('ACTIVE' || 0)) {
-                  this
-                    .checkIfStudentExists({id: student.id})
-                    .then(value => {
-                      try {
-                        if (value == false) {
-                          studentsColl.insert(student);
-                          response = {
-                            success: true,
-                            error: null,
-                            data: null
-                          };
-                        } else {
-                          response = {
-                            success: false,
-                            error: 'User already exists in the database',
-                            data: null
-                          };
-                        }
-                        this.saveDatabase();
-                        resolve(response);
-                      } catch (error) {
-                        reject(error);
-                      }
-                    })
-                    .catch(error => reject(error));
-                } else {
-                  response = {
-                    success: false,
-                    error: `Reached the limit of 10 persons in database. If you want to get rid of this limit please consider buying the app!`,
-                    data: null
-                  };
-                  resolve(response);
-                }
-              }
-            });
+          .storage
+          .get('boughtMasterKey')
+          .then(boughtMasterKey => {
+            if (boughtMasterKey == true) {
+              this
+                .insertStudentIntoDB(student)
+                .then(res => resolve(res))
+                .catch(err => reject(err));
+            } else {
+              response = {
+                success: false,
+                error: `Reached the limit of 10 persons in database. If you want to get rid of this limit please consider buying the app!`,
+                data: null
+              };
+              resolve(response);
+            }
           })
       } else {
         this
-          .checkIfStudentExists({id: student.id})
-          .then(value => {
-            try {
-              if (value == false) {
-                studentsColl.insert(student);
-                response = {
-                  success: true,
-                  error: null,
-                  data: null
-                };
-              } else {
-                response = {
-                  success: false,
-                  error: 'User already exists in the database',
-                  data: null
-                };
-              }
-              this.saveDatabase();
-              resolve(response);
-            } catch (error) {
-              reject(error);
-            }
-          })
-          .catch(error => reject(error));
+          .insertStudentIntoDB(student)
+          .then(res => resolve(res))
+          .catch(err => reject(err));
       }
     });
   }

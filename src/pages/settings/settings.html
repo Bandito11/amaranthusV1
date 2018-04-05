@@ -10,12 +10,27 @@
   <div *ngIf="noProducts" id="loader"></div>
   <div *ngFor="let product of products">
     <ion-icon name="pricetag"></ion-icon>
-    <span>
-      {{product.title}}
-    </span>
-    <p>
-      {{product.description}}
-    </p>
-    <button ion-button color="primary" (click)="buyProduct(product.productId)">Buy Now for only {{product.priceAsDecimal}}!</button>
+    <div *ngIf="isIos">
+      <span>
+        The Master Key!
+      </span>
+      <p>
+        Unlocks limit to database max rows!
+      </p>
+    </div>
+    <div *ngIf="isAndroid">
+      <span>
+        {{product.title}}
+      </span>
+      <p>
+        {{product.description}}
+      </p>
+    </div>
+    <button *ngIf="isAndroid" ion-button color="primary" (click)="buyProduct({productId: product.productId, productTitle: product.title})">Buy Now for only {{product.priceAsDecimal}} {{product.currency}}!</button>
+    <button *ngIf="isIos" ion-button color="primary" (click)="buyProduct({productId: product.productId, productTitle: 'The Master Key!'})">Buy Now for only {{product.priceAsDecimal}} {{product.currency}}!</button>
+    <br>
+    <button ion-button color="secondary" (click)="restorePurchases()">Already bought it? Click to restore it!
+      <ion-icon name="happy"></ion-icon>
+    </button>
   </div>
 </ion-content>

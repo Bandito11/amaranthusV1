@@ -1,8 +1,9 @@
+import {stateAndroid} from './../../common/app-purchase';
+import {Storage} from '@ionic/storage';
 import {Component, OnInit} from '@angular/core';
-import {IonicPage} from 'ionic-angular';
+import {IonicPage, Platform, LoadingController, AlertController} from 'ionic-angular';
 import {AppPurchaseProvider} from '../../providers/app-purchase/app-purchase';
 import {ISimpleAlertOptions} from '../../common/interface';
-import {AlertController} from 'ionic-angular/components/alert/alert-controller';
 import {productGet} from '../../common/app-purchase';
 
 @IonicPage()
@@ -12,12 +13,19 @@ export class SettingsPage implements OnInit {
 
   private products : productGet[];
   private noProducts : boolean;
-  
-  constructor(private iap : AppPurchaseProvider, private alertCtrl : AlertController,) {}
+  private isIos : boolean;
+  private isAndroid : boolean;
+
+  constructor(private loading : LoadingController, private storage : Storage, private platform : Platform, private iap : AppPurchaseProvider, private alertCtrl : AlertController,) {}
 
   ngOnInit() {
     this.products = [];
     this.noProducts = true;
+    if (this.platform.is('ios')) {
+      this.isIos = true;
+    } else if (this.platform.is('android')) {
+      this.isAndroid = true;
+    }
   }
 
   ionViewWillEnter() {
@@ -35,14 +43,72 @@ export class SettingsPage implements OnInit {
       .catch(err => this.showSimpleAlert({buttons: ['OK'], title: 'Error!', subTitle: err}));
   }
 
-  buyProduct(productId : string) {
+  restorePurchases() {
+    const loading = this
+      .loading
+      .create({content: 'Restoring Purchases!'})
+    loading.present();
     this
       .iap
-      .buy(productId)
-      .then(product => {
-        this.showSimpleAlert({buttons: ['OK'], title: 'Success!', subTitle: `${product.transactionId} was successfully bought.`})
+      .restore()
+      .then(products => {
+        products.forEach(product => {
+          if (this.platform.is('ios')) {
+            if (product.productId == 'master.key') {
+              this
+                .storage
+                .set('boughtMasterKey', true);
+              const options : ISimpleAlertOptions = {
+                title: 'Information',
+                subTitle: 'Restored the purchase!'
+              };
+              this.showSimpleAlert(options);
+            }
+            loading.dismiss();
+          } else if (this.platform.is('android')) {
+            const receipt = JSON.parse(product.receipt);
+            if (product.productId == 'master.key' && stateAndroid[receipt.purchaseState] == ('ACTIVE' || 0)) {
+              this
+                .storage
+                .set('boughtMasterKey', true);
+              const options : ISimpleAlertOptions = {
+                title: 'Information',
+                subTitle: 'Restored the purchase!'
+              };
+              this.showSimpleAlert(options);
+            }
+            loading.dismiss();
+          }
+        });
       })
-      .catch(err => this.showSimpleAlert({buttons: ['OK'], title: 'Error!', subTitle: err}));
+      .catch(err => {
+        this.showSimpleAlert({buttons: ['OK'], title: 'Error!', subTitle: err})
+        loading.dismiss();
+      });
+  }
+
+  buyProduct(opts : {
+    productTitle: string,
+    productId: string
+  }) {
+    const loading = this
+      .loading
+      .create({content: `Buying ${opts.productTitle}!`})
+    loading.present();
+    this
+      .iap
+      .buy(opts.productId)
+      .then(product => {
+        this.showSimpleAlert({buttons: ['OK'], title: 'Success!', subTitle: `${product.transactionId} was successfully bought.`});
+        this
+          .storage
+          .set('boughtMasterKey', true);
+        loading.dismiss();
+      })
+      .catch(err => {
+        this.showSimpleAlert({buttons: ['OK'], title: 'Error!', subTitle: err})
+        loading.dismiss();
+      });
   }
 
   private showSimpleAlert(options : ISimpleAlertOptions) {
