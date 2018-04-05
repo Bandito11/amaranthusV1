@@ -37,6 +37,7 @@ import { FileProvider } from '../providers/file/file';
 import { ExportPageModule } from '../pages/export/export.module';
 import { ExportPage } from '../pages/export/export';
 import { XLSXProvider } from '../providers/xslx/xslx';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { XLSXProvider } from '../providers/xslx/xslx';
     ExportPageModule,
     FormsModule,
     IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

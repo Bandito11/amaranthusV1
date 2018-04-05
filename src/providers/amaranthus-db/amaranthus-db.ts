@@ -86,7 +86,7 @@ export class AmaranthusDBProvider {
           .restore()
           .then(products => {
             products.forEach(product => {
-              const receipt = JSON.parse(product.receipt)
+              const receipt = JSON.parse(product.receipt);
               if (product.productId != 'everything') {
                 if (product.productId == 'master.key' && stateAndroid[receipt.purchaseState] == ('ACTIVE' || 0)) {
                   this
