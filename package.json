@@ -1,6 +1,6 @@
 {
   "name": "amaranthus",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "author": "Esteban Morales",
   "private": true,
   "scripts": {
@@ -22,6 +22,7 @@
     "@ionic-native/camera": "^4.4.2",
     "@ionic-native/core": "4.4.0",
     "@ionic-native/file": "^4.5.3",
+    "@ionic-native/file-opener": "^4.7.0",
     "@ionic-native/in-app-purchase": "^4.5.3",
     "@ionic-native/splash-screen": "4.4.0",
     "@ionic-native/status-bar": "4.4.0",
@@ -31,6 +32,7 @@
     "cordova-plugin-camera": "^4.0.2",
     "cordova-plugin-device": "^2.0.1",
     "cordova-plugin-file": "^6.0.1",
+    "cordova-plugin-file-opener2": "^2.0.19",
     "cordova-plugin-inapppurchase": "^1.2.0",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^1.1.16",
@@ -63,11 +65,12 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-inapppurchase": {}
+      "cordova-plugin-inapppurchase": {},
+      "cordova-plugin-file-opener2": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }

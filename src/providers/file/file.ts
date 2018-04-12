@@ -2,15 +2,17 @@ import {Platform} from 'ionic-angular';
 import {Injectable} from '@angular/core';
 import {File, IWriteOptions} from '@ionic-native/file';
 import {IResponse} from '../../common/interface';
+import {FileOpener} from '@ionic-native/file-opener';
 
 @Injectable()
 export class FileProvider {
 
-  constructor(private file : File, private platform : Platform) {}
+  constructor(private fileOpener : FileOpener, private file : File, private platform : Platform) {}
 
   exportFile(opts : {
     fileName: string,
-    text: any
+    text: any,
+    type: string
   }) : Promise < IResponse < any >> {
     return new Promise((resolve, reject) => {
       if (this.platform.is('ios')) {
@@ -61,7 +63,8 @@ export class FileProvider {
 
   writeToIOS(opts : {
     fileName: string,
-    text: any
+    text: any,
+    type: string
   }) : Promise < IResponse < any >> {
     let response: IResponse < boolean > = {
       success: false,
@@ -88,7 +91,27 @@ export class FileProvider {
                 error: res,
                 data: res
               };
-              resolve(response);
+              if (opts.type == 'xlsx') {
+                this
+                  .fileOpener
+                  .open(`${path}${directory}/${opts.fileName}`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                  .then(() => resolve(response))
+                  .catch(error => reject(error));
+              }
+              if (opts.type == 'txt') {
+                this
+                  .fileOpener
+                  .open(`${path}${directory}/${opts.fileName}`, 'text/plain')
+                  .then(() => resolve(response))
+                  .catch(error => reject(error));
+              }
+              if (opts.type == 'csv') {
+                this
+                  .fileOpener
+                  .open(`${path}${directory}/${opts.fileName}`, 'text/csv')
+                  .then(() => resolve(response))
+                  .catch(error => reject(error));
+              }
             })
             .catch(error => reject(error));
         })

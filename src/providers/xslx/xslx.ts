@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IRecord, IResponse } from '../../common/interface';
 import * as XLSX from 'xlsx';
@@ -12,7 +11,7 @@ import * as XLSX from 'xlsx';
 @Injectable()
 export class XLSXProvider {
 
-  constructor(public http: HttpClient) {}
+  constructor() {}
 
   exportXLSXToFile(tableRecords: IRecord[]): Promise<IResponse<Blob>> {
     let response: IResponse<Blob> = {

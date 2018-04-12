@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="xyz.attendancelog.amaranthus" version="0.4.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="xyz.attendancelog.amaranthus" version="0.4.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Attendance Log</name>
     <description>Take attendance the easy way!</description>
     <author email="esteban.a.morales.morales@gmail.com">Esteban Morales</author>
@@ -18,10 +18,14 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
-    <preference name="iosPersistentFileLocation" value="Library" />
     <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
         <string>App will use your personal photo library to use a photo you chose as a picture profile.</string>
     </edit-config>
+    <platform name="android">
+        <config-file parent="/manifest" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
+            <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+        </config-file>
+    </platform>
     <preference name="BackupWebStorage" value="none" />
     <allow-navigation href="http://192.168.1.247:8100" />
     <allow-navigation href="http://192.168.1.247:8101" />
@@ -38,6 +42,7 @@
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
     <plugin name="cordova-plugin-inapppurchase" spec="^1.2.0" />
     <allow-navigation href="http://192.168.5.77:8100" />
-    <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
     <engine name="ios" spec="4.5.4" />
+    <engine name="android" spec="7.0.0" />
 </widget>

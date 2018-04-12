@@ -38,6 +38,7 @@ import { ExportPageModule } from '../pages/export/export.module';
 import { ExportPage } from '../pages/export/export';
 import { XLSXProvider } from '../providers/xslx/xslx';
 import { IonicStorageModule } from '@ionic/storage';
+import { FileOpener } from '@ionic-native/file-opener';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { IonicStorageModule } from '@ionic/storage';
     Camera,
     InAppPurchase,
     File,
+    FileOpener,
     TextTabDelimitedProvider,
     AppPurchaseProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
