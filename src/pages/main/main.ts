@@ -30,6 +30,7 @@ export class MainPage {
       year: currentDate.getFullYear()
     }
     this.query = "None";
+    this.students = [];
     let studentInterval = setInterval(() => {
       this.getStudents();
       if (this.students.length > -1) {

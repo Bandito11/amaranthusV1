@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { IResponse, IRecord } from '../../common/interface';
+import {Injectable} from '@angular/core';
+import {IResponse, IRecord} from '../../common/interface';
 
 /*
   Generated class for the CsvProvider provider.
@@ -11,16 +10,17 @@ import { IResponse, IRecord } from '../../common/interface';
 @Injectable()
 export class CSVProvider {
 
-  constructor(public http: HttpClient) { }
+  constructor() {}
 
-  exportCSV(tableRecords: IRecord[]): Promise<IResponse<string>> {
-    let response: IResponse<string> = {
+  exportCSV(tableRecords : IRecord[]) : Promise < IResponse < string >> {
+    let response: IResponse < string > = {
       success: false,
       error: null,
       data: undefined
     }
     return new Promise((resolve, reject) => {
-      this.createCSV(tableRecords)
+      this
+        .createCSV(tableRecords)
         .then(data => {
           response = {
             ...response,
@@ -34,19 +34,21 @@ export class CSVProvider {
             ...response,
             error: error
           }
+          reject(error);
         })
     })
   }
 
-  private createCSV(tableRecords: IRecord[]): Promise<string> {
+  private createCSV(tableRecords : IRecord[]) : Promise < string > {
     return new Promise((resolve, reject) => {
-      this.asyncConcatenate(tableRecords, tableRecords.length)
+      this
+        .asyncConcatenate(tableRecords, tableRecords.length)
         .then(data => resolve(data))
         .catch(error => reject(error));
     });
   }
 
-  private asyncConcatenate(data: IRecord[], length: number): Promise<string> {
+  private asyncConcatenate(data : IRecord[], length : number) : Promise < string > {
     return new Promise((resolve, reject) => {
       let i = 0;
       let value = 'Id|Name|Attendance|Absence|Attendance %\n';

@@ -27,8 +27,9 @@ export class TextTabDelimitedProvider {
             ...response,
             error: error
           }
-        })
-    })
+          reject(error);
+        });
+    });
   }
 
   private createTextTabTable(tableRecords: IRecord[]): Promise<string> {

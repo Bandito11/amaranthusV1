@@ -1,26 +1,21 @@
-import { Injectable } from '@angular/core';
-import { IRecord, IResponse } from '../../common/interface';
+import {Injectable} from '@angular/core';
+import {IRecord, IResponse} from '../../common/interface';
 import * as XLSX from 'xlsx';
 
-/*
-  Generated class for the XslxProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class XLSXProvider {
 
   constructor() {}
 
-  exportXLSXToFile(tableRecords: IRecord[]): Promise<IResponse<Blob>> {
-    let response: IResponse<Blob> = {
+  exportXLSXToFile(tableRecords : IRecord[]) : Promise < IResponse < Blob >> {
+    let response: IResponse < Blob > = {
       success: false,
       error: null,
       data: undefined
     }
     return new Promise((resolve, reject) => {
-      this.createXLSX(tableRecords)
+      this
+        .createXLSX(tableRecords)
         .then(data => {
           response = {
             ...response,
@@ -34,40 +29,57 @@ export class XLSXProvider {
             ...response,
             error: error
           }
+          reject(error);
         });
     });
   }
 
-  private createXLSX(tableRecords): Promise<Blob> {
+  private createXLSX(tableRecords) : Promise < Blob > {
     return new Promise((resolve, reject) => {
       /* generate worksheet */
-      this.asyncConcatenate(tableRecords, tableRecords.length)
+      this
+        .asyncConcatenate(tableRecords, tableRecords.length)
         .then(data => {
-          const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
+          const ws : XLSX.WorkSheet = XLSX
+            .utils
+            .aoa_to_sheet(data);
           /* generate workbook and add the worksheet */
-          const wb: XLSX.WorkBook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, 'Students Attendance Records');
+          const wb : XLSX.WorkBook = XLSX
+            .utils
+            .book_new();
+          XLSX
+            .utils
+            .book_append_sheet(wb, ws, 'Students Attendance Records');
           /* save to file */
           // XLSX.writeFile(wb, 'AttendanceLog.xlsx');
           /* save to file */
-          const wbout: ArrayBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-          let blob = new Blob([wbout], { type: 'application/octet-stream' });
+          const wbout : ArrayBuffer = XLSX.write(wb, {
+            bookType: 'xlsx',
+            type: 'array'
+          });
+          let blob = new Blob([wbout], {type: 'application/octet-stream'});
           resolve(blob);
         })
+        .catch(error => reject(error));
     });
   }
 
-  private asyncConcatenate(data: IRecord[], length: number): Promise<any[][]> {
+  private asyncConcatenate(data : IRecord[], length : number) : Promise < any[][] > {
     return new Promise((resolve, reject) => {
       let i = 0;
-      let studentsRecords: any[][] = [['Id', 'Name', 'Attendance', 'Absence', 'Attendance %']];
+      let studentsRecords : any[][] = [
+        ['Id', 'Name', 'Attendance', 'Absence', 'Attendance %']
+      ];
       try {
         data.length;
       } catch (error) {
         reject(error);
       }
       const interval = setInterval(() => {
-        studentsRecords = [...studentsRecords, [data[i].id, data[i].fullName, data[i].attendance, data[i].absence, data[i].percent]];
+        studentsRecords = [
+          ...studentsRecords,
+          [data[i].id, data[i].fullName, data[i].attendance, data[i].absence, data[i].percent]
+        ];
         i++;
         if (i == length) {
           clearInterval(interval);

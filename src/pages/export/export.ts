@@ -40,7 +40,7 @@ export class ExportPage {
       const textTabResponse = await this
         .textTab
         .exportTextTabDelimited(this.students);
-      const fileName = 'AttendanceLog-TextTabDelimited.txt';
+      const fileName = 'AttendanceLog.txt';
       if (textTabResponse.success) {
         try {
           const fileResponse = await this
@@ -50,14 +50,13 @@ export class ExportPage {
             loading.dismiss();
             this
               .viewCtrl
-              .dismiss('Attendance-Log-TextTabDelimited.txt was downloaded successfully to your Download' +
-                  ' folder!');
+              .dismiss(fileResponse.data);
           }
         } catch (error) { //If FileProvider err
           loading.dismiss();
           this
             .viewCtrl
-            .dismiss('Error while saving the data, please try again!');
+            .dismiss(error);
         }
 
       }
@@ -88,13 +87,13 @@ export class ExportPage {
             loading.dismiss();
             this
               .viewCtrl
-              .dismiss('Attendance-Log.csv was downloaded successfully to your Download folder!');
+              .dismiss(fileResponse.data);
           }
         } catch (error) { //If FileProvider err
           loading.dismiss();
           this
             .viewCtrl
-            .dismiss('Error while saving the data, please try again!');
+            .dismiss(error);
         }
 
       }
@@ -125,13 +124,13 @@ export class ExportPage {
             loading.dismiss();
             this
               .viewCtrl
-              .dismiss('Attendance-Log.xlsx was downloaded successfully to your Download folder!');
+              .dismiss(fileResponse.data);
           }
         } catch (error) { //If FileProvider err
           loading.dismiss();
           this
             .viewCtrl
-            .dismiss('Error while saving the data, please try again!');
+            .dismiss(error);
         }
 
       }
