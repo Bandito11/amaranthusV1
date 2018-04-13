@@ -129,7 +129,7 @@ export class FileProvider {
                     .toFileOpener({
                     ...opts,
                     path: path,
-                    directory: directory
+                    directory: directory.name
                   })
                     .then(data => resolve(data))
                     .catch(error => reject(error));
