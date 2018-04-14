@@ -1,17 +1,15 @@
 page-student-profile {
-    $fontSize: 105%;
     .text {
-        font-size: $fontSize;
         color: #ffffff;
         margin-left: 2%;
     }
-    .profile-content {
-        background-color: color($colors, secondary);
-    }
+    .id {}
     .header {
-        font-size: $fontSize + 10%;
         color: #000;
         font-weight: bolder;
+    }
+    .profile-content {
+        background-color: color($colors, secondary);
     }
     .text.label {
         font-weight: normal;
@@ -19,12 +17,8 @@ page-student-profile {
     .text.bold {
         font-weight: bolder;
     }
-    .id {
-        font-size: $fontSize + 50%;
-    }
     .text.center {
         text-align: center;
-        padding: initial;
     }
     .profile-image {
         padding-bottom: 15px;
@@ -41,12 +35,32 @@ page-student-profile {
         margin-right: auto;
         padding-bottom: 10px;
     }
-    @media only screen and ( orientation:portrait) and (min-width:600px) {
-        .landscape {
-            margin-left: 25%;
-        }
+    @media only screen and (max-width: 700px) {
+        $fontSize: 105%;
         .text {
-            padding: 0px;
+            font-size: $fontSize;
+        }
+        .id {
+            font-size: $fontSize + 50%;
+        }
+        .header {
+            font-size: $fontSize + 10%;
+        }
+    }
+    @media only screen and (min-width: 700px) {
+        $fontSize: 125%;
+        .text {
+            font-size: $fontSize;
+        }
+        .id {
+            font-size: $fontSize + 50%;
+        }
+        .header {
+            font-size: $fontSize + 10%;
+        }
+        .text-box {
+            padding-left: 10%;
+            padding-top: 10%;
         }
     }
 }

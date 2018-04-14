@@ -1,19 +1,16 @@
 import {StudentProfilePage} from './../student-profile/student-profile';
 import {CreatePage} from './../create/create';
 import {AmaranthusDBProvider} from './../../providers/amaranthus-db/amaranthus-db';
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {IonicPage, NavController, AlertController} from 'ionic-angular';
 import {handleError} from './../../common/handleError';
 import {ISimpleAlertOptions, IStudent, Calendar} from '../../common/interface';
 
 @IonicPage()
 @Component({selector: 'page-main', templateUrl: 'main.html'})
-export class MainPage {
+export class MainPage implements OnInit {
 
-  constructor(private alertCtrl : AlertController, private navCtrl : NavController, private db : AmaranthusDBProvider) {
-    this.students = [];
-    this.untouchedStudentList = [];
-  }
+  constructor(private alertCtrl : AlertController, private navCtrl : NavController, private db : AmaranthusDBProvider) {}
 
   students : IStudent[];
   private untouchedStudentList : IStudent[];
@@ -21,16 +18,20 @@ export class MainPage {
   selectOptions : string[];
   date : Calendar;
 
-  ionViewWillEnter() {
-    this.selectOptions = ['Id', 'Name', 'None'];
+  ngOnInit() {
+    this.students = [];
+    this.untouchedStudentList = [];
     const currentDate = new Date();
     this.date = {
       month: currentDate.getMonth(),
       day: currentDate.getDate(),
       year: currentDate.getFullYear()
     }
+    this.selectOptions = ['Id', 'Name', 'None'];
+  }
+
+  ionViewWillEnter() {
     this.query = "None";
-    this.students = [];
     let studentInterval = setInterval(() => {
       this.getStudents();
       if (this.students.length > -1) {

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {IonicPage, NavController, NavParams, AlertController} from 'ionic-angular';
 import {handleError} from '../../common/handleError';
 import {StudentProfilePage} from '../student-profile/student-profile';
@@ -15,7 +15,7 @@ import {AmaranthusDBProvider} from '../../providers/amaranthus-db/amaranthus-db'
 
 @IonicPage()
 @Component({selector: 'page-student-list', templateUrl: 'student-list.html'})
-export class StudentListPage {
+export class StudentListPage implements OnInit {
 
   constructor(public alertCtrl : AlertController, public navCtrl : NavController, public navParams : NavParams, public db : AmaranthusDBProvider) {}
 
@@ -24,10 +24,13 @@ export class StudentListPage {
   query : string;
   selectOptions : string[];
 
-  ionViewWillEnter() {
-    this.selectOptions = ['Id', 'Name', 'Active', 'Not Active', 'None'];
-    this.query = "None";
+  ngOnInit() {
     this.students = [];
+    this.selectOptions = ['Id', 'Name', 'Active', 'Not Active', 'None'];
+  }
+
+  ionViewWillEnter() {
+    this.query = "None";
     let studentInterval = setInterval(() => {
       this.getStudents();
       if (this.students.length > -1) {
@@ -39,7 +42,6 @@ export class StudentListPage {
   private initializeStudentsList() {
     this.students = [...this.untouchedStudentList];
   };
-  ionViewDidLoad() {}
 
   searchStudent(event) {
     // TODO: implement query of the list by searchbar value

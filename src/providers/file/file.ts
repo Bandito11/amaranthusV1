@@ -27,7 +27,7 @@ export class FileProvider {
           .then(response => resolve(response))
           .catch(error => reject(error));
       }
-      
+
     });
   }
 
@@ -158,7 +158,7 @@ export class FileProvider {
         response = {
           ...response,
           success: true,
-          data: `${opts.fileName} was downloaded successfully to your device!`
+          data: `${opts.fileName} was exported successfully to the folder ${opts.path}${opts.directory} in your device!`
         };
         this
           .fileOpener
@@ -170,7 +170,7 @@ export class FileProvider {
         response = {
           ...response,
           success: true,
-          data: `${opts.fileName} was downloaded successfully to your device!`
+          data: `${opts.fileName} was exported successfully to the folder ${opts.path}${opts.directory} in your device!`
         };
         this
           .fileOpener
@@ -182,7 +182,7 @@ export class FileProvider {
         response = {
           ...response,
           success: true,
-          data: `${opts.fileName} was downloaded successfully to your device!`
+          data: `${opts.fileName} was exported successfully to the folder ${opts.path}${opts.directory} in your device!`
         };
         this
           .fileOpener

@@ -3,7 +3,7 @@
   <ion-navbar color="primary">
     <ion-title>Records</ion-title>
   <ion-buttons end>
-    <button ion-button (click)="toExportPage()">
+    <button *ngIf="students.length > 0" ion-button (click)="toExportPage()">
       Export
     </button>
     <!-- <button class="exportColor" *ngIf="!bought" ion-button (click)="exportMessage()">
