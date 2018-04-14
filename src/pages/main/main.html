@@ -26,7 +26,7 @@
       <ion-option *ngFor="let option of selectOptions" (ionSelect)="queryData(option)">{{option}}</ion-option>
     </ion-select>
   </ion-item>
-  <ion-list *ngIf="students">
+  <ion-list>
     <ion-item-sliding *ngFor="let student of students">
       <ion-item>
         <ion-avatar item-left>

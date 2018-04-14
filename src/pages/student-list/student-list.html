@@ -20,7 +20,7 @@
       <ion-option *ngFor="let option of selectOptions" (ionSelect)="queryData(option)">{{option}}</ion-option>
     </ion-select>
   </ion-item>
-  <ion-list *ngIf="students">
+  <ion-list>
     <ion-item (click)="goToStudentProfile(student.id)" *ngFor="let student of students">
       <ion-avatar item-left>
         <img src="{{student.picture}}" alt="no image">
