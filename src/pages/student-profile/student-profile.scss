@@ -63,4 +63,20 @@ page-student-profile {
             padding-top: 10%;
         }
     }
+    @media only screen and (min-width: 2000px) {
+        $fontSize: 145%;
+        .text {
+            font-size: $fontSize;
+        }
+        .id {
+            font-size: $fontSize + 50%;
+        }
+        .header {
+            font-size: $fontSize + 10%;
+        }
+        .text-box {
+            padding-left: 10%;
+            padding-top: 10%;
+        }
+    }
 }
