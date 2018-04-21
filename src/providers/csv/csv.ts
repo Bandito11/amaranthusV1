@@ -1,43 +1,35 @@
-import {Injectable} from '@angular/core';
-import {IResponse, IRecord} from '../../common/interface';
+import { Injectable } from '@angular/core';
+import { IResponse, IRecord } from '../../common/interface';
 
-/*
-  Generated class for the CsvProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class CSVProvider {
 
-  constructor() {}
+  constructor() { }
 
-  exportCSV(tableRecords : IRecord[]) : Promise < IResponse < string >> {
-    let response: IResponse < string > = {
+  exportCSV(tableRecords: IRecord[]): IResponse<string> {
+    let response: IResponse<string> = {
       success: false,
       error: null,
       data: undefined
     }
-    return new Promise((resolve, reject) => {
-      try {
-        const data = this.createCSV(tableRecords);
-        response = {
-          ...response,
-          success: true,
-          data: data
-        };
-        resolve(response);
-      } catch (error) {
-        response = {
-          ...response,
-          error: error
-        }
-        reject(error);
+    try {
+      const data = this.createCSV(tableRecords);
+      response = {
+        ...response,
+        success: true,
+        data: data
       };
-    })
+      return response;
+    } catch (error) {
+      response = {
+        ...response,
+        error: error
+      }
+      return error;
+    };
   }
 
-  private createCSV(tableRecords : IRecord[]) : string {
+  private createCSV(tableRecords: IRecord[]): string {
     let value = 'Id|Name|Attendance|Absence|Attendance %\n';
     try {
       tableRecords.length;

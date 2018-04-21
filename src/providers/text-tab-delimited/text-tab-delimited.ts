@@ -6,13 +6,12 @@ export class TextTabDelimitedProvider {
 
   constructor() {}
 
-  exportTextTabDelimited(tableRecords : IRecord[]) : Promise < IResponse < string >> {
+  exportTextTabDelimited(tableRecords : IRecord[]) : IResponse < string > {
     let response: IResponse < string > = {
       success: false,
       error: null,
       data: undefined
     }
-    return new Promise((resolve, reject) => {
       try {
         const data = this.createTextTabTable(tableRecords)
         response = {
@@ -20,15 +19,14 @@ export class TextTabDelimitedProvider {
           success: true,
           data: data
         };
-        resolve(response);
+        return response;
       } catch (error) {
         response = {
           ...response,
           error: error
         }
-        reject(error);
+        return error;
       };
-    });
   }
 
   private createTextTabTable(tableRecords : IRecord[]) : string {
