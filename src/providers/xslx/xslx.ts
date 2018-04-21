@@ -37,12 +37,27 @@ export class XLSXProvider {
   private createXLSX(tableRecords) : Promise < Blob > {
     return new Promise((resolve, reject) => {
       /* generate worksheet */
-      this
-        .asyncConcatenate(tableRecords, tableRecords.length)
-        .then(data => {
+      let i = 0;
+      let studentsRecords : any[][] = [
+        ['Id', 'Name', 'Attendance', 'Absence', 'Attendance %']
+      ];
+      let length;
+      try {
+        length =tableRecords.length;
+      } catch (error) {
+        reject(error);
+      }
+      const interval = setInterval(() => {
+        studentsRecords = [
+          ...studentsRecords,
+          [tableRecords[i].id, tableRecords[i].fullName, tableRecords[i].attendance, tableRecords[i].absence, tableRecords[i].percent]
+        ];
+        i++;
+        if (i == length) {
+          clearInterval(interval);
           const ws : XLSX.WorkSheet = XLSX
             .utils
-            .aoa_to_sheet(data);
+            .aoa_to_sheet(studentsRecords);
           /* generate workbook and add the worksheet */
           const wb : XLSX.WorkBook = XLSX
             .utils
@@ -59,34 +74,9 @@ export class XLSXProvider {
           });
           let blob = new Blob([wbout], {type: 'application/octet-stream'});
           resolve(blob);
-        })
-        .catch(error => reject(error));
-    });
-  }
-
-  private asyncConcatenate(data : IRecord[], length : number) : Promise < any[][] > {
-    return new Promise((resolve, reject) => {
-      let i = 0;
-      let studentsRecords : any[][] = [
-        ['Id', 'Name', 'Attendance', 'Absence', 'Attendance %']
-      ];
-      try {
-        data.length;
-      } catch (error) {
-        reject(error);
-      }
-      const interval = setInterval(() => {
-        studentsRecords = [
-          ...studentsRecords,
-          [data[i].id, data[i].fullName, data[i].attendance, data[i].absence, data[i].percent]
-        ];
-        i++;
-        if (i == length) {
-          clearInterval(interval);
-          resolve(studentsRecords);
         }
-      }, 500)
+      }, 500);
+
     });
   }
-
 }

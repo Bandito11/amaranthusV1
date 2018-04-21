@@ -41,34 +41,26 @@ export class CSVProvider {
 
   private createCSV(tableRecords : IRecord[]) : Promise < string > {
     return new Promise((resolve, reject) => {
-      this
-        .asyncConcatenate(tableRecords, tableRecords.length)
-        .then(data => resolve(data))
-        .catch(error => reject(error));
-    });
-  }
-
-  private asyncConcatenate(data : IRecord[], length : number) : Promise < string > {
-    return new Promise((resolve, reject) => {
       let i = 0;
       let value = 'Id|Name|Attendance|Absence|Attendance %\n';
+      let length;
       try {
-        data.length;
+        length = tableRecords.length;
       } catch (error) {
         reject(error);
       }
       const interval = setInterval(() => {
-        value += `${data[i].id}|`;
-        value += `${data[i].fullName}|`;
-        value += `${data[i].attendance}|`;
-        value += `${data[i].absence}|`;
-        value += `${data[i].percent}\n`;
+        value += `${tableRecords[i].id}|`;
+        value += `${tableRecords[i].fullName}|`;
+        value += `${tableRecords[i].attendance}|`;
+        value += `${tableRecords[i].absence}|`;
+        value += `${tableRecords[i].percent}\n`;
         i++;
         if (i == length) {
           clearInterval(interval);
           resolve(value);
         }
-      }, 500)
+      }, 500);
     });
   }
 
