@@ -19,49 +19,39 @@ export class CSVProvider {
       data: undefined
     }
     return new Promise((resolve, reject) => {
-      this
-        .createCSV(tableRecords)
-        .then(data => {
-          response = {
-            ...response,
-            success: true,
-            data: data
-          }
-          resolve(response)
-        })
-        .catch(error => {
-          response = {
-            ...response,
-            error: error
-          }
-          reject(error);
-        })
+      try {
+        const data = this.createCSV(tableRecords);
+        response = {
+          ...response,
+          success: true,
+          data: data
+        };
+        resolve(response);
+      } catch (error) {
+        response = {
+          ...response,
+          error: error
+        }
+        reject(error);
+      };
     })
   }
 
-  private createCSV(tableRecords : IRecord[]) : Promise < string > {
-    return new Promise((resolve, reject) => {
-      let i = 0;
-      let value = 'Id|Name|Attendance|Absence|Attendance %\n';
-      let length;
-      try {
-        length = tableRecords.length;
-      } catch (error) {
-        reject(error);
-      }
-      const interval = setInterval(() => {
-        value += `${tableRecords[i].id}|`;
-        value += `${tableRecords[i].fullName}|`;
-        value += `${tableRecords[i].attendance}|`;
-        value += `${tableRecords[i].absence}|`;
-        value += `${tableRecords[i].percent}\n`;
-        i++;
-        if (i == length) {
-          clearInterval(interval);
-          resolve(value);
-        }
-      }, 500);
+  private createCSV(tableRecords : IRecord[]) : string {
+    let value = 'Id|Name|Attendance|Absence|Attendance %\n';
+    try {
+      tableRecords.length;
+    } catch (error) {
+      return 'There are no students created!';
+    }
+    tableRecords.map(tableRecord => {
+      value += `${tableRecord.id}|`;
+      value += `${tableRecord.fullName}|`;
+      value += `${tableRecord.attendance}|`;
+      value += `${tableRecord.absence}|`;
+      value += `${tableRecord.percent}\n`;
     });
+    return value;
   }
 
 }
