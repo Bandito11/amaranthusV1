@@ -1,22 +1,22 @@
-import {StudentProfilePage} from './../student-profile/student-profile';
-import {CreatePage} from './../create/create';
-import {AmaranthusDBProvider} from './../../providers/amaranthus-db/amaranthus-db';
-import {Component, OnInit} from '@angular/core';
-import {IonicPage, NavController, AlertController} from 'ionic-angular';
-import {handleError} from './../../common/handleError';
-import {ISimpleAlertOptions, IStudent, Calendar} from '../../common/interface';
+import { StudentProfilePage } from './../student-profile/student-profile';
+import { CreatePage } from './../create/create';
+import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
+import { Component, OnInit } from '@angular/core';
+import { IonicPage, NavController, AlertController } from 'ionic-angular';
+import { handleError } from './../../common/handleError';
+import { ISimpleAlertOptions, IStudent, Calendar } from '../../common/interface';
 
 @IonicPage()
-@Component({selector: 'page-main', templateUrl: 'main.html'})
+@Component({ selector: 'page-main', templateUrl: 'main.html' })
 export class MainPage implements OnInit {
 
-  constructor(private alertCtrl : AlertController, private navCtrl : NavController, private db : AmaranthusDBProvider) {}
+  constructor(private alertCtrl: AlertController, private navCtrl: NavController, private db: AmaranthusDBProvider) { }
 
-  students : IStudent[];
-  private untouchedStudentList : IStudent[];
-  query : string;
-  selectOptions : string[];
-  date : Calendar;
+  students: IStudent[];
+  private untouchedStudentList: IStudent[];
+  query: string;
+  selectOptions: string[];
+  date: Calendar;
 
   ngOnInit() {
     this.students = [];
@@ -46,9 +46,7 @@ export class MainPage implements OnInit {
 
   private async getStudents() {
     try {
-      const studentResponse = await this
-        .db
-        .getAllActiveStudents();
+      const studentResponse = await this.db.getAllActiveStudents();
       if (studentResponse.success == true) {
         this.students = [...studentResponse.data];
         this.untouchedStudentList = [...studentResponse.data];
@@ -63,13 +61,11 @@ export class MainPage implements OnInit {
   }
 
   searchStudent(event) {
-    let query : string = event.target.value;
-    query
-      ? this.queryStudentsList(query)
-      : this.initializeStudentsList();
+    let query: string = event.target.value;
+    query ? this.queryStudentsList(query) : this.initializeStudentsList();
   }
 
-  queryData(option : string) {
+  queryData(option: string) {
     switch (option) {
       case 'Id':
         this.queryStudentsbyId();
@@ -82,42 +78,35 @@ export class MainPage implements OnInit {
     }
   }
 
-  queryStudentsbyId() {
+  private queryStudentsbyId() {
     this.students = [
-      ...this
-        .students
-        .sort((a, b) => {
-          if (a.id < b.id) 
-            return -1;
-          if (a.id > b.id) 
-            return 1;
-          return 0;
-        })
+      ...this.students.sort((a, b) => {
+        if (a.id < b.id)
+          return -1;
+        if (a.id > b.id)
+          return 1;
+        return 0;
+      })
     ];
   }
 
-  queryStudentsName() {
+  private queryStudentsName() {
     this.students = [
-      ...this
-        .students
-        .sort((a, b) => {
-          if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) 
-            return -1;
-          if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) 
-            return 1;
-          return 0;
-        })
+      ...this.students.sort((a, b) => {
+        if (a.firstName.toLowerCase() < b.firstName.toLowerCase())
+          return -1;
+        if (a.firstName.toLowerCase() > b.firstName.toLowerCase())
+          return 1;
+        return 0;
+      })
     ];
   }
 
-  private queryStudentsList(query : string) {
+  private queryStudentsList(query: string) {
     const students = [...this.untouchedStudentList];
-    let fullName : string;
+    let fullName: string;
     const newQuery = students.filter(student => {
-      fullName = `${student
-        .firstName} ${student
-        .lastName}`
-        .toLowerCase();
+      fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
       if (student.id == query || student.firstName.toLowerCase() == query.toLowerCase() || student.lastName.toLowerCase() == query.toLowerCase() || fullName == query.toLowerCase()) {
         return student;
       }
@@ -125,16 +114,24 @@ export class MainPage implements OnInit {
     this.students = [...newQuery];
   }
 
-  addAttendance(opts : {
+  addAttendance(opts: {
     id: string
   }) {
     this
       .db
-      .addAttendance({date: this.date, id: opts.id})
+      .addAttendance({ date: this.date, id: opts.id })
       .then(response => {
         if (response.success == true) {
-          this.updateStudentAttendance({id: opts.id, absence: false, attendance: true});
-          this.showSimpleAlert({title: 'Success!', subTitle: 'Student was marked present!', buttons: ['OK']});
+          this.updateStudentAttendance({
+            id: opts.id,
+            absence: false,
+            attendance: true
+          });
+          this.showSimpleAlert({
+            title: 'Success!',
+            subTitle: 'Student was marked present!',
+            buttons: ['OK']
+          });
         } else {
           handleError(response.error)
         }
@@ -142,38 +139,45 @@ export class MainPage implements OnInit {
       .catch(error => handleError(error));
   }
 
-  updateStudentAttendance(opts : {
+  private updateStudentAttendance(opts: {
     id: string,
     absence: boolean,
     attendance: boolean
   }) {
-    const results = this
-      .students
-      .map(student => {
-        if (student.id == opts.id) {
-          return {
-            ...student,
-            attendance: opts.attendance,
-            absence: opts.absence
-          };
-        } else {
-          return student;
-        }
-      });
+    const results = this.students.map(student => {
+      if (student.id == opts.id) {
+        return {
+          ...student,
+          attendance: opts.attendance,
+          absence: opts.absence
+        };
+      } else {
+        return student;
+      }
+    });
     this.students = [...results];
     this.untouchedStudentList = [...results];
   }
 
-  addAbsence(opts : {
+  addAbsence(opts: {
     id: string
   }) {
-    this
-      .db
-      .addAbsence({date: this.date, id: opts.id})
+    this.db.addAbsence({
+      date: this.date,
+      id: opts.id
+    })
       .then(response => {
         if (response.success == true) {
-          this.updateStudentAttendance({id: opts.id, absence: true, attendance: false});
-          this.showSimpleAlert({title: 'Success!', subTitle: 'Student was marked absent!', buttons: ['OK']});
+          this.updateStudentAttendance({
+            id: opts.id,
+            absence: true,
+            attendance: false
+          });
+          this.showSimpleAlert({
+            title: 'Success!',
+            subTitle: 'Student was marked absent!',
+            buttons: ['OK']
+          });
         } else {
           handleError(response.error);
         }
@@ -181,22 +185,20 @@ export class MainPage implements OnInit {
       .catch(error => handleError(error));
   }
 
-  private showSimpleAlert(options : ISimpleAlertOptions) {
-    return this
-      .alertCtrl
-      .create({title: options.title, subTitle: options.subTitle, buttons: options.buttons})
+  private showSimpleAlert(options: ISimpleAlertOptions) {
+    return this.alertCtrl.create({
+      title: options.title,
+      subTitle: options.subTitle,
+      buttons: options.buttons
+    })
       .present();;
   }
 
-  goToStudentProfile(id : string) {
-    this
-      .navCtrl
-      .push(StudentProfilePage, {id: id})
+  goToStudentProfile(id: string) {
+    this.navCtrl.push(StudentProfilePage, { id: id })
   }
 
   goToCreate() {
-    this
-      .navCtrl
-      .push(CreatePage);
+    this.navCtrl.push(CreatePage);
   }
 }

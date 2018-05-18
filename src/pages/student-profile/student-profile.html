@@ -17,43 +17,56 @@
     <img src="{{picture}}" />
     <header class="text center header">
       {{student.firstName}}
-      <span *ngIf="student.initial">{{student.initial}}</span>
-      {{student.lastName}}
+      <span *ngIf="student.initial">{{student.initial}}</span> {{student.lastName}}
     </header>
   </div>
   <div class="text text-box">
-      <p class="text bold id">
-        <span class="text label">ID: </span>{{student.id}}
+    <p class="text bold id">
+      <span class="text label">ID: </span>{{student.id}}
+    </p>
+    <p class="text bold">
+      <span class="text label">Address: </span>{{student.address}}
+    </p>
+    <p class="text bold" *ngIf="student.phoneNumber">
+      <span class="text label">Phone Number: </span>{{student.phoneNumber}}
+    </p>
+    <p class="text bold">
+      <span class="text label">City: </span>{{student.town}}
+    </p>
+    <p class="text bold">
+      <span class="text label">State: </span>{{student.state}}
+    </p>
+    <p class="text bold">
+      <span class="text label">Class: </span>{{student.class}}
+    </p>
+    <p class="text bold">
+      <span class="text label">Gender: </span>{{student.gender}}
+    </p>
+    <p class="text bold">
+      <span class="text label">Father's Name: </span>{{student.fatherFirstName}} {{student.fatherLastName}}
+    </p>
+    <p class="text bold">
+      <span class="text label">Mother's Name: </span>{{student.motherFirstName}} {{student.motherLastName}}
+    </p>
+    <h2>
+      Emergency Contact
+    </h2>
+    <p class="text bold">
+      <span class="text label"> Name: </span>{{student.emergencyContactName}}
+    </p>
+    <p class="text bold">
+      <span class="text label">Relationship: </span>{{student.emergencyRelationship}}
+    </p>
+    <p class="text bold">
+      <span class="text label">Phone Number: </span>{{student.emergencyContactPhoneNumber}}
+    </p>
+    <div class="text bold">
+      <p *ngIf="student.isActive == true">
+        *Student is currently active on the roster.*
       </p>
-      <p class="text bold">
-        <span class="text label">Address: </span>{{student.address}}</p>
-      <p class="text bold" *ngIf="student.phoneNumber">
-        <span class="text label">Phone Number: </span>{{student.phoneNumber}}</p>
-      <p class="text bold">
-        <span class="text label">City: </span>{{student.town}}</p>
-      <p class="text bold">
-        <span class="text label">State: </span>{{student.state}}</p>
-      <p class="text bold">
-        <span class="text label">Class: </span>{{student.class}}</p>
-      <p class="text bold">
-        <span class="text label">Gender: </span>{{student.gender}}</p>
-      <p class="text bold">
-        <span class="text label">Father's Name: </span>{{student.fatherFirstName}} {{student.fatherLastName}}</p>
-      <p class="text bold">
-        <span class="text label">Mother's Name: </span>{{student.motherFirstName}} {{student.motherLastName}}</p>
-      <p class="text bold">
-        <span class="text label">Emergency Contact's Name: </span>{{student.emergencyContactName}}</p>
-      <p class="text bold">
-        <span class="text label">Emergency Contact's Relationship: </span>{{student.emergencyRelationship}}</p>
-      <p class="text bold">
-        <span class="text label">Emergency Contact's Phone Number: </span>{{student.emergencyContactPhoneNumber}}</p>
-      <div class="text bold">
-        <p *ngIf="student.isActive == true">
-          *Student is currently active on the roster.*
-        </p>
-        <p *ngIf="student.isActive == false">
-          *Student is currently inactive on the roster.*
-        </p>
-      </div>
+      <p *ngIf="student.isActive == false">
+        *Student is currently inactive on the roster.*
+      </p>
+    </div>
   </div>
 </ion-content>

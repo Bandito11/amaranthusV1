@@ -40,17 +40,10 @@ export class TablePage implements OnInit {
     // `${this.currentDate.getFullYear()}-${this.currentDate.getMonth() - 1}`; //
     // will be used with the date time component
     this.months = [...monthsLabels];
-    this.monthQuery = this.months[
-      this
-        .currentDate
-        .getMonth()
-    ];
+    this.monthQuery = this.months[this.currentDate.getMonth()];
     this.students = [];
     this.untouchedStudentList = [];
-    this.yearQuery = this
-      .currentDate
-      .getFullYear()
-      .toString();
+    this.yearQuery = this.currentDate.getFullYear().toString();
     this.years = [...yearLabels]
     this.selectOptions = [
       'Id',
@@ -62,14 +55,14 @@ export class TablePage implements OnInit {
     ];
   }
 
-  exportMessage() {
-    const opts = {
-      buttons: ['OK'],
-      subTitle: 'If you want to export the records to a file please consider buying the product.',
-      title: 'Information!'
-    };
-    this.showSimpleAlert(opts);
-  }
+  // exportMessage() {
+  //   const opts = {
+  //     buttons: ['OK'],
+  //     subTitle: 'If you want to export the records to a file please consider buying the product.',
+  //     title: 'Information!'
+  //   };
+  //   this.showSimpleAlert(opts);
+  // }
 
   // checkIfBought() {
   //   this
@@ -136,9 +129,7 @@ export class TablePage implements OnInit {
         .indexOf(this.monthQuery) + 1,
       day: null
     };
-    this
-      .db
-      .getQueriedRecordsByDate(date)
+    this.db.getQueriedRecordsByDate(date)
       .then(response => {
         if (response.success == true) {
           this.students = [...response.data];
@@ -162,9 +153,7 @@ export class TablePage implements OnInit {
         day: null
       }
     }
-    this
-      .db
-      .getQueriedRecordsByDate(date)
+    this.db.getQueriedRecordsByDate(date)
       .then(response => {
         if (response.success == true) {
           this.students = [...response.data];
@@ -175,9 +164,7 @@ export class TablePage implements OnInit {
 
   getStudentsRecords() {
     // Will get all Students queried by today's date.
-    this
-      .db
-      .getQueriedRecords({ query: this.query })
+    this.db.getQueriedRecords({ query: this.query })
       .then(response => {
         if (response.success == true) {
           this.students = [...response.data];
@@ -193,64 +180,54 @@ export class TablePage implements OnInit {
 
   queryStudentsName() {
     this.students = [
-      ...this
-        .students
-        .sort((a, b) => {
-          if (a.fullName.toLowerCase() < b.fullName.toLowerCase())
-            return -1;
-          if (a.fullName.toLowerCase() > b.fullName.toLowerCase())
-            return 1;
-          return 0;
-        })
+      ...this.students.sort((a, b) => {
+        if (a.fullName.toLowerCase() < b.fullName.toLowerCase())
+          return -1;
+        if (a.fullName.toLowerCase() > b.fullName.toLowerCase())
+          return 1;
+        return 0;
+      })
     ];
   }
 
   queryStudentsbyAttendance() {
     this.students = [
-      ...this
-        .students
-        .sort((a, b) => {
-          if (a.attendance < b.attendance)
-            return 1;
-          if (a.attendance > b.attendance)
-            return -1;
-          return 0;
-        })
+      ...this.students.sort((a, b) => {
+        if (a.attendance < b.attendance)
+          return 1;
+        if (a.attendance > b.attendance)
+          return -1;
+        return 0;
+      })
     ];
   }
 
   queryStudentsbyAbsence() {
     this.students = [
-      ...this
-        .students
-        .sort((a, b) => {
-          if (a.absence < b.absence)
-            return 1;
-          if (a.absence > b.absence)
-            return -1;
-          return 0;
-        })
+      ...this.students.sort((a, b) => {
+        if (a.absence < b.absence)
+          return 1;
+        if (a.absence > b.absence)
+          return -1;
+        return 0;
+      })
     ];
   }
 
   queryStudentsbyId() {
     this.students = [
-      ...this
-        .students
-        .sort((a, b) => {
-          if (a.id < b.id)
-            return -1;
-          if (a.id > b.id)
-            return 1;
-          return 0;
-        })
+      ...this.students.sort((a, b) => {
+        if (a.id < b.id)
+          return -1;
+        if (a.id > b.id)
+          return 1;
+        return 0;
+      })
     ];
   }
 
   toExportPage() {
-    const exportModal = this
-      .modalCtrl
-      .create(ExportPage, { students: this.students });
+    const exportModal = this.modalCtrl.create(ExportPage, { students: this.students });
     exportModal.onDidDismiss(message => {
       if (message) {
         this.showSimpleAlert({ buttons: ['OK'], title: 'Information!', subTitle: message });
@@ -261,8 +238,7 @@ export class TablePage implements OnInit {
   }
 
   private showSimpleAlert(options: ISimpleAlertOptions) {
-    return this
-      .alertCtrl
+    return this.alertCtrl
       .create({ title: options.title, subTitle: options.subTitle, buttons: options.buttons })
       .present();;
   }
