@@ -1,3 +1,4 @@
+import { ISimpleAlertOptions } from './../../common/interface';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
@@ -26,27 +27,46 @@ export class StudentListPage implements OnInit {
 
   ngOnInit() {
     this.students = [];
+    this.untouchedStudentList = [];
     this.selectOptions = ['Id', 'Name', 'Active', 'Not Active', 'None'];
-  }
-
-  ionViewWillEnter() {
-    this.query = "None";
-    let studentInterval = setInterval(() => {
-      this.getStudents();
-      if (this.students.length > -1) {
-        clearInterval(studentInterval);
-      }
-    }, 500);
   }
 
   private initializeStudentsList() {
     this.students = [...this.untouchedStudentList];
   };
 
+
+  ionViewWillEnter() {
+    this.query = "None";
+    let studentInterval = setInterval(() => {
+      this.getStudents();
+      if (this.students.length > 0) {
+        clearInterval(studentInterval);
+      }
+    }, 500);
+  }
   searchStudent(event) {
-    // TODO: implement query of the list by searchbar value
     let query: string = event.target.value;
     query ? this.queryStudentsList(query) : this.initializeStudentsList();
+  }
+
+  private getStudents() {
+    try {
+      const response = this.db.getAllStudents();
+      if (response.success == true) {
+        this.students = [...response.data];
+        this.untouchedStudentList = [...response.data];
+      } else {
+        const options: ISimpleAlertOptions = {
+          title: 'Error',
+          subTitle: response.error,
+          buttons: ['OK', 'Cancel']
+        }
+        this.showSimpleAlert(options);
+      }
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   queryData(option: string) {
@@ -116,7 +136,7 @@ export class StudentListPage implements OnInit {
 
   private queryStudentsList(query: string) {
     const students = [...this.untouchedStudentList];
-    let fullName: string;
+    let fullName;
     const newQuery = students.filter(student => {
       fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
       if (student.id == query || student.firstName.toLowerCase() == query.toLowerCase() || student.lastName.toLowerCase() == query.toLowerCase() || fullName == query.toLowerCase()) {
@@ -126,22 +146,6 @@ export class StudentListPage implements OnInit {
     this.students = [...newQuery];
   }
 
-  private async getStudents() {
-    try {
-      const response = await this.db.getAllStudents();
-      if (response.success == true) {
-        this.students = [...response.data];
-        this.untouchedStudentList = [...response.data];
-      } else {
-        // TODO:  implement an alert message if it fails message should say no students
-        // can be retrieved.
-        handleError(response.error);
-      }
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
   goToStudentProfile(id: string) {
     this.navCtrl.push(StudentProfilePage, { id: id })
   }
@@ -149,4 +153,14 @@ export class StudentListPage implements OnInit {
   goToCreate() {
     this.navCtrl.push(CreatePage);
   }
+
+  showSimpleAlert(options: ISimpleAlertOptions) {
+    return this.alertCtrl.create({
+      title: options.title,
+      subTitle: options.subTitle,
+      buttons: options.buttons
+    })
+      .present();;
+  }
+
 }

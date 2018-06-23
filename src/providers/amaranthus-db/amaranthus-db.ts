@@ -3,6 +3,7 @@ import { IStudent, IResponse, IRecord, ICalendar } from './../../common/interfac
 import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';
+import { handleError } from '../../common/handleError';
 // /// Only for dev purposes //////////////// import { STUDENTS, RECORDS } from
 // './../../mock/mock-students'; /////////////////////////////////
 
@@ -298,13 +299,12 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getQueriedRecords(opts: { query: string, date?: ICalendar }): Promise<IResponse<IRecord[]>> {
+  getQueriedRecords(opts: { query: string, date?: ICalendar }): IResponse<IRecord[]> {
     let response = {
       success: true,
       error: null,
       data: null
     };
-    return new Promise((resolve, reject) => {
       switch (opts.query) {
         case 'Date':
           this.getQueriedRecordsByDate(opts.date);
@@ -316,17 +316,16 @@ export class AmaranthusDBProvider {
               month: new Date().getMonth() + 1,
               day: null
             }
-          this
-            .getAllStudentsRecords(options)
-            .then(res => {
-              response = {
-                ...res
-              }
-              resolve(response);
-            })
-            .catch(error => reject(error));
+          try {
+            response = {
+              ...response,
+              ...this.getAllStudentsRecords(options)
+            };
+            return response;
+          } catch (error) {
+            return error;
+          };
       }
-    });
   }
 
   getStudentsRecordsByDate(opts: ICalendar): IResponse<IRecord[]> {
@@ -402,7 +401,7 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getAllStudentsRecords(opts: ICalendar): Promise<IResponse<IRecord[]>> {
+  getAllStudentsRecords(opts: ICalendar): IResponse<IRecord[]> {
     let response = {
       success: true,
       error: null,
@@ -410,108 +409,109 @@ export class AmaranthusDBProvider {
     };
     let attendance: number;
     let absence: number;
-    return new Promise((resolve, reject) => {
-      try {
-        const students = studentsColl.find({
-          'isActive': {
-            '$eq': true
+    try {
+      const students = studentsColl.find({
+        'isActive': {
+          '$eq': true
+        }
+      });
+      students.map((student: IStudent) => {
+        attendance = 0;
+        absence = 0;
+        const records = recordsColl.find({
+          'id': {
+            '$eq': student.id
+          },
+          'year': {
+            '$eq': opts.year
+          },
+          'month': {
+            '$eq': opts.month
           }
         });
-        students.map((student: IStudent) => {
-          attendance = 0;
-          absence = 0;
-          const records = recordsColl.find({
-            'id': {
-              '$eq': student.id
-            },
-            'year': {
-              '$eq': opts.year
-            },
-            'month': {
-              '$eq': opts.month
+        if (records) {
+          records.map((record: IRecord) => {
+            if (record.attendance == true) {
+              attendance++;
+            }
+            if (record.absence == true) {
+              absence++;
             }
           });
-          if (records) {
-            records.map((record: IRecord) => {
-              if (record.attendance == true) {
-                attendance++;
-              }
-              if (record.absence == true) {
-                absence++;
-              }
-            });
-            let percent = '0';
-            if (attendance + absence != 0) {
-              percent = (100 * attendance / (attendance + absence)).toFixed(2);
-            }
-            if (percent) {
-              response = {
-                ...response,
-                data: [
-                  ...response.data, {
-                    id: student.id,
-                    fullName: `${student.firstName} ${student.lastName}`,
-                    attendance: attendance,
-                    percent: percent,
-                    absence: absence,
-                    picture: student.picture
-                  }
-                ]
-              };
-            } else {
-              response = {
-                ...response,
-                data: [
-                  ...response.data, {
-                    id: student.id,
-                    fullName: `${student.firstName} ${student.lastName}`,
-                    attendance: attendance,
-                    percent: 0,
-                    absence: absence,
+          let percent = '0';
+          if (attendance + absence != 0) {
+            percent = (100 * attendance / (attendance + absence)).toFixed(2);
+          }
+          if (percent) {
+            response = {
+              ...response,
+              data: [
+                ...response.data, {
+                  id: student.id,
+                  fullName: `${student.firstName} ${student.lastName}`,
+                  attendance: attendance,
+                  percent: percent,
+                  absence: absence,
+                  picture: student.picture
+                }
+              ]
+            };
+          } else {
+            response = {
+              ...response,
+              data: [
+                ...response.data, {
+                  id: student.id,
+                  fullName: `${student.firstName} ${student.lastName}`,
+                  attendance: attendance,
+                  percent: 0,
+                  absence: absence,
 
-                    picture: student.picture
-                  }
-                ]
-              };
-            }
-          };
-        });
-        resolve(response);
-      } catch (error) {
-        if (studentsColl) {
-          reject(error);
-        }
-        if (recordsColl) {
-          reject(error);
-        }
-      }
-    });
+                  picture: student.picture
+                }
+              ]
+            };
+          }
+        };
+      });
+      return response;
+    } catch (error) {
+      handleError(error);
+      response = {
+        ...response,
+        error: error
+      };
+      return response;
+    }
   }
-
   // query by isActive
-  getAllStudents(): Promise<IResponse<IStudent[]>> {
-    return new Promise((resolve, reject) => {
-      try {
-        const results = studentsColl.data;
-        resolve({
-          success: true,
-          error: null,
-          data: results
-        });
-      } catch (error) {
-        if (studentsColl) {
-          reject(error);
-        }
+  getAllStudents(): IResponse<IStudent[]> {
+    let response: IResponse<IStudent[]> = {
+      success: false,
+      error: null,
+      data: []
+    };
+    try {
+      response = {
+        ...response,
+        success: true,
+        data: [...studentsColl.data]
       }
-    })
+      return response;
+    } catch (error) {
+      if (!studentsColl) {
+        response.error = error;
+        return response;
+      }
+    }
   }
 
-  getQueriedRecordsByDate(opts: ICalendar): Promise<IResponse<IRecord[]>> {
-    return new Promise((resolve, reject) => {
-      this.getAllStudentsRecords(opts)
-        .then(res => resolve(res))
-        .catch(error => reject(error))
-    });
+  getQueriedRecordsByDate(opts: ICalendar): IResponse<IRecord[]> {
+    try {
+      return this.getAllStudentsRecords(opts)
+    } catch (error) {
+      return error;
+    }
   }
 
   // query by isActive

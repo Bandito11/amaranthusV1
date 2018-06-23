@@ -39,6 +39,7 @@ import { ExportPage } from '../pages/export/export';
 import { XLSXProvider } from '../providers/xslx/xslx';
 import { IonicStorageModule } from '@ionic/storage';
 import { FileOpener } from '@ionic-native/file-opener';
+import { EmailComposer } from '@ionic-native/email-composer';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { FileOpener } from '@ionic-native/file-opener';
     Camera,
     InAppPurchase,
     File,
+    EmailComposer,
     FileOpener,
     TextTabDelimitedProvider,
     AppPurchaseProvider,

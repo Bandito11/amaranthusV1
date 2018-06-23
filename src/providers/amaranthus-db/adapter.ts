@@ -1,14 +1,11 @@
 import { Storage } from '@ionic/storage';
 
-const storage = new Storage({
-    driverOrder: ['sqlite', 'indexeddb',  'websql', 'localstorage' ]
-});
+const storage = new Storage({});
 /**
  * A loki persistence adapter which persists to web browser's local storage object
  * @constructor IonicStorageAdapter
  */
-export function IonicStorageAdapter() {
-}
+export function IonicStorageAdapter() {}
 
 /**
  * loadDatabase() - Load data from IonicStorage

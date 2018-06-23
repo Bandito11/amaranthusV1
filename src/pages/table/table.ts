@@ -129,13 +129,14 @@ export class TablePage implements OnInit {
         .indexOf(this.monthQuery) + 1,
       day: null
     };
-    this.db.getQueriedRecordsByDate(date)
-      .then(response => {
-        if (response.success == true) {
-          this.students = [...response.data];
-        }
-      })
-      .catch(error => handleError(error));
+    try {
+      const response = this.db.getQueriedRecordsByDate(date)
+      if (response.success == true) {
+        this.students = [...response.data];
+      }
+    } catch (error) {
+      handleError(error)
+    }
   }
 
   queryDataByMonth(index: number) {
@@ -153,29 +154,31 @@ export class TablePage implements OnInit {
         day: null
       }
     }
-    this.db.getQueriedRecordsByDate(date)
-      .then(response => {
-        if (response.success == true) {
-          this.students = [...response.data];
-        }
-      })
-      .catch(error => handleError(error));
+    try {
+      const response = this.db.getQueriedRecordsByDate(date)
+      if (response.success == true) {
+        this.students = [...response.data];
+      }
+    } catch (error) {
+      handleError(error)
+    }
   }
 
   getStudentsRecords() {
     // Will get all Students queried by today's date.
-    this.db.getQueriedRecords({ query: this.query })
-      .then(response => {
-        if (response.success == true) {
-          this.students = [...response.data];
-          this.untouchedStudentList = [...response.data];
-        } else {
-          // TODO:  implement an alert message if it fails message should say no students
-          // can be retrieved.
-          handleError(response.error);
-        }
-      })
-      .catch(error => handleError(error));
+    try {
+      const response = this.db.getQueriedRecords({ query: this.query })
+      if (response.success == true) {
+        this.students = [...response.data];
+        this.untouchedStudentList = [...response.data];
+      } else {
+        // TODO:  implement an alert message if it fails message should say no students
+        // can be retrieved.
+        handleError(response.error);
+      }
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   queryStudentsName() {
@@ -234,7 +237,6 @@ export class TablePage implements OnInit {
       };
     });
     exportModal.present();
-
   }
 
   private showSimpleAlert(options: ISimpleAlertOptions) {

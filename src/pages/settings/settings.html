@@ -7,6 +7,7 @@
 </ion-header>
 
 <ion-content padding>
+  <div *ngIf="!this.platform.is('core')">
   <div *ngIf="noProducts" id="loader"></div>
   <div *ngFor="let product of products">
     <ion-icon name="pricetag"></ion-icon>
@@ -32,5 +33,16 @@
     <button ion-button color="secondary" (click)="restorePurchases()">Already bought it? Click to restore it!
       <ion-icon name="happy"></ion-icon>
     </button>
+  </div>
+  <hr>
+</div>
+  <div>
+    <h2>Feedback</h2>
+    <p>Have any issues or just want to give me some feedback on how to make the app better? Just sent me an email 
+      and I will answer accordingly!
+    </p>
+    <textarea #message></textarea>
+    <br>
+    <button ion-button color="primary" (click)="sendEmail(message.value)">Send email! </button>
   </div>
 </ion-content>

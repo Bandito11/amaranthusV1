@@ -38,10 +38,15 @@ export class MainPage implements OnInit {
     this.query = "None";
     let studentInterval = setInterval(() => {
       this.getStudents();
-      if (this.students.length > -1) {
+      if (this.students.length > 0) {
         clearInterval(studentInterval);
       }
     }, 500);
+  }
+
+  searchStudent(event) {
+    let query: string = event.target.value;
+    query ? this.filterStudentsList(query) : this.initializeStudentsList();
   }
 
   private getStudents() {
@@ -60,11 +65,6 @@ export class MainPage implements OnInit {
     } catch (error) {
       handleError(error);
     }
-  }
-
-  searchStudent(event) {
-    let query: string = event.target.value;
-    query ? this.filterStudentsList(query) : this.initializeStudentsList();
   }
 
   filterData(option: string) {

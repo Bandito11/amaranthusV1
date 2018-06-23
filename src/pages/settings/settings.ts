@@ -1,22 +1,23 @@
-import {stateAndroid} from './../../common/app-purchase';
-import {Storage} from '@ionic/storage';
-import {Component, OnInit} from '@angular/core';
-import {IonicPage, Platform, LoadingController, AlertController} from 'ionic-angular';
-import {AppPurchaseProvider} from '../../providers/app-purchase/app-purchase';
-import {ISimpleAlertOptions} from '../../common/interface';
-import {productGet} from '../../common/app-purchase';
+import { stateAndroid } from './../../common/app-purchase';
+import { Storage } from '@ionic/storage';
+import { Component, OnInit } from '@angular/core';
+import { IonicPage, Platform, LoadingController, AlertController } from 'ionic-angular';
+import { AppPurchaseProvider } from '../../providers/app-purchase/app-purchase';
+import { ISimpleAlertOptions } from '../../common/interface';
+import { productGet } from '../../common/app-purchase';
+import { EmailComposer } from '@ionic-native/email-composer';
 
 @IonicPage()
-@Component({selector: 'page-settings', templateUrl: 'settings.html'})
+@Component({ selector: 'page-settings', templateUrl: 'settings.html' })
 
 export class SettingsPage implements OnInit {
 
-  private products : productGet[];
-  private noProducts : boolean;
-  private isIos : boolean;
-  private isAndroid : boolean;
+  private products: productGet[];
+  private noProducts: boolean;
+  private isIos: boolean;
+  private isAndroid: boolean;
 
-  constructor(private loading : LoadingController, private storage : Storage, private platform : Platform, private iap : AppPurchaseProvider, private alertCtrl : AlertController,) {}
+  constructor(private emailComposer: EmailComposer, private loading: LoadingController, private storage: Storage, private platform: Platform, private iap: AppPurchaseProvider, private alertCtrl: AlertController, ) { }
 
   ngOnInit() {
     this.products = [];
@@ -29,7 +30,48 @@ export class SettingsPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.getProducts();
+    if (!this.platform.is('core')) this.getProducts();
+  }
+
+  sendEmail(message: string) {
+    let email = {
+      to: 'bandito-dev@outlook.com',
+      subject: 'Attendance Log: Browser',
+      body: message,
+      isHtml: true
+    };
+    if (!this.platform.is('core')) {
+      this.emailComposer.isAvailable().then(available => {
+        if (available) {
+          if (this.platform.is('android')) {
+            email = {
+              ...email,
+              subject: 'Attendance Log: Android'
+            };
+          }
+          if (this.platform.is('ios')) {
+            email = {
+              ...email,
+              subject: 'Attendance Log: IPhone'
+            };
+          }
+          // Send a text message using default options
+          this.emailComposer.open(email);
+        }
+      });
+    }else{
+      this.emailComposer.open(email);
+    }
+  }
+
+  createEmail(message: string) {
+    let email = {
+      to: 'bandito-dev@outlook.com',
+      subject: 'Attendance Log: Browser',
+      body: message,
+      isHtml: true
+    };
+    return email;
   }
 
   getProducts() {
@@ -40,13 +82,13 @@ export class SettingsPage implements OnInit {
         this.noProducts = false;
         this.products = [...products]
       })
-      .catch(err => this.showSimpleAlert({buttons: ['OK'], title: 'Error!', subTitle: err}));
+      .catch(err => this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: err }));
   }
 
   restorePurchases() {
     const loading = this
       .loading
-      .create({content: 'Restoring Purchases!'})
+      .create({ content: 'Restoring Purchases!' })
     loading.present();
     this
       .iap
@@ -58,7 +100,7 @@ export class SettingsPage implements OnInit {
               this
                 .storage
                 .set('boughtMasterKey', true);
-              const options : ISimpleAlertOptions = {
+              const options: ISimpleAlertOptions = {
                 title: 'Information',
                 subTitle: 'Restored the purchase!'
               };
@@ -71,7 +113,7 @@ export class SettingsPage implements OnInit {
               this
                 .storage
                 .set('boughtMasterKey', true);
-              const options : ISimpleAlertOptions = {
+              const options: ISimpleAlertOptions = {
                 title: 'Information',
                 subTitle: 'Restored the purchase!'
               };
@@ -82,39 +124,39 @@ export class SettingsPage implements OnInit {
         });
       })
       .catch(err => {
-        this.showSimpleAlert({buttons: ['OK'], title: 'Error!', subTitle: err})
+        this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: err })
         loading.dismiss();
       });
   }
 
-  buyProduct(opts : {
+  buyProduct(opts: {
     productTitle: string,
     productId: string
   }) {
     const loading = this
       .loading
-      .create({content: `Buying ${opts.productTitle}!`})
+      .create({ content: `Buying ${opts.productTitle}!` })
     loading.present();
     this
       .iap
       .buy(opts.productId)
       .then(product => {
-        this.showSimpleAlert({buttons: ['OK'], title: 'Success!', subTitle: `${product.transactionId} was successfully bought.`});
+        this.showSimpleAlert({ buttons: ['OK'], title: 'Success!', subTitle: `${product.transactionId} was successfully bought.` });
         this
           .storage
           .set('boughtMasterKey', true);
         loading.dismiss();
       })
       .catch(err => {
-        this.showSimpleAlert({buttons: ['OK'], title: 'Error!', subTitle: err})
+        this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: err })
         loading.dismiss();
       });
   }
 
-  private showSimpleAlert(options : ISimpleAlertOptions) {
+  private showSimpleAlert(options: ISimpleAlertOptions) {
     return this
       .alertCtrl
-      .create({title: options.title, subTitle: options.subTitle, buttons: options.buttons})
+      .create({ title: options.title, subTitle: options.subTitle, buttons: options.buttons })
       .present();;
   }
 
