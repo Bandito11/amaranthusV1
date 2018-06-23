@@ -1,5 +1,5 @@
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
-import { ISimpleAlertOptions, IStudent } from './../../common/interface';
+import { ISimpleAlertOptions, IStudent, IResponse } from './../../common/interface';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
@@ -54,18 +54,30 @@ export class EditPage implements OnInit {
 
   ionViewDidLoad() {
     this.student = { ...this.student, id: this.navParams.get('id') };
-    this.getStudentFromDB(this.student)
-      .then(student => {
-        this.isActive = student.isActive;
-        this.gender = student.gender;
-        this.picture = student.picture;
-        this.student = { ...student };
-      })
-      .catch(error => handleError(error))
+    try {
+      const response = this.getStudentFromDB(this.student);
+      if (response.success) {
+        this.isActive = response.data.isActive;
+        this.gender = response.data.gender;
+        this.picture = response.data.picture;
+        this.student = { ...response.data };
+      }
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  getStudentFromDB(student: IStudent): IResponse<IStudent> {
+    try {
+      let response = this.db.getStudentById(student);
+      return response;
+    } catch (error) {
+      handleError(error)
+    };
   }
 
   deleteStudent(opts: IStudent) {
-    const options: ISimpleAlertOptions = {
+    let options: ISimpleAlertOptions = {
       title: 'Success!',
       subTitle: 'Student was deleted.'
     };
@@ -82,19 +94,19 @@ export class EditPage implements OnInit {
             // user has clicked the alert button
             // begin the alert's dismiss transition
             const navTransition = alert.dismiss();
-            this.db.deleteStudent(opts)
-              .then((response) => {
-                if (response.success == true) {
-                  navTransition.then(() => this.showAdvancedAlert(options));
-                } else {
-                  handleError(response.error);
-                  const error: ISimpleAlertOptions = {
-                    title: 'Error',
-                    subTitle: 'There was an error trying to delete the record. Please try again.'
-                  }
-                  navTransition.then(() => this.showAdvancedAlert(error));
-                }
-              });
+            const response = {
+              ...this.db.deleteStudent(opts)
+            };
+            if (response.success == true) {
+              navTransition.then(() => this.showAdvancedAlert(options));
+            } else {
+              handleError(response.error);
+              options = {
+                title: 'Error',
+                subTitle: 'There was an error trying to delete the record. Please try again.'
+              }
+              navTransition.then(() => this.showAdvancedAlert(options));
+            }
             return false;
           }
         }
@@ -248,8 +260,9 @@ export class EditPage implements OnInit {
               // user has clicked the alert button
               // begin the alert's dismiss transition
               const navTransition = alert.dismiss();
-              this.db.updateStudent(student)
-                .then((response) => {
+              const response = { 
+                ...this.db.updateStudent(student)
+              };
                   if (response.success == true) {
                     navTransition.then(() => {
                       options = {
@@ -259,14 +272,12 @@ export class EditPage implements OnInit {
                       this.showAdvancedAlert(options);
                     });
                   } else {
-                    handleError(response.error);
                     options = {
                       title: 'Error',
                       subTitle: 'There was an error trying to edit the record. Please try again.'
                     }
                     navTransition.then(() => this.showAdvancedAlert(options));
                   }
-                });
               return false;
             }
           }
@@ -286,20 +297,6 @@ export class EditPage implements OnInit {
       opts.picture = "./assets/profilePics/defaultUndisclosed.png";
     }
     return opts.picture;
-  }
-
-  getStudentFromDB(student: IStudent): Promise<IStudent> {
-    return new Promise((resolve, reject) => {
-      this.db.getStudentById(student)
-        .then(response => {
-          if (response.success == true) {
-            resolve(response.data);
-          } else {
-            reject(response.error);
-          }
-        })
-        .catch(error => handleError(error));
-    });
   }
 
   browsePicture() {

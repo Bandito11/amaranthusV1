@@ -1,7 +1,7 @@
 import { Storage } from '@ionic/storage';
-import { IStudent, IResponse, IRecord, Calendar } from './../../common/interface';
+import { IStudent, IResponse, IRecord, ICalendar } from './../../common/interface';
 import { Injectable } from '@angular/core';
-import { IonicStorageAdapter } from './../../common/adapter';
+import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';
 // /// Only for dev purposes //////////////// import { STUDENTS, RECORDS } from
 // './../../mock/mock-students'; /////////////////////////////////
@@ -54,67 +54,75 @@ export class AmaranthusDBProvider {
     }
   }
 
-  checkIfStudentExists(opts: { id: string }): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      try {
-        let results = studentsColl.findOne({
-          'id': {
-            '$eq': opts.id
-          }
-        });
-        results
-          ? resolve(true)
-          : resolve(false);
-      } catch (error) {
-        if (studentsColl) {
-          reject(error);
+  checkIfStudentExists(opts: { id: string }) {
+    try {
+      let results = studentsColl.findOne({
+        'id': {
+          '$eq': opts.id
         }
+      });
+      if (results) {
+        return true
       }
-    });
+      return false;
+    } catch (error) {
+      if (!studentsColl) {
+        return error;
+      }
+    }
   }
 
-  insertStudentIntoDB(student: IStudent): Promise<IResponse<null>> {
-    return new Promise((resolve, reject) => {
-      let response;
-      this
-        .checkIfStudentExists({ id: student.id })
-        .then(value => {
-          try {
-            if (value == false) {
-              studentsColl.insert(student);
-              response = {
-                success: true,
-                error: null,
-                data: null
-              };
-            } else {
-              response = {
-                success: false,
-                error: 'User already exists in the database',
-                data: null
-              };
-            }
-            this.saveDatabase();
-            resolve(response);
-          } catch (error) {
-            reject(error);
-          }
-        })
-        .catch(error => reject(error));
-    });
+  insertStudentIntoDB(student: IStudent): IResponse<null> {
+    let response: IResponse<null> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
+    const value = this.checkIfStudentExists({ id: student.id })
+    try {
+      if (value == false) {
+        studentsColl.insert(student);
+        response = {
+          success: true,
+          error: null,
+          data: null
+        };
+      } else {
+        response = {
+          success: false,
+          error: 'User already exists in the database',
+          data: null
+        };
+      }
+      return response;
+    } catch (error) {
+      response = {
+        ...response,
+        error: error
+      }
+      return response;
+    }
   }
 
   insertStudent(student: IStudent): Promise<IResponse<null>> {
-    let response: IResponse<null>;
+    let response: IResponse<null> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
     return new Promise((resolve, reject) => {
       if (studentsColl.data.length > 9) {
         this.storage.get('boughtMasterKey')
           .then(boughtMasterKey => {
             if (boughtMasterKey == true) {
-              this
-                .insertStudentIntoDB(student)
-                .then(res => resolve(res))
-                .catch(err => reject(err));
+              response = {
+                ...response,
+                ...this.insertStudentIntoDB(student)
+              }
+              if (response.success) {
+                resolve(response);
+              }
+              reject(response);
             } else {
               response = {
                 success: false,
@@ -125,154 +133,172 @@ export class AmaranthusDBProvider {
             }
           })
       } else {
-        this
-          .insertStudentIntoDB(student)
-          .then(res => resolve(res))
-          .catch(err => reject(err));
+        response = {
+          ...response,
+          ...this.insertStudentIntoDB(student)
+        }
+        if (response.success) {
+          resolve(response);
+        }
+        reject(response);
       }
     });
   }
 
-  addAbsence(opts: { date: Calendar, id: string }): Promise<IResponse<null>> {
-    return new Promise((resolve, reject) => {
-      this.updateRecord({
-        ...opts,
-        date: {
-          ...opts.date,
-          month: opts.date.month + 1
-        },
-        attendance: false,
-        absence: true
-      })
-        .then(res => resolve(res))
-        .catch(error => reject(error))
+  addAbsence(opts: { date: ICalendar, id: string }): IResponse<null> {
+    const response = this.updateRecord({
+      ...opts,
+      date: {
+        ...opts.date,
+        month: opts.date.month + 1
+      },
+      attendance: false,
+      absence: true
     })
+    return response;
   }
 
-  addAttendance(opts: { date: Calendar, id: string }): Promise<IResponse<null>> {
-    return new Promise((resolve, reject) => {
-      this.updateRecord({
-        ...opts,
-        date: {
-          ...opts.date,
-          month: opts.date.month + 1
-        },
-        attendance: true,
-        absence: false
-      })
-        .then(res => resolve(res))
-        .catch(error => reject(error))
-    });
+  addAttendance(opts: { date: ICalendar, id: string }): IResponse<null> {
+    const response = this.updateRecord({
+      ...opts,
+      date: {
+        ...opts.date,
+        month: opts.date.month + 1
+      },
+      attendance: true,
+      absence: false
+    })
+    return response;
   }
 
-  updateRecord(opts: {
-    attendance: boolean,
-    absence: boolean,
-    date: Calendar,
-    id: string
-  }): Promise<IResponse<null>> {
-    return new Promise((resolve, reject) => {
-      try {
-        const record: IRecord = {
-          id: opts.id,
-          month: opts.date.month,
-          year: opts.date.year,
-          day: opts.date.day,
-          attendance: opts.attendance,
-          absence: opts.absence
-        }
-        let results = recordsColl.findOne({
-          'id': {
-            '$eq': record.id
-          },
-          'month': {
-            '$eq': record.month
-          },
-          'year': {
-            '$eq': record.year
-          },
-          'day': {
-            '$eq': record.day
-          }
-        });
-        if (results) {
-          results = {
-            ...results,
-            ...record
-          };
-          recordsColl.update(results);
-        } else {
-          recordsColl.insert(record);
-        }
-        this.saveDatabase();
-        resolve({ success: true, error: null, data: null });
-      } catch (error) {
-        if (recordsColl) {
-          reject(error);
-        }
+  updateRecord(
+    opts: { attendance: boolean, absence: boolean, date: ICalendar, id: string }
+  ) {
+    let response: IResponse<null> = {
+      success: false,
+      error: null,
+      data: undefined
+    }
+    try {
+      const record: IRecord = {
+        id: opts.id,
+        month: opts.date.month,
+        year: opts.date.year,
+        day: opts.date.day,
+        attendance: opts.attendance,
+        absence: opts.absence
       }
-    });
-  }
-  updateStudent(student: IStudent): Promise<IResponse<null>> {
-    return new Promise((resolve, reject) => {
-      try {
-        let results: any = studentsColl.findOne({
-          'id': {
-            '$eq': student.id
-          }
-        });
+      let results = recordsColl.findOne({
+        'id': {
+          '$eq': record.id
+        },
+        'month': {
+          '$eq': record.month
+        },
+        'year': {
+          '$eq': record.year
+        },
+        'day': {
+          '$eq': record.day
+        }
+      });
+      if (results) {
         results = {
           ...results,
-          ...student
+          ...record
         };
-        studentsColl.update(results);
-        this.saveDatabase();
-        resolve({ success: true, error: null, data: null })
-      } catch (error) {
-        if (studentsColl) {
-          reject(error);
-        }
+        recordsColl.update(results);
+      } else {
+        recordsColl.insert(record);
       }
-    });
+      response = {
+        ...response,
+        success: true,
+        error: null,
+        data: null
+      };
+      return response;
+    } catch (error) {
+      if (recordsColl) {
+        response = {
+          ...response,
+          error: error || null
+        }
+        return response;
+      }
+    }
+  }
+  updateStudent(student: IStudent): IResponse<null> {
+    try {
+      let results: any = studentsColl.findOne({
+        'id': {
+          '$eq': student.id
+        }
+      });
+      results = {
+        ...results,
+        ...student
+      };
+      studentsColl.update(results);
+      return {
+        success: true,
+        error: null,
+        data: null
+      };
+    } catch (error) {
+      if (!studentsColl) {
+        return error;
+      }
+    }
   }
 
-  deleteStudent(student: IStudent): Promise<IResponse<null>> {
-    return new Promise((resolve, reject) => {
-      try {
-        let results: any = studentsColl.findOne({
-          'id': {
-            '$eq': student.id
-          }
-        });
-        studentsColl.remove(results);
-        this.saveDatabase();
-        resolve({ success: true, error: null, data: null })
-      } catch (error) {
-        if (studentsColl) {
-          reject(error);
+  deleteStudent(student: IStudent): IResponse<null> {
+    try {
+      let results: any = studentsColl.findOne({
+        'id': {
+          '$eq': student.id
         }
+      });
+      studentsColl.remove(results);
+      return {
+        success: true,
+        error: null,
+        data: null
+      };
+    } catch (error) {
+      if (!studentsColl) {
+        return error;
       }
-    });
+    }
   }
 
-  getStudentById(student: IStudent): Promise<IResponse<IStudent>> {
-    return new Promise((resolve, reject) => {
-      try {
-        const results = studentsColl.findOne({
-          'id': {
-            '$eq': student.id
-          }
-        });
-        resolve({ success: true, error: null, data: results });
-      } catch (error) {
-        if (studentsColl) {
-          reject(error);
+  getStudentById(student: IStudent): IResponse<IStudent> {
+    let response: IResponse<IStudent> = {
+      success: false,
+      error: null,
+      data: undefined
+    }
+    try {
+      const results = studentsColl.findOne({
+        'id': {
+          '$eq': student.id
         }
+      });
+      response = {
+        ...response,
+        success: true,
+        error: null,
+        data: results
+      };
+      return response;
+    } catch (error) {
+      if (studentsColl) {
+        return error;
       }
-    });
+    }
   }
 
-  getQueriedRecords(opts: { query: string, date?: Calendar }): Promise<IResponse<IRecord[]>> {
+  getQueriedRecords(opts: { query: string, date?: ICalendar }): Promise<IResponse<IRecord[]>> {
     let response = {
       success: true,
       error: null,
@@ -285,7 +311,7 @@ export class AmaranthusDBProvider {
           break;
         default:
           const options:
-            Calendar = {
+            ICalendar = {
               year: new Date().getFullYear(),
               month: new Date().getMonth() + 1,
               day: null
@@ -303,53 +329,36 @@ export class AmaranthusDBProvider {
     });
   }
 
-  getStudentsRecordsByDate(opts: Calendar): Promise<IResponse<IRecord[]>> {
+  getStudentsRecordsByDate(opts: ICalendar): IResponse<IRecord[]> {
     let response = {
       success: true,
       error: null,
       data: []
     };
-    return new Promise((resolve, reject) => {
-      try {
-        const students = studentsColl.find({
-          'isActive': {
-            '$eq': true
+    try {
+      const students = studentsColl.find({
+        'isActive': {
+          '$eq': true
+        }
+      });
+
+      students.map((student: IStudent) => {
+        const record = recordsColl.findOne({
+          'id': {
+            '$eq': student.id
+          },
+          'year': {
+            '$eq': opts.year
+          },
+          'month': {
+            '$eq': opts.month
+          },
+          'day': {
+            '$eq': opts.day
           }
         });
-
-        students.map((student: IStudent) => {
-          const record = recordsColl.findOne({
-            'id': {
-              '$eq': student.id
-            },
-            'year': {
-              '$eq': opts.year
-            },
-            'month': {
-              '$eq': opts.month
-            },
-            'day': {
-              '$eq': opts.day
-            }
-          });
-          if (record) {
-            if (student.id == record.id) {
-              response = {
-                ...response,
-                data: [
-                  ...response.data, {
-                    firstName: student.firstName,
-                    lastName: student.lastName,
-                    fullName: `${student.firstName} ${student.lastName}`,
-                    picture: student.picture,
-                    attendance: record.attendance,
-                    absence: record.absence,
-                    id: student.id
-                  }
-                ]
-              };
-            }
-          } else {
+        if (record) {
+          if (student.id == record.id) {
             response = {
               ...response,
               data: [
@@ -358,27 +367,42 @@ export class AmaranthusDBProvider {
                   lastName: student.lastName,
                   fullName: `${student.firstName} ${student.lastName}`,
                   picture: student.picture,
-                  attendance: false,
-                  absence: false,
+                  attendance: record.attendance,
+                  absence: record.absence,
                   id: student.id
                 }
               ]
             };
+          }
+        } else {
+          response = {
+            ...response,
+            data: [
+              ...response.data, {
+                firstName: student.firstName,
+                lastName: student.lastName,
+                fullName: `${student.firstName} ${student.lastName}`,
+                picture: student.picture,
+                attendance: false,
+                absence: false,
+                id: student.id
+              }
+            ]
           };
-        });
-        resolve(response);
-      } catch (error) {
-        if (studentsColl) {
-          reject(error);
-        }
-        if (recordsColl) {
-          reject(error);
-        }
+        };
+      });
+      return response;
+    } catch (error) {
+      if (studentsColl) {
+        return error;
       }
-    });
+      if (recordsColl) {
+        return error;
+      }
+    }
   }
 
-  getAllStudentsRecords(opts: Calendar): Promise<IResponse<IRecord[]>> {
+  getAllStudentsRecords(opts: ICalendar): Promise<IResponse<IRecord[]>> {
     let response = {
       success: true,
       error: null,
@@ -469,7 +493,11 @@ export class AmaranthusDBProvider {
     return new Promise((resolve, reject) => {
       try {
         const results = studentsColl.data;
-        resolve({ success: true, error: null, data: results });
+        resolve({
+          success: true,
+          error: null,
+          data: results
+        });
       } catch (error) {
         if (studentsColl) {
           reject(error);
@@ -478,55 +506,52 @@ export class AmaranthusDBProvider {
     })
   }
 
-  getQueriedRecordsByDate(opts: Calendar): Promise<IResponse<IRecord[]>> {
+  getQueriedRecordsByDate(opts: ICalendar): Promise<IResponse<IRecord[]>> {
     return new Promise((resolve, reject) => {
-      this
-        .getAllStudentsRecords(opts)
+      this.getAllStudentsRecords(opts)
         .then(res => resolve(res))
         .catch(error => reject(error))
     });
   }
 
   // query by isActive
-  getAllActiveStudents(): Promise<IResponse<any>> {
-    return new Promise((resolve, reject) => {
-      try {
-        const students = studentsColl.find({
-          'isActive': {
-            '$eq': true
-          }
-        });
-        const currentDate = {
-          day: new Date().getDate(),
-          year: new Date().getFullYear(),
-          month: new Date().getMonth() + 1
-        };
-        let record: IRecord;
-        const results = students.map(student => {
-          record = {
-            ...this.getQueriedRecordsByCurrentDate({ studentId: student.id, year: currentDate.year, day: currentDate.day, month: currentDate.month })
-          };
-          if (record != null && record.id == student.id) {
-            return {
-              ...student,
-              attendance: record.attendance,
-              absence: record.absence
-            };
-          } else {
-            return {
-              ...student,
-              attendance: false,
-              absence: false
-            };
-          }
-        });
-        resolve({ success: true, error: null, data: results });
-      } catch (error) {
-        if (studentsColl) {
-          reject(error);
+  getAllActiveStudents(date: ICalendar): IResponse<IStudent[]> {
+    try {
+      const students = studentsColl.find({
+        'isActive': {
+          '$eq': true
         }
+      });
+      let record: IRecord;
+      const results = students.map(student => {
+        record = {
+          ...this.getQueriedRecordsByCurrentDate({
+            studentId: student.id,
+            year: date.year,
+            day: date.day,
+            month: date.month
+          })
+        };
+        if (record != null && record.id == student.id) {
+          return {
+            ...student,
+            attendance: record.attendance,
+            absence: record.absence
+          };
+        } else {
+          return {
+            ...student,
+            attendance: false,
+            absence: false
+          };
+        }
+      }); // got results
+      return { success: true, error: null, data: results };
+    } catch (error) {
+      if (!studentsColl) {
+        return error;
       }
-    })
+    }
   }
 
   getQueriedRecordsByCurrentDate(opts: {
@@ -554,9 +579,8 @@ export class AmaranthusDBProvider {
       if (recordQuery) {
         response = recordQuery;
         return response;
-      } else {
-        return null;
       }
+      return null;
     } catch (error) {
       if (recordsColl) {
         setTimeout(() => this.getQueriedRecordsByCurrentDate(opts), 5000);

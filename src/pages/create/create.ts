@@ -35,10 +35,8 @@ export class CreatePage {
   getNewId(): Promise<string> {
     return new Promise((resolve, reject) => {
       this.idInput = `XY${Math.ceil(Math.random() * 100000000)}`;
-      this.db.checkIfStudentExists({ id: this.idInput })
-        .then(value => {
-          value == false ? resolve(this.idInput) : this.getNewId();
-        })
+      const value = this.db.checkIfStudentExists({ id: this.idInput });
+      value == false ? resolve(this.idInput) : this.getNewId();
     });
   }
 
@@ -60,18 +58,18 @@ export class CreatePage {
       )
   }
 
-  validatePhoneNumber(phoneNumber: string) {
-    // if (phoneNumber.length >= 10 && phoneNumber.length <= 12) {
-    //   return false;
-    // } else {
-    //   return true;
-    // }
-    if (phoneNumber.length > 0) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+  // validatePhoneNumber(phoneNumber: string) {
+  // if (phoneNumber.length >= 10 && phoneNumber.length <= 12) {
+  //   return false;
+  // } else {
+  //   return true;
+  // }
+  //   if (phoneNumber.length > 0) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
 
   createStudent(opts: IStudent) {
     let options: ISimpleAlertOptions = { title: '', subTitle: '', buttons: [] }
@@ -184,16 +182,20 @@ export class CreatePage {
       //   this.showSimpleAlert(options);
       //   return;
       // }
-      opts = { ...opts, phoneNumber: phoneNumber, emergencyContactPhoneNumber: emergencyContactPhoneNumber };
       const picture = this.validatePicture({ gender: this.gender, picture: this.picture });
-      const student: IStudent = { ...opts, picture: picture, gender: this.gender, isActive: true };
+      const student: IStudent = {
+        ...opts,
+        phoneNumber: phoneNumber,
+        emergencyContactPhoneNumber: emergencyContactPhoneNumber,
+        picture: picture,
+        gender: this.gender,
+        isActive: true
+      };
       const alert = this.alertCtrl.create({
         title: 'Warning!',
         subTitle: `Are you sure you want to create a new record for ${opts.firstName} ${opts.lastName}?`,
         buttons: [
-          {
-            text: 'No'
-          },
+          { text: 'No' },
           {
             text: 'Yes',
             handler: () => {
@@ -204,21 +206,21 @@ export class CreatePage {
                 .then((response) => {
                   if (response.success == true) {
                     navTransition.then(() => {
-                      options = {
+                      const options = {
                         title: 'Success!',
                         subTitle: `${opts.firstName} ${opts.lastName} was created.`
                       };
                       this.showAdvancedAlert(options);
                     });
                   } else {
-                    options = {
+                  const options = {
                       title: 'Error',
                       subTitle: response.error
                     }
                     navTransition.then(() => this.showAdvancedAlert(options));
                   }
                 })
-                .catch(error => this.showSimpleAlert({ title: 'Error', subTitle: error }));
+                .catch(error => this.showSimpleAlert({ title: 'Error', subTitle: error.error }));
               ;
               return false;
             }

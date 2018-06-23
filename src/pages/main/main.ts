@@ -4,7 +4,7 @@ import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
-import { ISimpleAlertOptions, IStudent, Calendar } from '../../common/interface';
+import { ISimpleAlertOptions, IStudent, ICalendar } from '../../common/interface';
 
 @IonicPage()
 @Component({ selector: 'page-main', templateUrl: 'main.html' })
@@ -16,7 +16,7 @@ export class MainPage implements OnInit {
   private untouchedStudentList: IStudent[];
   query: string;
   selectOptions: string[];
-  date: Calendar;
+  date: ICalendar;
 
   ngOnInit() {
     this.students = [];
@@ -30,6 +30,10 @@ export class MainPage implements OnInit {
     this.selectOptions = ['Id', 'Name', 'None'];
   }
 
+  private initializeStudentsList() {
+    this.students = [...this.untouchedStudentList];
+  };
+
   ionViewWillEnter() {
     this.query = "None";
     let studentInterval = setInterval(() => {
@@ -40,19 +44,17 @@ export class MainPage implements OnInit {
     }, 500);
   }
 
-  private initializeStudentsList() {
-    this.students = [...this.untouchedStudentList];
-  };
-
-  private async getStudents() {
+  private getStudents() {
+    const date = {
+      ...this.date,
+      month: this.date.month + 1
+    }
     try {
-      const studentResponse = await this.db.getAllActiveStudents();
+      const studentResponse = this.db.getAllActiveStudents(date);
       if (studentResponse.success == true) {
         this.students = [...studentResponse.data];
         this.untouchedStudentList = [...studentResponse.data];
       } else {
-        // TODO:  implement an alert message if it fails message should say no students
-        // can be retrieved.
         handleError(studentResponse.error);
       }
     } catch (error) {
@@ -62,23 +64,23 @@ export class MainPage implements OnInit {
 
   searchStudent(event) {
     let query: string = event.target.value;
-    query ? this.queryStudentsList(query) : this.initializeStudentsList();
+    query ? this.filterStudentsList(query) : this.initializeStudentsList();
   }
 
-  queryData(option: string) {
+  filterData(option: string) {
     switch (option) {
       case 'Id':
-        this.queryStudentsbyId();
+        this.filterStudentsbyId();
         break;
       case 'Name':
-        this.queryStudentsName();
+        this.filterStudentsName();
         break;
       default:
         this.students = [...this.untouchedStudentList];
     }
   }
 
-  private queryStudentsbyId() {
+  private filterStudentsbyId() {
     this.students = [
       ...this.students.sort((a, b) => {
         if (a.id < b.id)
@@ -90,7 +92,7 @@ export class MainPage implements OnInit {
     ];
   }
 
-  private queryStudentsName() {
+  private filterStudentsName() {
     this.students = [
       ...this.students.sort((a, b) => {
         if (a.firstName.toLowerCase() < b.firstName.toLowerCase())
@@ -102,7 +104,7 @@ export class MainPage implements OnInit {
     ];
   }
 
-  private queryStudentsList(query: string) {
+  private filterStudentsList(query: string) {
     const students = [...this.untouchedStudentList];
     let fullName: string;
     const newQuery = students.filter(student => {
@@ -117,26 +119,41 @@ export class MainPage implements OnInit {
   addAttendance(opts: {
     id: string
   }) {
-    this
-      .db
-      .addAttendance({ date: this.date, id: opts.id })
-      .then(response => {
-        if (response.success == true) {
-          this.updateStudentAttendance({
-            id: opts.id,
-            absence: false,
-            attendance: true
-          });
-          this.showSimpleAlert({
-            title: 'Success!',
-            subTitle: 'Student was marked present!',
-            buttons: ['OK']
-          });
-        } else {
-          handleError(response.error)
-        }
-      })
-      .catch(error => handleError(error));
+    const response = this.db.addAttendance({ date: this.date, id: opts.id });
+    if (response.success == true) {
+      this.updateStudentAttendance({
+        id: opts.id,
+        absence: false,
+        attendance: true
+      });
+      this.showSimpleAlert({
+        title: 'Success!',
+        subTitle: 'Student was marked present!',
+        buttons: ['OK']
+      });
+    } else {
+      handleError(response.error)
+    }
+  }
+
+  addAbsence(opts: {
+    id: string
+  }) {
+    const response = this.db.addAbsence({ date: this.date, id: opts.id });
+    if (response.success == true) {
+      this.updateStudentAttendance({
+        id: opts.id,
+        absence: true,
+        attendance: false
+      });
+      this.showSimpleAlert({
+        title: 'Success!',
+        subTitle: 'Student was marked absent!',
+        buttons: ['OK']
+      });
+    } else {
+      handleError(response.error);
+    }
   }
 
   private updateStudentAttendance(opts: {
@@ -159,39 +176,13 @@ export class MainPage implements OnInit {
     this.untouchedStudentList = [...results];
   }
 
-  addAbsence(opts: {
-    id: string
-  }) {
-    this.db.addAbsence({
-      date: this.date,
-      id: opts.id
-    })
-      .then(response => {
-        if (response.success == true) {
-          this.updateStudentAttendance({
-            id: opts.id,
-            absence: true,
-            attendance: false
-          });
-          this.showSimpleAlert({
-            title: 'Success!',
-            subTitle: 'Student was marked absent!',
-            buttons: ['OK']
-          });
-        } else {
-          handleError(response.error);
-        }
-      })
-      .catch(error => handleError(error));
-  }
-
   private showSimpleAlert(options: ISimpleAlertOptions) {
     return this.alertCtrl.create({
       title: options.title,
       subTitle: options.subTitle,
       buttons: options.buttons
     })
-      .present();;
+      .present();
   }
 
   goToStudentProfile(id: string) {

@@ -52,7 +52,7 @@ export interface IRecord {
     percent?: number;
 }
 
-export interface Calendar {
+export interface ICalendar {
     weekDay?: number,
     day: number,
     month: number,

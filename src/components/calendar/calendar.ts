@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Calendar } from './../../common/interface';
+import { ICalendar } from './../../common/interface';
 import { weekDaysHeader, weekDaysLabels, monthsLabels } from './../../common/labels'
 
 @Component({
@@ -33,7 +33,7 @@ export class CalendarComponent implements OnInit {
   @Output() getDate = new EventEmitter();
 
   /**Used to generate calendar*/
-  calendarDays: Array<Calendar> = [];
+  calendarDays: Array<ICalendar> = [];
 
   /**Used to generate Calendar*/
   private currentDate = new Date();
@@ -48,13 +48,13 @@ export class CalendarComponent implements OnInit {
     this.weekDaysLabels = weekDaysLabels;
     this.monthsLabels = monthsLabels;
     this.weekDaysHeader = weekDaysHeader;
-    let calendar: Calendar = { day: this.currentDate.getDate(), month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() };
+    let calendar: ICalendar = { day: this.currentDate.getDate(), month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() };
     calendar.weekDay = this.currentDate.getDay();
     this.choseDay(calendar);
   }
 
   /**When the day is chosen, load the data from the db using the date as a parameter. */
-  private choseDay(date: Calendar) {
+  private choseDay(date: ICalendar) {
     this.getDate.emit(date);
   }
 

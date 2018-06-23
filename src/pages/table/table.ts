@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { handleError } from '../../common/handleError';
-import { IRecord, Calendar, ISimpleAlertOptions } from '../../common/interface';
+import { IRecord, ICalendar, ISimpleAlertOptions } from '../../common/interface';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { ExportPage } from '../export/export';
@@ -122,7 +122,7 @@ export class TablePage implements OnInit {
   }
 
   queryDataByYear(year: number) {
-    const date: Calendar = {
+    const date: ICalendar = {
       year: + year,
       month: this
         .months
@@ -139,7 +139,7 @@ export class TablePage implements OnInit {
   }
 
   queryDataByMonth(index: number) {
-    let date: Calendar;
+    let date: ICalendar;
     if (index) {
       date = {
         year: + this.yearQuery,

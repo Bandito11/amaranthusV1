@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { Calendar, IRecord, ISimpleAlertOptions } from '../../common/interface';
+import { ICalendar, IRecord, ISimpleAlertOptions } from '../../common/interface';
 import { monthsLabels, weekDaysHeader } from '../../common/labels';
 import { handleError } from '../../common/handleError';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
@@ -22,29 +22,30 @@ export class CalendarPage {
   currentDate: string;
   students: IRecord[];
   private untouchedStudentList: IRecord[];
-  private date: Calendar;
+  private date: ICalendar;
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.getStudentsRecords(this.date);
   }
-  
 
-  getStudentsRecords(opts: Calendar) {
+
+  getStudentsRecords(opts: ICalendar) {
     // Will get all Students queried by today's date.
     const date = { ...opts, month: opts.month + 1 }
-    this.db.getStudentsRecordsByDate(date)
-      .then(response => {
-        if (response.success == true) {
-          this.students = [...response.data];
-          this.untouchedStudentList = [...response.data];
-        }else{
-          handleError(response.error);
-        }
-      })
-      .catch(error => handleError(error))
+    try {
+      const response = this.db.getStudentsRecordsByDate(date)
+      if (response.success == true) {
+        this.students = [...response.data];
+        this.untouchedStudentList = [...response.data];
+      } else {
+        handleError(response.error);
+      }
+    } catch (error) {
+      handleError(error)
+    }
   }
 
-  getDate(date: Calendar) {
+  getDate(date: ICalendar) {
     this.date = date;
     const currentDay = date.day;
     const currentMonth = monthsLabels[date.month];
@@ -54,27 +55,56 @@ export class CalendarPage {
     this.getStudentsRecords(date);
   }
 
-  addAttendance(opts: { id: string }) {
-    this.db.addAttendance({ date: this.date, id: opts.id })
-      .then(response => {
-        if (response.success == true) {
-          this.updateStudentAttendance({ id: opts.id, absence: false, attendance: true });
-          this.showSimpleAlert({
-            title: 'Success!',
-            subTitle: 'Student was marked present!',
-            buttons:['OK']
-          });
-        } else {
-          handleError(response.error)
-        }
-      })
-      .catch(error => handleError(error));
+  addAttendance(opts: {
+    id: string
+  }) {
+    const response = this.db.addAttendance({ date: this.date, id: opts.id });
+    if (response.success == true) {
+      this.updateStudentAttendance({
+        id: opts.id,
+        absence: false,
+        attendance: true
+      });
+      this.showSimpleAlert({
+        title: 'Success!',
+        subTitle: 'Student was marked present!',
+        buttons: ['OK']
+      });
+    } else {
+      handleError(response.error)
+    }
   }
 
-  updateStudentAttendance(opts: { id: string, absence: boolean, attendance: boolean }) {
+  addAbsence(opts: { id: string }) {
+    const response = this.db.addAbsence({ date: this.date, id: opts.id });
+    if (response.success == true) {
+      this.updateStudentAttendance({
+        id: opts.id,
+        absence: true,
+        attendance: false
+      });
+      this.showSimpleAlert({
+        title: 'Success!',
+        subTitle: 'Student was marked absent!',
+        buttons: ['OK']
+      });
+    } else {
+      handleError(response.error);
+    }
+  }
+
+  private updateStudentAttendance(opts: {
+    id: string,
+    absence: boolean,
+    attendance: boolean
+  }) {
     const results = this.students.map(student => {
       if (student.id == opts.id) {
-        return { ...student, attendance: opts.attendance, absence: opts.absence };
+        return {
+          ...student,
+          attendance: opts.attendance,
+          absence: opts.absence
+        };
       } else {
         return student;
       }
@@ -82,26 +112,9 @@ export class CalendarPage {
     this.students = [...results];
     this.untouchedStudentList = [...results];
   }
-  
-  addAbsence(opts: { id: string }) {
-    this.db.addAbsence({ date: this.date, id: opts.id })
-      .then(response => {
-        if (response.success == true) {
-          this.updateStudentAttendance({ id: opts.id, absence: true, attendance: false });
-          this.showSimpleAlert({
-            title: 'Success!',
-            subTitle: 'Student was marked absent!',
-            buttons: ['Ok']
-          });
-        } else {
-          handleError(response.error);
-        }
-      })
-      .catch(error => handleError(error));
-  }
-  
-  
-  
+
+
+
   private showSimpleAlert(options: ISimpleAlertOptions) {
     return this.alertCtrl.create({
       title: options.title,
@@ -116,7 +129,7 @@ export class CalendarPage {
     let query: string = event.target.value;
     query ? this.queryStudentsList(query) : this.initializeStudentsList();
   }
-  
+
   private initializeStudentsList() {
     this.students = [...this.untouchedStudentList];
   };
