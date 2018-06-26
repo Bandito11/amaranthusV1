@@ -16,6 +16,7 @@ export class MainPage implements OnInit {
   private untouchedStudentList: IStudent[];
   query: string;
   selectOptions: string[];
+  filterOptions: string[];
   date: ICalendar;
 
   ngOnInit() {
@@ -28,6 +29,7 @@ export class MainPage implements OnInit {
       year: currentDate.getFullYear()
     }
     this.selectOptions = ['Id', 'Name', 'None'];
+    this.filterOptions = this.getFilterOptions();
   }
 
   private initializeStudentsList() {
@@ -44,9 +46,13 @@ export class MainPage implements OnInit {
     }, 500);
   }
 
+  getFilterOptions() {
+    let options = [];
+    return options;
+  };
   searchStudent(event) {
     let query: string = event.target.value;
-    query ? this.filterStudentsList(query) : this.initializeStudentsList();
+    query ? this.sortStudentsList(query) : this.initializeStudentsList();
   }
 
   private getStudents() {
@@ -67,20 +73,20 @@ export class MainPage implements OnInit {
     }
   }
 
-  filterData(option: string) {
+  sortData(option: string) {
     switch (option) {
       case 'Id':
-        this.filterStudentsbyId();
+        this.sortStudentsbyId();
         break;
       case 'Name':
-        this.filterStudentsName();
+        this.sortStudentsName();
         break;
       default:
         this.students = [...this.untouchedStudentList];
     }
   }
 
-  private filterStudentsbyId() {
+  private sortStudentsbyId() {
     this.students = [
       ...this.students.sort((a, b) => {
         if (a.id < b.id)
@@ -92,7 +98,17 @@ export class MainPage implements OnInit {
     ];
   }
 
-  private filterStudentsName() {
+  filterByClass(option: string) {
+    const students = [...this.untouchedStudentList];
+    const newQuery = students.filter(student => {
+      if (student.class == option) {
+        return student;
+      }
+    });
+    this.students = [...newQuery];
+  }
+
+  private sortStudentsName() {
     this.students = [
       ...this.students.sort((a, b) => {
         if (a.firstName.toLowerCase() < b.firstName.toLowerCase())
@@ -104,7 +120,7 @@ export class MainPage implements OnInit {
     ];
   }
 
-  private filterStudentsList(query: string) {
+  private sortStudentsList(query: string) {
     const students = [...this.untouchedStudentList];
     let fullName: string;
     const newQuery = students.filter(student => {
@@ -116,9 +132,7 @@ export class MainPage implements OnInit {
     this.students = [...newQuery];
   }
 
-  addAttendance(opts: {
-    id: string
-  }) {
+  addAttendance(opts: { id: string }) {
     const response = this.db.addAttendance({ date: this.date, id: opts.id });
     if (response.success == true) {
       this.updateStudentAttendance({
