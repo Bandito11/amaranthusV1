@@ -36,4 +36,11 @@ page-settings {
             transform: rotate(360deg);
         }
     }
+
+    @media screen and (min-width: 600px) {
+        #loader {
+            left: 55%;
+            top: 20%;
+        }
+    }
 }
