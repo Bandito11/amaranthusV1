@@ -33,11 +33,9 @@ export class CreatePage {
   }
 
   getNewId(): Promise<string> {
-    return new Promise((resolve, reject) => {
       this.idInput = `XY${Math.ceil(Math.random() * 100000000)}`;
       const value = this.db.checkIfStudentExists({ id: this.idInput });
-      value == false ? resolve(this.idInput) : this.getNewId();
-    });
+      if(value == false) this.getNewId();
   }
 
   browsePicture() {
