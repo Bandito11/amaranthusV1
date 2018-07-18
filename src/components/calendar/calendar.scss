@@ -1,27 +1,33 @@
 .calendar {
-    .date{
-        display:inline-block;
-        padding:15px;
+    .date {
+        display: inline-block;
+        padding: 15px;
     }
-    .weekdays li  {
-        margin:0;
-        display:inline-block;
-        width:13.6%;
-        text-align:center;
-    }
-
-    .days li {
-        margin:0;
+    .weekdays li {
+        margin: 0;
         display: inline-block;
         width: 13.6%;
         text-align: center;
+    }
+    .days li {
+        margin: 0;
+        display: inline-block;
+        width: 13.6%;
+        text-align: center;
+    }
+    .active {
+        background-color: red;
+        color: white;
+    }
+    .text{
+        color:white
     }
     .ripple {
         position: relative;
         overflow: hidden;
         transform: translate3d(0, 0, 0);
-      }
-      .ripple:after {
+    }
+    .ripple:after {
         content: "";
         display: block;
         position: absolute;
@@ -36,10 +42,10 @@
         transform: scale(10, 10);
         opacity: 0;
         transition: transform .5s, opacity 1s;
-      }
-      .ripple:active:after {
+    }
+    .ripple:active:after {
         transform: scale(0, 0);
         opacity: .2;
         transition: 0s;
-      }
+    }
 }

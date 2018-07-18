@@ -26,12 +26,12 @@
       <ion-option *ngFor="let option of selectOptions" (ionSelect)="sortData(option)">{{option}}</ion-option>
     </ion-select>
   </ion-item>
-  <ion-item>
+  <!-- <ion-item>
     <ion-label>Filter by class: </ion-label>
     <ion-select [(ngModel)]="filter" multiple="false" selectSettings="filterOptions">
       <ion-option *ngFor="let class of classOptions" (ionSelect)="filterByClass(class)">{{class}}</ion-option>
     </ion-select>
-  </ion-item>
+  </ion-item> -->
   <ion-list>
     <ion-item-sliding *ngFor="let student of students">
       <ion-item>

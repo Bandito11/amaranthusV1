@@ -79,7 +79,7 @@ export class AmaranthusDBProvider {
       error: null,
       data: undefined
     };
-    const value = this.checkIfStudentExists({ id: student.id })
+    const value = this.checkIfStudentExists({ id: student.id });
     try {
       if (value == false) {
         studentsColl.insert(student);

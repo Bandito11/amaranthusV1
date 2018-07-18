@@ -11,19 +11,19 @@ export class CalendarComponent implements OnInit {
   constructor() {
     this.currentDate = new Date();
   }
-  /**weekDaysHeader html properties*/
+  //  html properties
   weekDaysHeader: Array<string>;
 
-  /**weekDaysLabels html properties*/
+  //  html properties
   weekDaysLabels: Array<string>;
 
-  /**monthsLabels html properties*/
+  //  html properties
   monthsLabels: Array<string>;
 
-  /**Used to get the month and year to start the calendar*/
+  // Used to get the month and year to start the calendar
   month: number;
 
-  /**Used to get the year to start the calendar*/
+  // Used to get the year to start the calendar
   year: number;
 
   /**
@@ -32,15 +32,27 @@ export class CalendarComponent implements OnInit {
    * */
   @Output() getDate = new EventEmitter();
 
-  /**Used to generate calendar*/
+  // Used to generate calendar
   calendarDays: Array<ICalendar> = [];
 
-  /**Used to generate Calendar*/
+  // Used to generate Calendar
   private currentDate = new Date();
+
+  // Verify if a day is chosen
+  chosen: number;
+
+  currentStyles;
 
   ngOnInit() {
     this.createCalendar(null, null);
     this.initialize();
+  }
+
+  setCurrentStyles() {
+    this.currentStyles = {
+      'background-color': this.chosen ? '#e60000' : '',
+      'color': this.chosen ? '#fff' : ''
+    };
   }
 
   /**Initialize the labels and headers in order to generate the calendar and the output for the header*/
@@ -53,8 +65,9 @@ export class CalendarComponent implements OnInit {
     this.choseDay(calendar);
   }
 
-  /**When the day is chosen, load the data from the db using the date as a parameter. */
+  // When the day is chosen, load the data from the db using the date as a parameter. 
   private choseDay(date: ICalendar) {
+    this.chosen = date.day;
     this.getDate.emit(date);
   }
 

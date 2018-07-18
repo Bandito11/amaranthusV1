@@ -50,6 +50,7 @@ export class MainPage implements OnInit {
     let options = [];
     return options;
   };
+  
   searchStudent(event) {
     let query: string = event.target.value;
     query ? this.sortStudentsList(query) : this.initializeStudentsList();

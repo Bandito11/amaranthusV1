@@ -24,6 +24,6 @@
 		<li *ngFor="let weekDay of weekDaysLabels">{{weekDay}}</li>
 	</ul>
 	<ul class="days">
-		<li class="ripple" *ngFor="let date of calendarDays;" (click)="choseDay(date)">{{date.day}}</li>
+		<li class="ripple" [style.color]="this.chosen == date.day ? '#fff' : ''" [style.background-color]="this.chosen == date.day ? '#ffcccc' : ''" *ngFor="let date of calendarDays" (click)="choseDay(date)">{{date.day}}</li>
 	</ul>
 </div>

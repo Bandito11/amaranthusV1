@@ -1,7 +1,7 @@
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
 import { ISimpleAlertOptions, IStudent, IResponse } from './../../common/interface';
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, normalizeURL } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
@@ -303,15 +303,15 @@ export class EditPage implements OnInit {
     const options: CameraOptions = {
       quality: 100,
       sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
-      targetWidth: 150,
-      targetHeight: 150,
-      destinationType: this.camera.DestinationType.DATA_URL,
+      targetWidth: 250,
+      targetHeight: 250,
+      destinationType: this.camera.DestinationType.FILE_URI,
       mediaType: this.camera.MediaType.PICTURE,
-      encodingType: this.camera.EncodingType.JPEG
+      encodingType: this.camera.EncodingType.PNG
     };
     this.camera.getPicture(options)
-      .then((imageData) => {
-        this.picture = `data:image/jpeg;base64,${imageData}`;
+      .then((imageData: string) => {
+        this.picture = normalizeURL(imageData);        
       },
         error => handleError(error)
       )

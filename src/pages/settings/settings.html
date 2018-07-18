@@ -30,13 +30,12 @@
     <button *ngIf="isAndroid" ion-button color="primary" (click)="buyProduct({productId: product.productId, productTitle: product.title})">Buy Now for only {{product.priceAsDecimal}} {{product.currency}}!</button>
     <button *ngIf="isIos" ion-button color="primary" (click)="buyProduct({productId: product.productId, productTitle: 'The Master Key!'})">Buy Now for only {{product.priceAsDecimal}} {{product.currency}}!</button>
     <br>
-    <button ion-button color="secondary" (click)="restorePurchases()">Already bought it? Click to restore it!
-      <ion-icon name="happy"></ion-icon>
+    <button ion-button color="secondary" (click)="restorePurchases()">Restore purchase!<ion-icon name="happy"></ion-icon>
     </button>
+    <hr>
   </div>
-  <hr>
 </div>
-  <div>
+  <div *ngIf='bought'>
     <h2>Feedback</h2>
     <p>Have any issues or just want to give me some feedback on how to make the app better? Just sent me an email 
       and I will answer accordingly!
