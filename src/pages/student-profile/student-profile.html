@@ -8,21 +8,20 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
 
 <ion-content class="profile-content">
   <div class="profile-image">
     <img src="{{picture}}" />
-    <header class="text center header">
-      {{student.firstName}}
-      <span *ngIf="student.initial">{{student.initial}}</span> {{student.lastName}}
-    </header>
   </div>
   <div class="text text-box">
     <p class="text bold id">
       <span class="text label">ID: </span>{{student.id}}
+    </p>
+    <p class="text bold">
+      <span class="text label">Name: </span> {{student.firstName}}
+      <span *ngIf="student.initial">{{student.initial}}</span> {{student.lastName}}
     </p>
     <p class="text bold">
       <span class="text label">Address: </span>{{student.address}}
@@ -43,14 +42,14 @@
       <span class="text label">Gender: </span>{{student.gender}}
     </p>
     <p class="text bold">
-      <span class="text label">Father's Name: </span>{{student.fatherFirstName}} {{student.fatherLastName}}
+      <span class="text label">Father's Name: </span>
+      {{student.fatherFirstName}} {{student.fatherLastName}}
     </p>
     <p class="text bold">
-      <span class="text label">Mother's Name: </span>{{student.motherFirstName}} {{student.motherLastName}}
+      <span class="text label">Mother's Name: </span>
+      {{student.motherFirstName}} {{student.motherLastName}}
     </p>
-    <h2>
-      Emergency Contact
-    </h2>
+    <h2> Emergency Contact </h2>
     <p class="text bold">
       <span class="text label"> Name: </span>{{student.emergencyContactName}}
     </p>

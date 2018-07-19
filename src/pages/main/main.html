@@ -21,17 +21,17 @@
   <ion-searchbar (ionInput)="searchStudent($event)">
   </ion-searchbar>
   <ion-item>
-    <ion-label>Sort by: </ion-label>
-    <ion-select [(ngModel)]="query" multiple="false" selectSettings="selectOptions">
-      <ion-option *ngFor="let option of selectOptions" (ionSelect)="sortData(option)">{{option}}</ion-option>
+    <ion-label>Sort by:</ion-label>
+    <ion-select interface="popover" multiple="false" selectSettings="selectOptions" placeholder="None">
+      <ion-option *ngFor="let option of selectOptions" (ionSelect)="sortData(option)" >{{option}}</ion-option>
     </ion-select>
   </ion-item>
-  <!-- <ion-item>
+  <ion-item>
     <ion-label>Filter by class: </ion-label>
-    <ion-select [(ngModel)]="filter" multiple="false" selectSettings="filterOptions">
-      <ion-option *ngFor="let class of classOptions" (ionSelect)="filterByClass(class)">{{class}}</ion-option>
+    <ion-select interface="popover" multiple="false" selectSettings="filterOptions" placeholder="None">
+      <ion-option *ngFor="let class of filterOptions" (ionSelect)="filterByClass(class)">{{class}}</ion-option>
     </ion-select>
-  </ion-item> -->
+  </ion-item>
   <ion-list>
     <ion-item-sliding *ngFor="let student of students">
       <ion-item>

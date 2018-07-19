@@ -29,7 +29,6 @@ export class MainPage implements OnInit {
       year: currentDate.getFullYear()
     }
     this.selectOptions = ['Id', 'Name', 'None'];
-    this.filterOptions = this.getFilterOptions();
   }
 
   private initializeStudentsList() {
@@ -37,9 +36,9 @@ export class MainPage implements OnInit {
   };
 
   ionViewWillEnter() {
-    this.query = "None";
     let studentInterval = setInterval(() => {
       this.getStudents();
+      this.filterOptions = this.getFilterOptions();
       if (this.students.length > 0) {
         clearInterval(studentInterval);
       }
@@ -48,9 +47,18 @@ export class MainPage implements OnInit {
 
   getFilterOptions() {
     let options = [];
+    if (this.students.length > 0) {
+      for (const student of this.students) {
+        const option = options.find(option => student.class == option);
+        if (option == undefined) {
+          options = [...options, student.class];
+        }
+      }
+    }
+    options = [...options, 'None'];
     return options;
   };
-  
+
   searchStudent(event) {
     let query: string = event.target.value;
     query ? this.sortStudentsList(query) : this.initializeStudentsList();
@@ -90,16 +98,19 @@ export class MainPage implements OnInit {
   private sortStudentsbyId() {
     this.students = [
       ...this.students.sort((a, b) => {
-        if (a.id < b.id)
-          return -1;
-        if (a.id > b.id)
-          return 1;
+        if (a.id < b.id) return -1;
+        if (a.id > b.id) return 1;
         return 0;
       })
     ];
   }
 
   filterByClass(option: string) {
+    if (option == 'None') {
+      this.students = [...this.untouchedStudentList];
+      this.query = 'None';
+      return;
+    }
     const students = [...this.untouchedStudentList];
     const newQuery = students.filter(student => {
       if (student.class == option) {

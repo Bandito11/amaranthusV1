@@ -107,7 +107,7 @@
       </ion-item>
       <ion-item>
         <ion-label stacked>Class</ion-label>
-        <ion-input type="text" #class></ion-input>
+        <ion-input [value]="student.class" type="text" #class></ion-input>
       </ion-item>
       <h6>Gender</h6>
       <ion-list no-lines radio-group [(ngModel)]="gender" name="gender">
