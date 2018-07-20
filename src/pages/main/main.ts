@@ -38,8 +38,8 @@ export class MainPage implements OnInit {
   ionViewWillEnter() {
     let studentInterval = setInterval(() => {
       this.getStudents();
-      this.filterOptions = this.getFilterOptions();
       if (this.students.length > 0) {
+        this.filterOptions = this.getFilterOptions();
         clearInterval(studentInterval);
       }
     }, 500);
@@ -47,14 +47,12 @@ export class MainPage implements OnInit {
 
   getFilterOptions() {
     let options = [];
-    if (this.students.length > 0) {
       for (const student of this.students) {
         const option = options.find(option => student.class == option);
         if (option == undefined) {
           options = [...options, student.class];
         }
       }
-    }
     options = [...options, 'None'];
     return options;
   };
