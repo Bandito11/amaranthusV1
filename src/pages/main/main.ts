@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, AlertController } from 'ionic-angular';
 import { handleError } from './../../common/handleError';
 import { ISimpleAlertOptions, IStudent, ICalendar } from '../../common/interface';
+import { EventsPage } from '../events/events';
 
 @IonicPage()
 @Component({ selector: 'page-main', templateUrl: 'main.html' })
@@ -31,15 +32,11 @@ export class MainPage implements OnInit {
     this.selectOptions = ['Id', 'Name', 'None'];
   }
 
-  private initializeStudentsList() {
-    this.students = [...this.untouchedStudentList];
-  };
-
   ionViewWillEnter() {
     let studentInterval = setInterval(() => {
       this.getStudents();
+      this.filterOptions = this.getFilterOptions();
       if (this.students.length > 0) {
-        this.filterOptions = this.getFilterOptions();
         clearInterval(studentInterval);
       }
     }, 500);
@@ -47,19 +44,38 @@ export class MainPage implements OnInit {
 
   getFilterOptions() {
     let options = [];
-      for (const student of this.students) {
-        const option = options.find(option => student.class == option);
-        if (option == undefined) {
-          options = [...options, student.class];
-        }
-      }
+    let filteredStudents = this.students.filter(student => {
+      if (student.class) return true;
+    });
+    for (const student of filteredStudents) {
+      options = [...options, student.class];
+    }
     options = [...options, 'None'];
     return options;
   };
 
+  filterByClass(option: string) {
+    if (option == 'None') {
+      this.students = [...this.untouchedStudentList];
+      this.query = 'None';
+      return;
+    }
+    const students = [...this.untouchedStudentList];
+    const newQuery = students.filter(student => {
+      if (student.class == option) {
+        return student;
+      }
+    });
+    this.students = [...newQuery];
+  }
+
+  private initializeStudentsList() {
+    this.students = [...this.untouchedStudentList];
+  };
+
   searchStudent(event) {
     let query: string = event.target.value;
-    query ? this.sortStudentsList(query) : this.initializeStudentsList();
+    query ? this.filterStudentsList(query) : this.initializeStudentsList();
   }
 
   private getStudents() {
@@ -96,26 +112,11 @@ export class MainPage implements OnInit {
   private sortStudentsbyId() {
     this.students = [
       ...this.students.sort((a, b) => {
-        if (a.id < b.id) return -1;
+        if (a.id.slice(2, a.id.length) < b.id.slice(2, a.id.length)) return -1;
         if (a.id > b.id) return 1;
         return 0;
       })
     ];
-  }
-
-  filterByClass(option: string) {
-    if (option == 'None') {
-      this.students = [...this.untouchedStudentList];
-      this.query = 'None';
-      return;
-    }
-    const students = [...this.untouchedStudentList];
-    const newQuery = students.filter(student => {
-      if (student.class == option) {
-        return student;
-      }
-    });
-    this.students = [...newQuery];
   }
 
   private sortStudentsName() {
@@ -130,12 +131,16 @@ export class MainPage implements OnInit {
     ];
   }
 
-  private sortStudentsList(query: string) {
+  private filterStudentsList(query: string) {
     const students = [...this.untouchedStudentList];
     let fullName: string;
     const newQuery = students.filter(student => {
       fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
-      if (student.id == query || student.firstName.toLowerCase() == query.toLowerCase() || student.lastName.toLowerCase() == query.toLowerCase() || fullName == query.toLowerCase()) {
+      if (
+        student.id == query ||
+        student.firstName.toLowerCase().includes(query.toLowerCase()) ||
+        student.lastName.toLowerCase().includes(query.toLowerCase()) ||
+        fullName == query.toLowerCase()) {
         return student;
       }
     });
@@ -210,10 +215,14 @@ export class MainPage implements OnInit {
   }
 
   goToStudentProfile(id: string) {
-    this.navCtrl.push(StudentProfilePage, { id: id })
+    this.navCtrl.push(StudentProfilePage, { id: id });
   }
 
   goToCreate() {
     this.navCtrl.push(CreatePage);
+  }
+
+  goToEvents() {
+    this.navCtrl.push(EventsPage);
   }
 }

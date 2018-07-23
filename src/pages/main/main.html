@@ -9,21 +9,20 @@
   <ion-navbar color="primary">
     <ion-title>Main</ion-title>
     <ion-buttons end>
-      <button ion-button (click)="goToCreate()">
-        Add
-      </button>
+      <button ion-button (click)="goToEvents()">Events</button>
+      <button ion-button (click)="goToCreate()"> Add </button>
     </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content padding>
-  <ion-searchbar (ionInput)="searchStudent($event)">
+  <ion-searchbar placeholder="Search by ID or Name" (ionInput)="searchStudent($event)">
   </ion-searchbar>
   <ion-item>
     <ion-label>Sort by:</ion-label>
     <ion-select interface="popover" multiple="false" selectSettings="selectOptions" placeholder="None">
-      <ion-option *ngFor="let option of selectOptions" (ionSelect)="sortData(option)" >{{option}}</ion-option>
+      <ion-option *ngFor="let option of selectOptions" (ionSelect)="sortData(option)">{{option}}</ion-option>
     </ion-select>
   </ion-item>
   <ion-item>
@@ -53,12 +52,12 @@
             Absent
           </button>
           <div>
-              <p class="left attended" *ngIf="student.attendance">
-                  {{student.firstName}}'s present today!
-                </p>
-                <p class="left attended" *ngIf="student.absence">
-                  {{student.firstName}}'s absent today!
-                </p>
+            <p class="left attended" *ngIf="student.attendance">
+              {{student.firstName}}'s present today!
+            </p>
+            <p class="left attended" *ngIf="student.absence">
+              {{student.firstName}}'s absent today!
+            </p>
             <p class="right">
               Swipe for more options
             </p>

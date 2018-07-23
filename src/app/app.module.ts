@@ -40,6 +40,8 @@ import { XLSXProvider } from '../providers/xslx/xslx';
 import { IonicStorageModule } from '@ionic/storage';
 import { FileOpener } from '@ionic-native/file-opener';
 import { EmailComposer } from '@ionic-native/email-composer';
+import { EventsPage } from '../pages/events/events';
+import { EventsPageModule } from '../pages/events/events.module';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,7 @@ import { EmailComposer } from '@ionic-native/email-composer';
     StudentListPageModule,
     CalendarPageModule,
     SettingsPageModule,
+    EventsPageModule,
     BrowserModule,
     HttpClientModule,
     ExportPageModule,
@@ -76,7 +79,8 @@ import { EmailComposer } from '@ionic-native/email-composer';
     CalendarPage,
     SettingsPage,
     CalendarComponent,
-    ExportPage
+    ExportPage,
+    EventsPage
   ],
   providers: [
     StatusBar,

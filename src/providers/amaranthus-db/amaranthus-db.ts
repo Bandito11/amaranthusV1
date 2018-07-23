@@ -4,8 +4,6 @@ import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';
 import { handleError } from '../../common/handleError';
-// /// Only for dev purposes //////////////// import { STUDENTS, RECORDS } from
-// './../../mock/mock-students'; /////////////////////////////////
 
 let studentsColl: Collection<IStudent>;
 let recordsColl: Collection<IRecord>;
@@ -19,14 +17,6 @@ export class AmaranthusDBProvider {
     this.createDB();
   }
 
-  // ///////////////////////////////////// Only for dev purposes!!!!!!!!!
-  // devInsertStudentsIntoDb() {   this.oldStudentsData.data.map(student =>
-  // students.insert(student)) } devInsertRecordsIntoDb() {
-  // this.oldRecordsData.data.map(record => records.insert(record)); }
-  // //////////////////////////////////// /// Only for dev purposes///////////
-  // oldStudentsData: IResponse<IStudent[]>; oldRecordsData: IResponse<IRecord[]>;
-  // ///////////////////////////////////////
-
   private createDB() {
     const ionicStorageAdapter = new IonicStorageAdapter();
     const lokiOptions: Partial<LokiConfigOptions> = {
@@ -37,9 +27,6 @@ export class AmaranthusDBProvider {
       autosaveCallback: this.saveDatabase
     }
     db = new Loki(dbName, lokiOptions);
-    // ///// Only for dev Purposes ///////// this.oldStudentsData = { ...STUDENTS };
-    // this.oldRecordsData = { ...RECORDS }; this.devInsertStudentsIntoDb();
-    // this.devInsertRecordsIntoDb(); //////////////////////////////////
   }
 
   private saveDatabase() {

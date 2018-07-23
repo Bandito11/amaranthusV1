@@ -28,7 +28,7 @@ export class CreatePage {
   ionViewWillEnter() {
     this.getNewId();
     this.gender = 'male';
-    this.picture = '';
+    this.picture = './assets/profilePics/defaultMale.png';
     this.phoneNumber = '';
   }
 
@@ -254,11 +254,11 @@ export class CreatePage {
 
   private validatePicture(opts: { gender: string, picture: string }) {
     if (opts.gender == 'male' && opts.picture == '') {
-      opts.picture = "./assets/profilePics/defaultMale.png";
+      opts.picture = './assets/profilePics/defaultMale.png';
     } else if (opts.gender == 'female' && opts.picture == '') {
-      opts.picture = "./assets/profilePics/defaultFemale.png";
+      opts.picture = './assets/profilePics/defaultFemale.png';
     } else if (opts.gender == 'undisclosed' && opts.picture == '') {
-      opts.picture = "./assets/profilePics/defaultUndisclosed.png";
+      opts.picture = './assets/profilePics/defaultUndisclosed.png';
     }
     return opts.picture;
   }
