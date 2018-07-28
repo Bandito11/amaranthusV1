@@ -1,4 +1,25 @@
 .calendar {
+    button {
+        background-color: Transparent;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+        height: 5vh;
+        widows: 10vw;
+        padding-right: 20px;
+        padding-top: 15px;
+    }
+    #arrow-up{
+        background-image: url('../../assets/fonts/arrow-up-solid.svg');
+    }
+    #arrow-down{
+        background-image: url('../../assets/fonts/arrow-down-solid.svg');
+    }
+    span {
+        font-size: 30px;
+    }
     .date {
         display: inline-block;
         padding: 15px;
@@ -19,8 +40,8 @@
         background-color: red;
         color: white;
     }
-    .text{
-        color:white
+    .text {
+        color: white
     }
     .ripple {
         position: relative;

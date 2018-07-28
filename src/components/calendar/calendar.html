@@ -1,29 +1,22 @@
-<!--
-  Generated template for the Calendar component.
-
-  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
-  for more info on Angular 2 Components.
--->
 <div class="calendar">
-	<ion-list no-lines>
-		<ion-item>
-			<ion-buttons start>
-				<button ion-button clear (click)="nextMonth()">
-					<ion-icon name="arrow-up"></ion-icon>
-				</button>
-				<button ion-button clear (click)="previousMonth()">
-					<ion-icon name="arrow-down"></ion-icon>
-				</button>
-				<div class="date">
-					<span>{{monthsLabels[month] + ' ' + year}}</span>
-				</div>
-			</ion-buttons>
-		</ion-item>
-	</ion-list>
+	<div>
+		<div>
+			<button class="ripple" id="arrow-up" (click)="nextMonth()">
+				<!-- <img src="assets/fonts/arrow-up-solid.svg"> -->
+			</button>
+			<button class="ripple" id="arrow-down" (click)="previousMonth()">
+				<!-- <img src="assets/fonts/arrow-down-solid.svg"> -->
+			</button>
+			<span class="date">
+				{{monthsLabels[month] + ' ' + year}}
+			</span>
+		</div>
+	</div>
 	<ul class="weekdays">
 		<li *ngFor="let weekDay of weekDaysLabels">{{weekDay}}</li>
 	</ul>
 	<ul class="days">
-		<li class="ripple" [style.color]="this.chosen == date.day ? '#fff' : ''" [style.background-color]="this.chosen == date.day ? '#ffcccc' : ''" *ngFor="let date of calendarDays" (click)="choseDay(date)">{{date.day}}</li>
+		<li class="ripple" [style.color]="this.chosen == date.day ? '#fff' : ''" [style.background-color]="this.chosen == date.day ? '#ffcccc' : ''"
+		 *ngFor="let date of calendarDays" (click)="choseDay(date)">{{date.day}}</li>
 	</ul>
 </div>

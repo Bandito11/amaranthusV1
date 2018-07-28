@@ -29,7 +29,6 @@ import { File } from '@ionic-native/file';
 import { InAppPurchase } from '@ionic-native/in-app-purchase';
 import { SettingsPageModule } from '../pages/settings/settings.module';
 import { SettingsPage } from '../pages/settings/settings';
-import { CalendarComponent } from '../components/calendar/calendar';
 import { TextTabDelimitedProvider } from '../providers/text-tab-delimited/text-tab-delimited';
 import { HttpClientModule } from '@angular/common/http';
 import { CSVProvider } from '../providers/csv/csv';
@@ -78,9 +77,8 @@ import { EventsPageModule } from '../pages/events/events.module';
     StudentListPage,
     CalendarPage,
     SettingsPage,
-    CalendarComponent,
     ExportPage,
-    EventsPage
+    EventsPage,
   ],
   providers: [
     StatusBar,

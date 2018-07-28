@@ -4,7 +4,8 @@ import { weekDaysHeader, weekDaysLabels, monthsLabels } from './../../common/lab
 
 @Component({
   selector: 'calendar-component',
-  templateUrl: 'calendar.html'
+  templateUrl: 'calendar.html',
+  styleUrls:['assets/fonts/arrow-up-solid.svg','assets/fonts/arrow-up-solid.svg']
 })
 
 export class CalendarComponent implements OnInit {
