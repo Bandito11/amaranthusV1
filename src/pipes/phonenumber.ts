@@ -8,10 +8,10 @@ export class PhoneNumberPipe implements PipeTransform {
         let counter = 0;
         const value = phoneNumber.map(response => {
             counter++;
-            if (counter == 2) {
+            if (counter == 4) {
                 return `-${response}`;
             }
-            if (counter == 5) {
+            if (counter == 7) {
                 return `-${response}`;
             }
             return response;

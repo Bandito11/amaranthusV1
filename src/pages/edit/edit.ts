@@ -5,7 +5,6 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, normalizeURL, ViewController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { NavOptions } from 'ionic-angular/navigation/nav-util';
 
 
 @IonicPage()
@@ -122,29 +121,9 @@ export class EditPage implements OnInit {
     alert.present();
   }
 
-  validatePhoneNumber(phoneNumber) {
-    // if (phoneNumber.length >= 10 && phoneNumber.length <= 12) {
-    //   return false;
-    // } else {
-    //   return true;
-    // }
-    if (phoneNumber.length > 0) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   editStudent(opts: IStudent) {
     let options: ISimpleAlertOptions = { title: '', subTitle: '', buttons: [] }
-    if (
-      !opts.firstName ||
-      !opts.lastName ||
-      !opts.id //||
-      // !opts.address ||
-      // !opts.town ||
-      // !opts.state
-    ) {
+    if (!opts.firstName || !opts.lastName || !opts.id) {
       options = {
         ...options, title: 'Warning!',
         subTitle: 'Some fields doesn\'t have the required info',
@@ -152,101 +131,7 @@ export class EditPage implements OnInit {
       }
       this.showSimpleAlert(options);
     } else {
-      const phoneNumber = opts.phoneNumber
-        .split('')
-        .filter(phoneNumber => {
-          if (phoneNumber != '-') {
-            return phoneNumber;
-          }
-        })
-        .join('');
-      const emergencyContactPhoneNumber = opts.emergencyContactPhoneNumber
-        .split('')
-        .map(phoneNumber => {
-          if (phoneNumber != '-') {
-            return phoneNumber;
-          }
-        })
-        .join('');
-      // if(!phoneNumber){
-      //   options = {
-      //     ...options, title: 'Warning!',
-      //     subTitle: 'You have to write a valid phone number.',
-      //     buttons: [...['OK']]
-      //   }
-      //   this.showSimpleAlert(options);
-      //   return;
-      // } else if (!+phoneNumber) {
-      //   options = {
-      //     ...options, title: 'Warning!',
-      //     subTitle: 'Phone numbers can only have numbers or \'-\'.',
-      //     buttons: [...['OK']]
-      //   }
-      //   this.showSimpleAlert(options);
-      //   return;
-
-      // }
-      if (phoneNumber) {
-        if (!+phoneNumber) {
-          options = {
-            ...options, title: 'Warning!',
-            subTitle: 'Phone numbers can only have numbers or \'-\'.',
-            buttons: [...['OK']]
-          }
-          this.showSimpleAlert(options);
-          return;
-        }
-      }
-
-      if (emergencyContactPhoneNumber) {
-        if (!+emergencyContactPhoneNumber) {
-          options = {
-            ...options, title: 'Warning!',
-            subTitle: 'Phone numbers can only have numbers or \'-\'.',
-            buttons: [...['OK']]
-          }
-          this.showSimpleAlert(options);
-          return;
-        }
-      }
-      // if ((phoneNumber.length < 10 || phoneNumber.length > 12)) {
-      //   options = {
-      //     ...options, title: 'Warning!',
-      //     subTitle: 'Phone numbers have to be a 10 digit number.',
-      //     buttons: [...['OK']]
-      //   }
-      //   this.showSimpleAlert(options);
-      //   return;
-      // }
-      // if (emergencyContactPhoneNumber.length >= 10 && emergencyContactPhoneNumber.length <= 12) {
-      //   if (!+emergencyContactPhoneNumber) {
-      //     options = {
-      //       ...options, title: 'Warning!',
-      //       subTitle: 'Phone numbers can only have numbers or \'-\'.',
-      //       buttons: [...['OK']]
-      //     }
-      //     this.showSimpleAlert(options);
-      //     return;
-      //   }
-      // }
-      // if ((emergencyContactPhoneNumber.length < 10 || emergencyContactPhoneNumber.length > 12) && emergencyContactPhoneNumber) {
-      //   if (!+emergencyContactPhoneNumber) {
-      //     options = {
-      //       ...options, title: 'Warning!',
-      //       subTitle: 'Phone numbers can only have numbers or \'-\'.',
-      //       buttons: [...['OK']]
-      //     }
-      //   } else {
-      //     options = {
-      //       ...options, title: 'Warning!',
-      //       subTitle: 'Emergency contact phone numbers have to be a 10 digit number.',
-      //       buttons: [...['OK']]
-      //     }
-      //   }
-      //   this.showSimpleAlert(options);
-      //   return;
-      // }
-      opts = { ...opts, phoneNumber: phoneNumber, emergencyContactPhoneNumber: emergencyContactPhoneNumber };
+      opts = { ...opts, phoneNumber: opts.phoneNumber, emergencyContactPhoneNumber: opts.emergencyContactPhoneNumber };
       const picture = this.validatePicture({ gender: this.gender, picture: this.picture })
       const student = {
         ...opts,

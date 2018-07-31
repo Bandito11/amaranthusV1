@@ -46,7 +46,7 @@
             <span class="label">ID: </span>{{student.id}}
           </p>
           <p *ngIf="student.phoneNumber">
-            <span class="label">Phone Number: </span>{{student.phoneNumber | phoneNumber}}
+            <span class="label">Phone Number: </span>{{student.phoneNumber}}
           </p>
           <button ion-button small color="primary" (click)="addAttendance({id: student.id})">
             Attended

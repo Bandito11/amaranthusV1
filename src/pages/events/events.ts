@@ -1,6 +1,6 @@
 import { CreateEventPage } from '../createevent/createevent';
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -12,7 +12,6 @@ export class EventsPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private modalCtrl: ModalController
   ) { }
 
   selectOptions: string[];
