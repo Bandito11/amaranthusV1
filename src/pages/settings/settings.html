@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content padding>
-  <div *ngIf="!this.platform.is('core')">
+  <div *ngIf="this.platform.is('cordova')">
   <loader *ngIf="noProducts"></loader>
   <div *ngFor="let product of products">
     <ion-icon name="pricetag"></ion-icon>

@@ -8,6 +8,9 @@
 
   <ion-navbar color="primary">
     <ion-title>Edit Record</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="goBack()">Cancel</button>
+    </ion-buttons>
     <ion-buttons end>
       <button ion-button (click)="editStudent({
         firstName: firstName.value,

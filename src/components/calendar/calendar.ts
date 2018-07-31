@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ICalendar } from './../../common/interface';
-import { weekDaysHeader, weekDaysLabels, monthsLabels } from './../../common/labels'
+import { ICalendar } from '../../common/interface';
+import { weekDaysHeader, weekDaysLabels, monthsLabels } from '../../common/labels'
 
 @Component({
   selector: 'calendar-component',

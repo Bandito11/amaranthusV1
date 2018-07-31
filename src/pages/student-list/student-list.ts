@@ -1,4 +1,4 @@
-import { ISimpleAlertOptions } from './../../common/interface';
+import { ISimpleAlertOptions } from '../../common/interface';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';

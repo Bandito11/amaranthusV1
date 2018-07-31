@@ -1,10 +1,10 @@
-import { StudentListPage } from './../student-list/student-list';
+import { StudentListPage } from '../student-list/student-list';
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
-import { MainPage } from '../../pages/main/main';
-import { TablePage } from '../../pages/table/table';
-import { CalendarPage } from '../../pages/calendar/calendar';
-import { SettingsPage } from '../../pages/settings/settings';
+import { MainPage } from '../main/main';
+import { TablePage } from '../table/table';
+import { CalendarPage } from '../calendar/calendar';
+import { SettingsPage } from '../settings/settings';
 
 
 @IonicPage()

@@ -1,4 +1,4 @@
-import { stateAndroid } from './../../common/app-purchase';
+import { stateAndroid } from '../../common/app-purchase';
 import { Storage } from '@ionic/storage';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, Platform, LoadingController, AlertController } from 'ionic-angular';
@@ -48,7 +48,7 @@ export class SettingsPage implements OnInit {
       });
   }
   ionViewWillEnter() {
-    if (!this.platform.is('core')) this.getProducts();
+    if (this.platform.is('cordova')) this.getProducts();
   }
 
   sendEmail(message: string) {
@@ -58,7 +58,7 @@ export class SettingsPage implements OnInit {
       body: message,
       isHtml: true
     };
-    if (!this.platform.is('core')) {
+    if (this.platform.is('cordova')) {
       this.emailComposer.isAvailable().then(available => {
         if (available) {
           if (this.platform.is('android')) {

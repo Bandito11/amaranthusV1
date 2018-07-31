@@ -1,8 +1,8 @@
-import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
-import { IStudent, ISimpleAlertOptions } from './../../common/interface';
+import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
+import { IStudent, ISimpleAlertOptions } from '../../common/interface';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, AlertController, normalizeURL } from 'ionic-angular';
-import { handleError } from './../../common/handleError';
+import { IonicPage, NavController, AlertController, normalizeURL, ViewController } from 'ionic-angular';
+import { handleError } from '../../common/handleError';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
 @IonicPage()
@@ -15,6 +15,7 @@ export class CreatePage {
   constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
+    private viewCtrl: ViewController,
     private db: AmaranthusDBProvider,
     private camera: Camera
   ) { }
@@ -30,6 +31,10 @@ export class CreatePage {
     this.gender = 'male';
     this.picture = './assets/profilePics/defaultMale.png';
     this.phoneNumber = '';
+  }
+
+  goBack() {
+    this.viewCtrl.dismiss();
   }
 
   getNewId() {

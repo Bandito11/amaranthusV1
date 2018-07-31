@@ -1,9 +1,9 @@
-import { EditPage } from './../edit/edit';
-import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
-import { IStudent, IResponse } from './../../common/interface';
+import { EditPage } from '../edit/edit';
+import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
+import { IStudent, IResponse } from '../../common/interface';
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { handleError } from './../../common/handleError';
+import { IonicPage, NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
+import { handleError } from '../../common/handleError';
 
 
 @IonicPage()
@@ -17,6 +17,7 @@ export class StudentProfilePage implements OnInit {
     public db: AmaranthusDBProvider,
     public alertCtrl: AlertController,
     public navCtrl: NavController,
+    private modalCtrl: ModalController,
     public navParams: NavParams
   ) { }
 
@@ -25,7 +26,7 @@ export class StudentProfilePage implements OnInit {
    * @param id 
    */
   goToEdit(id: string) {
-    this.navCtrl.push(EditPage, { id: id });
+    this.modalCtrl.create(EditPage, { id: id }).present();
   }
 
   // HTML controls
@@ -77,7 +78,7 @@ export class StudentProfilePage implements OnInit {
       handleError(error);
     }
   }
-  
+
   getStudentFromDB(student: IStudent): IResponse<IStudent> {
     try {
       let response = this.db.getStudentById(student);

@@ -1,9 +1,11 @@
-import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
-import { ISimpleAlertOptions, IStudent, IResponse } from './../../common/interface';
+import { MainPage } from '../main/main';
+import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
+import { ISimpleAlertOptions, IStudent, IResponse } from '../../common/interface';
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, normalizeURL } from 'ionic-angular';
-import { handleError } from './../../common/handleError';
+import { IonicPage, NavController, NavParams, AlertController, normalizeURL, ViewController } from 'ionic-angular';
+import { handleError } from '../../common/handleError';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { NavOptions } from 'ionic-angular/navigation/nav-util';
 
 
 @IonicPage()
@@ -18,6 +20,7 @@ export class EditPage implements OnInit {
     public alertCtrl: AlertController,
     public navCtrl: NavController,
     public navParams: NavParams,
+    private viewCtrl: ViewController,
     private camera: Camera
   ) { }
   // HTML controls
@@ -65,6 +68,10 @@ export class EditPage implements OnInit {
     } catch (error) {
       handleError(error);
     }
+  }
+
+  goBack() {
+    this.viewCtrl.dismiss();
   }
 
   getStudentFromDB(student: IStudent): IResponse<IStudent> {
@@ -260,24 +267,24 @@ export class EditPage implements OnInit {
               // user has clicked the alert button
               // begin the alert's dismiss transition
               const navTransition = alert.dismiss();
-              const response = { 
+              const response = {
                 ...this.db.updateStudent(student)
               };
-                  if (response.success == true) {
-                    navTransition.then(() => {
-                      options = {
-                        title: 'Success!',
-                        subTitle: `${opts.firstName} ${opts.lastName} was edited.`
-                      };
-                      this.showAdvancedAlert(options);
-                    });
-                  } else {
-                    options = {
-                      title: 'Error',
-                      subTitle: 'There was an error trying to edit the record. Please try again.'
-                    }
-                    navTransition.then(() => this.showAdvancedAlert(options));
-                  }
+              if (response.success == true) {
+                navTransition.then(() => {
+                  options = {
+                    title: 'Success!',
+                    subTitle: `${opts.firstName} ${opts.lastName} was edited.`
+                  };
+                  this.showAdvancedAlert(options);
+                });
+              } else {
+                options = {
+                  title: 'Error',
+                  subTitle: 'There was an error trying to edit the record. Please try again.'
+                }
+                navTransition.then(() => this.showAdvancedAlert(options));
+              }
               return false;
             }
           }
@@ -311,7 +318,7 @@ export class EditPage implements OnInit {
     };
     this.camera.getPicture(options)
       .then((imageData: string) => {
-        this.picture = normalizeURL(imageData);        
+        this.picture = normalizeURL(imageData);
       },
         error => handleError(error)
       )
@@ -327,6 +334,8 @@ export class EditPage implements OnInit {
   }
 
   showAdvancedAlert(options: ISimpleAlertOptions) {
+    this.navCtrl.remove(0, this.navCtrl.length() - 1);
+    this.navCtrl.insert(0, MainPage);
     const alert = this.alertCtrl.create({
       title: options.title,
       subTitle: options.subTitle,
@@ -338,7 +347,7 @@ export class EditPage implements OnInit {
             // begin the alert's dismiss transition
             alert.dismiss()
               .then(() => {
-                this.navCtrl.popToRoot();
+                this.navCtrl.pop();
               });
             return false;
           }

@@ -1,21 +1,25 @@
-import { StudentProfilePage } from './../student-profile/student-profile';
-import { CreatePage } from './../create/create';
-import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, AlertController } from 'ionic-angular';
-import { handleError } from './../../common/handleError';
-import { ISimpleAlertOptions, IStudent, ICalendar } from '../../common/interface';
 import { EventsPage } from '../events/events';
+import { StudentProfilePage } from '../student-profile/student-profile';
+import { CreatePage } from '../create/create';
+import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
+import { Component, OnInit } from '@angular/core';
+import { IonicPage, NavController, AlertController, ModalController } from 'ionic-angular';
+import { handleError } from '../../common/handleError';
+import { ISimpleAlertOptions, IStudent, ICalendar } from '../../common/interface';
 
 @IonicPage()
 @Component({ selector: 'page-main', templateUrl: 'main.html' })
 export class MainPage implements OnInit {
 
-  constructor(private alertCtrl: AlertController, private navCtrl: NavController, private db: AmaranthusDBProvider) { }
+  constructor(
+    private alertCtrl: AlertController,
+    private navCtrl: NavController,
+    private db: AmaranthusDBProvider,
+    private modalCtrl: ModalController
+  ) { }
 
   students: IStudent[];
   private untouchedStudentList: IStudent[];
-  query: string;
   selectOptions: string[];
   filterOptions: string[];
   date: ICalendar;
@@ -44,11 +48,13 @@ export class MainPage implements OnInit {
 
   getFilterOptions() {
     let options = [];
-    let filteredStudents = this.students.filter(student => {
+    let checkIfHaveClass = this.students.filter(student => {
       if (student.class) return true;
     });
-    for (const student of filteredStudents) {
-      options = [...options, student.class];
+    for (const student of checkIfHaveClass) {
+      if (options.indexOf(student.class) == -1) {
+        options = [...options, student.class];
+      }
     }
     options = [...options, 'None'];
     return options;
@@ -56,8 +62,7 @@ export class MainPage implements OnInit {
 
   filterByClass(option: string) {
     if (option == 'None') {
-      this.students = [...this.untouchedStudentList];
-      this.query = 'None';
+      this.initializeStudentsList();
       return;
     }
     const students = [...this.untouchedStudentList];
@@ -105,7 +110,7 @@ export class MainPage implements OnInit {
         this.sortStudentsName();
         break;
       default:
-        this.students = [...this.untouchedStudentList];
+        this.initializeStudentsList();
     }
   }
 
@@ -219,7 +224,9 @@ export class MainPage implements OnInit {
   }
 
   goToCreate() {
-    this.navCtrl.push(CreatePage);
+    const modal = this.modalCtrl.create(CreatePage);
+    modal.onDidDismiss(_ => this.getStudents())
+    modal.present();
   }
 
   goToEvents() {

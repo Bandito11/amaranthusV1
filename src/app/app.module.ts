@@ -1,11 +1,6 @@
-import { StudentProfilePage } from './../pages/student-profile/student-profile';
-import { StudentListPage } from './../pages/student-list/student-list';
-import { PhoneNumberPipe } from './../common/phonenumber.pipe';
-import { TabsPage } from '../pages/tabs/tabs';
-import { MainPage } from '../pages/main/main';
-import { TablePage } from '../pages/table/table';
-import { EditPage } from './../pages/edit/edit';
-import { CreatePage } from './../pages/create/create';
+import { LogoPreviewPageModule } from '../pages/logopreview/logopreview.module';
+import { CreateEventPageModule } from '../pages/createevent/createevent.module';
+import { EventsPageModule } from '../pages/events/events.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -15,7 +10,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { AmaranthusDBProvider } from '../providers/amaranthus-db/amaranthus-db';
 import { Camera } from '@ionic-native/camera';
-import { CalendarPage } from '../pages/calendar/calendar';
 import { TabsPageModule } from '../pages/tabs/tabs.module';
 import { MainPageModule } from '../pages/main/main.module';
 import { TablePageModule } from '../pages/table/table.module';
@@ -28,24 +22,19 @@ import { AppPurchaseProvider } from '../providers/app-purchase/app-purchase';
 import { File } from '@ionic-native/file';
 import { InAppPurchase } from '@ionic-native/in-app-purchase';
 import { SettingsPageModule } from '../pages/settings/settings.module';
-import { SettingsPage } from '../pages/settings/settings';
 import { TextTabDelimitedProvider } from '../providers/text-tab-delimited/text-tab-delimited';
 import { HttpClientModule } from '@angular/common/http';
 import { CSVProvider } from '../providers/csv/csv';
 import { FileProvider } from '../providers/file/file';
 import { ExportPageModule } from '../pages/export/export.module';
-import { ExportPage } from '../pages/export/export';
 import { XLSXProvider } from '../providers/xslx/xslx';
 import { IonicStorageModule } from '@ionic/storage';
 import { FileOpener } from '@ionic-native/file-opener';
 import { EmailComposer } from '@ionic-native/email-composer';
-import { EventsPage } from '../pages/events/events';
-import { EventsPageModule } from '../pages/events/events.module';
 
 @NgModule({
   declarations: [
-    MyApp,
-    PhoneNumberPipe
+    MyApp
   ],
   imports: [
     TabsPageModule,
@@ -57,29 +46,17 @@ import { EventsPageModule } from '../pages/events/events.module';
     StudentListPageModule,
     CalendarPageModule,
     SettingsPageModule,
+    ExportPageModule,
     EventsPageModule,
+    CreateEventPageModule,
+    LogoPreviewPageModule,
     BrowserModule,
     HttpClientModule,
-    ExportPageModule,
     FormsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    TabsPage,
-    MainPage,
-    TablePage,
-    EditPage,
-    CreatePage,
-    StudentProfilePage,
-    StudentListPage,
-    CalendarPage,
-    SettingsPage,
-    ExportPage,
-    EventsPage,
-  ],
   providers: [
     StatusBar,
     SplashScreen,

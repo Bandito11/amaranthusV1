@@ -1,18 +1,34 @@
-<!--
-  Generated template for the EventsPage page.
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar color="primary">
     <ion-title>Events</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="goToCreateEvent()">Add Event</button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <ion-item>
+    <ion-label>Sort By:</ion-label>
+    <ion-select interface="popover" multiple="false" selectSettings="selectOptions" placeholder="None" >
+      <ion-option *ngFor="let option of selectOptions" (ionSelect)="sortData(option)">{{option}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-card *ngFor="let event of events">
+    <img src={{event.img}}/> <!--TODO: Only will show IF picture SRC has any value. -->
+    <ion-card-content>
+      <ion-card-title>
+        {{event.name}}
+      </ion-card-title>
+      <h3><span>Date:</span> {{event.date}}</h3>
+      <br>
+      <p><span>Totals Members:</span> {{event.totalMembers}}</p>
+      <p><span>Total Attendance:</span> {{event.totalAttendance}}</p>
+      <p><span>Total Absence:</span> {{event.totalAbsence}}</p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

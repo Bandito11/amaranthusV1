@@ -7,7 +7,7 @@ import { MainPage } from './main';
     MainPage
     ],
   imports: [
-    IonicPageModule.forChild(MainPage),
+    IonicPageModule.forChild(MainPage)
   ],
 })
 export class MainPageModule {}

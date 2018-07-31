@@ -1,4 +1,4 @@
-import { monthsLabels, yearLabels } from './../../common/labels';
+import { monthsLabels, yearLabels } from '../../common/labels';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
@@ -13,7 +13,11 @@ import { ExportPage } from '../export/export';
 
 export class TablePage implements OnInit {
 
-  constructor(private db: AmaranthusDBProvider, private alertCtrl: AlertController, private modalCtrl: ModalController) { }
+  constructor(
+    private db: AmaranthusDBProvider, 
+    private alertCtrl: AlertController, 
+    private modalCtrl: ModalController
+  ) { }
 
   students: IRecord[];
   private untouchedStudentList: IRecord[];

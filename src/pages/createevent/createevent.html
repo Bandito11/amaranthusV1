@@ -1,0 +1,21 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Create Event</ion-title>
+    <ion-buttons end>
+      <button ion-button>Create</button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <button ion-button full>Set Date/s</button>
+  <button ion-button full (click)="addLogo()">Add Logo</button>
+  <!--Only if picture has a value-->
+  <button ion-button full color="secondary" (click)="previewLogo()">See Logo Preview</button>
+  <ion-fab bottom right>
+    <button ion-fab color="secondary"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+</ion-content>
