@@ -22,10 +22,8 @@
         town:town.value,
         state:state.value,
         class: class.value,
-        fatherFirstName:fatherFirstName.value,
-        fatherLastName:fatherLastName.value,
-        motherFirstName:motherFirstName.value,
-        motherLastName:motherLastName.value,
+        fatherName:fatherName.value,
+        motherName:motherName.value,
         emergencyContactName:emergencyContactName.value,
         emergencyRelationship:emergencyRelationship.value,
         emergencyContactPhoneNumber:emergencyContactPhoneNumber.value
@@ -40,7 +38,7 @@
 
 <ion-content padding>
   <div *ngIf="picture != ''" class="profile-image">
-    <img src="{{picture}}">
+    <img src="{{picture}}" alt="A profile picture">
   </div>
   <form #studentForm="ngForm" (ngSubmit)="createStudent({
       firstName: firstName.value,
@@ -52,10 +50,8 @@
       town:town.value,
       state:state.value,
       class: class.value,
-      fatherFirstName:fatherFirstName.value,
-      fatherLastName:fatherLastName.value,
-      motherFirstName:motherFirstName.value,
-      motherLastName:motherLastName.value,
+      fatherName:fatherName.value,
+      motherName:motherName.value,
       emergencyContactName:emergencyContactName.value,
       emergencyRelationship:emergencyRelationship.value,
       emergencyContactPhoneNumber:emergencyContactPhoneNumber.value
@@ -130,25 +126,15 @@
       </ion-item>
       <h6>Father</h6>
       <ion-item>
-        <ion-label stacked>First Name</ion-label>
-        <ion-input type="text" #fatherFirstName></ion-input>
-        <!-- <ion-icon id="form-icon" item-right name="warning" *ngIf="!fatherFirstName.value"></ion-icon> -->
-      </ion-item>
-      <ion-item>
-        <ion-label stacked>Last Name</ion-label>
-        <ion-input type="text" #fatherLastName></ion-input>
-        <!-- <ion-icon id="form-icon" item-right name="warning" *ngIf="!fatherLastName.value"></ion-icon> -->
+        <ion-label stacked>Name</ion-label>
+        <ion-input type="text" #fatherName></ion-input>
+        <!-- <ion-icon id="form-icon" item-right name="warning" *ngIf="!fatherName.value"></ion-icon> -->
       </ion-item>
       <h6>Mother</h6>
       <ion-item>
-        <ion-label stacked>First Name</ion-label>
-        <ion-input type="text" #motherFirstName></ion-input>
-        <!-- <ion-icon id="form-icon" item-right name="warning" *ngIf="!motherFirstName.value"></ion-icon> -->
-      </ion-item>
-      <ion-item>
-        <ion-label stacked>Last Name</ion-label>
-        <ion-input type="text" #motherLastName></ion-input>
-        <!-- <ion-icon id="form-icon" item-right name="warning" *ngIf="!motherLastName.value"></ion-icon> -->
+        <ion-label stacked>Name</ion-label>
+        <ion-input type="text" #motherName></ion-input>
+        <!-- <ion-icon id="form-icon" item-right name="warning" *ngIf="!motherName.value"></ion-icon> -->
       </ion-item>
       <h6>Emergency Contact</h6>
       <ion-item>
@@ -178,10 +164,8 @@
       phoneNumber.value = '';
       town.value = '';
       state.value = '';
-      fatherFirstName.value = '';
-      fatherLastName.value = '';
-      motherFirstName.value = '';
-      motherLastName.value = '';
+      fatherName.value = '';
+      motherName.value = '';
       emergencyContactName.value = '';
       emergencyRelationship.value = '';
       emergencyContactPhoneNumber.value = '';

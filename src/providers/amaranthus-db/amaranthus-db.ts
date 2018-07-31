@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';
 import { handleError } from '../../common/handleError';
+import { studentFormatter } from '../../common/studentformatter';
 
 let studentsColl: Collection<IStudent>;
 let recordsColl: Collection<IRecord>;
@@ -51,8 +52,9 @@ export class AmaranthusDBProvider {
       });
       if (results) {
         return true
-      }
+      }else{
       return false;
+    }
     } catch (error) {
       if (!studentsColl) {
         return error;
@@ -69,7 +71,8 @@ export class AmaranthusDBProvider {
     const value = this.checkIfStudentExists({ id: student.id });
     try {
       if (value == false) {
-        studentsColl.insert(student);
+        const formattedStudent = studentFormatter(student);
+        studentsColl.insert(formattedStudent);
         response = {
           success: true,
           error: null,
@@ -223,9 +226,10 @@ export class AmaranthusDBProvider {
           '$eq': student.id
         }
       });
+      const formattedStudent = studentFormatter(results);
       results = {
         ...results,
-        ...student
+        ...formattedStudent
       };
       studentsColl.update(results);
       return {

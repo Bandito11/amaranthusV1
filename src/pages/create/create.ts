@@ -29,7 +29,7 @@ export class CreatePage {
   ionViewWillEnter() {
     this.getNewId();
     this.gender = 'male';
-    this.picture = './assets/profilePics/defaultMale.png';
+    this.picture = './assets/profilepics/default.png';
     this.phoneNumber = '';
   }
 
@@ -39,8 +39,12 @@ export class CreatePage {
 
   getNewId() {
     this.idInput = `XY${Math.ceil(Math.random() * 100000000)}`;
-    const value = this.db.checkIfStudentExists({ id: this.idInput });
-    if (value == false) this.getNewId();
+    try {
+      const value = this.db.checkIfStudentExists({ id: this.idInput });
+      if (!value) this.getNewId();
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   browsePicture() {

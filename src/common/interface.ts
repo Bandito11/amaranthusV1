@@ -4,15 +4,13 @@ export interface IStudent {
     lastName: string;
     id: string;
     address: string;
-    phoneNumber?: string;
+    phoneNumber: string;
     town: string;
     state: string;
     picture: string;
     gender: string;
-    fatherFirstName: string;
-    fatherLastName: string;
-    motherFirstName: string;
-    motherLastName: string;
+    fatherName: string;
+    motherName: string;
     emergencyContactName: string;
     emergencyRelationship: string;
     emergencyContactPhoneNumber: string;
