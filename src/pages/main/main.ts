@@ -46,6 +46,16 @@ export class MainPage implements OnInit {
     }, 500);
   }
 
+  getFullName(opts: { firstName: string, initial: string, lastName: string }) {
+    const firstName = opts.firstName.split('')[0].toUpperCase() + opts.firstName.slice(1, opts.firstName.length);
+    const lastName = opts.lastName.split('')[0].toUpperCase() + opts.lastName.slice(1, opts.lastName.length)
+    if (opts.initial) {
+      const initial = opts.initial.split('')[0].toUpperCase() + opts.initial.slice(1, opts.initial.length)
+      return `${firstName} ${initial} ${lastName}`;
+    }
+    else return `${firstName} ${lastName}`;
+  }
+
   getFilterOptions() {
     let options = [];
     let checkIfHaveClass = this.students.filter(student => {

@@ -40,7 +40,7 @@
         <div class="amaranthus">
           <p>
             <span class="label name">Name: </span>
-            <span class="name">{{student.firstName}} {{student.lastName}}</span>
+            <span class="name">{{getFullName({firstName: student.firstName, initial: student.initial, lastName: student.lastName})}}</span>
           </p>
           <p>
             <span class="label">ID: </span>{{student.id}}
