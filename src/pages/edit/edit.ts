@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, normalizeURL, ViewController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { trimText } from '../../common/formatToText';
 
 
 @IonicPage()
@@ -131,12 +132,13 @@ export class EditPage implements OnInit {
     } else {
       opts = { ...opts, phoneNumber: opts.phoneNumber, emergencyContactPhoneNumber: opts.emergencyContactPhoneNumber };
       const picture = this.validatePicture({ gender: this.gender, picture: this.picture })
-      const student = {
+      const student: IStudent = {
         ...opts,
+        ...trimText(opts),
+        picture: picture,
         gender: this.gender,
-        isActive: this.isActive,
-        picture: picture
-      }
+        isActive: true
+      };
       const alert = this.alertCtrl.create({
         title: 'Warning!',
         subTitle: `Are you sure you want to edit ${opts.firstName} ${opts.lastName} record?`,

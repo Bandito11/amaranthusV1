@@ -15,7 +15,8 @@ export interface IStudent {
     emergencyRelationship: string;
     emergencyContactPhoneNumber: string;
     isActive: boolean;
-    class: string
+    class: string,
+    fullName?:string
 }
 
 export interface IAssistance {
@@ -55,4 +56,29 @@ export interface ICalendar {
     day: number,
     month: number,
     year: number
+}
+
+export interface productGet {
+    productId: string;
+    title: string;
+    description: string;
+    currency: string;
+    price: any;
+    priceAsDecimal: any;
+}
+export interface productBought {
+    transactionId: string;
+    receipt: string;
+    signature: string;
+    productType: string;
+}
+export interface productRestore {
+    productId: string;
+    state: string | number;
+    transactionId: string;
+    type:string;
+    date: string;
+    productType: string;
+    receipt;
+    signature: string;
 }

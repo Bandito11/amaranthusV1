@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, Platform, LoadingController, AlertController } from 'ionic-angular';
 import { AppPurchaseProvider } from '../../providers/app-purchase/app-purchase';
 import { ISimpleAlertOptions } from '../../common/interface';
-import { productGet } from '../../common/app-purchase';
+import { productGet } from '../../common/interface';
 import { EmailComposer } from '@ionic-native/email-composer';
 
 @IonicPage()

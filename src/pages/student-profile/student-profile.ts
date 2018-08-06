@@ -29,34 +29,14 @@ export class StudentProfilePage implements OnInit {
     this.modalCtrl.create(EditPage, { id: id }).present();
   }
 
-  // HTML controls
   picture: string;
   gender: string;
   isActive: boolean;
-
-  // HTML values
   student: IStudent;
+  headerName: string;
 
   ngOnInit() {
-    this.student = {
-      id: '',
-      firstName: '',
-      initial: '',
-      lastName: '',
-      address: '',
-      phoneNumber: '',
-      class: '',
-      town: '',
-      state: '',
-      fatherName: '',
-      motherName: '',
-      emergencyContactName: '',
-      emergencyContactPhoneNumber: '',
-      emergencyRelationship: '',
-      picture: '',
-      gender: '',
-      isActive: false
-    };
+    this.student = <IStudent>{};
     this.picture = "";
     this.gender = 'male';
     this.isActive = false;

@@ -37,7 +37,7 @@
 
 
 <ion-content padding>
-  <div *ngIf="picture != ''" class="profile-image">
+  <div *ngIf="picture" class="profile-image">
     <img src="{{picture}}" alt="A profile picture">
   </div>
   <form #studentForm="ngForm" (ngSubmit)="createStudent({
@@ -59,10 +59,10 @@
     <!-- Picture will be taken from gallery or camera.  If the input is empty a default one will
        be chosen from based by gender. -->
     <ion-item-group>
-      <ion-item>
+      <!-- <ion-item>
         <ion-label stacked>Picture</ion-label>
         <ion-input type="text" readonly="true" name="picture" [(ngModel)]="picture"></ion-input>
-      </ion-item>
+      </ion-item> -->
       <button (click)="browsePicture()" type="button" ion-button color="primary">Browse</button>
       <button (click)="picture = ''" type="button" ion-button color="secondary">Reset</button>
       <ion-item>

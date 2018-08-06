@@ -11,6 +11,12 @@ export class CalendarComponent implements OnInit {
   constructor() {
     this.currentDate = new Date();
   }
+
+  /**
+   * Date chosen by the user to be shown in the card Header
+   * Will return @param Calendar
+   * */
+  @Output() getDate = new EventEmitter();
   //  html properties
   weekDaysHeader: Array<string>;
 
@@ -25,12 +31,6 @@ export class CalendarComponent implements OnInit {
 
   // Used to get the year to start the calendar
   year: number;
-
-  /**
-   * Date chosen by the user to be shown in the card Header
-   * Will return @param Calendar
-   * */
-  @Output() getDate = new EventEmitter();
 
   // Used to generate calendar
   calendarDays: Array<ICalendar> = [];
@@ -116,6 +116,13 @@ export class CalendarComponent implements OnInit {
       this.month = 0;
       this.createCalendar(this.month, this.year + 1);
     }
+    const calendar: ICalendar = {
+      month: this.month + 1,
+      year: this.year,
+      day: 1,
+      weekDay: new Date(this.year, this.month + 1, 1).getDay()
+    }
+    this.choseDay(calendar);
   }
 
   previousMonth() {
@@ -125,5 +132,12 @@ export class CalendarComponent implements OnInit {
       this.month = 11;
       this.createCalendar(this.month, this.year - 1);
     }
+    const calendar: ICalendar = {
+      month: this.month - 1,
+      year: this.year,
+      day: 1,
+      weekDay: new Date(this.year, this.month - 1, 1).getDay()
+    }
+    this.choseDay(calendar);
   }
 }

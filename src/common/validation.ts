@@ -5,3 +5,10 @@ export function validatePhoneNumber(phoneNumber) {
         return true;
     }
 }
+
+export function addZeroInFront(value: number) {
+    if (value < 10) {
+        return `0${value}`;
+    }
+    return value;
+}

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';
 import { handleError } from '../../common/handleError';
-import { studentFormatter } from '../../common/studentformatter';
+import { studentFormatter, formatStudent } from '../../common/formatToText';
 
 let studentsColl: Collection<IStudent>;
 let recordsColl: Collection<IRecord>;
@@ -52,9 +52,9 @@ export class AmaranthusDBProvider {
       });
       if (results) {
         return true
-      }else{
-      return false;
-    }
+      } else {
+        return false;
+      }
     } catch (error) {
       if (!studentsColl) {
         return error;
@@ -276,11 +276,14 @@ export class AmaranthusDBProvider {
           '$eq': student.id
         }
       });
+      const students = {
+        ...formatStudent(results)
+      }
       response = {
         ...response,
         success: true,
         error: null,
-        data: results
+        data: students
       };
       return response;
     } catch (error) {
@@ -296,27 +299,27 @@ export class AmaranthusDBProvider {
       error: null,
       data: null
     };
-      switch (opts.query) {
-        case 'Date':
-          this.getQueriedRecordsByDate(opts.date);
-          break;
-        default:
-          const options:
-            ICalendar = {
-              year: new Date().getFullYear(),
-              month: new Date().getMonth() + 1,
-              day: null
-            }
-          try {
-            response = {
-              ...response,
-              ...this.getAllStudentsRecords(options)
-            };
-            return response;
-          } catch (error) {
-            return error;
+    switch (opts.query) {
+      case 'Date':
+        this.getQueriedRecordsByDate(opts.date);
+        break;
+      default:
+        const options:
+          ICalendar = {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+          day: null
+        }
+        try {
+          response = {
+            ...response,
+            ...this.getAllStudentsRecords(options)
           };
-      }
+          return response;
+        } catch (error) {
+          return error;
+        };
+    }
   }
 
   getStudentsRecordsByDate(opts: ICalendar): IResponse<IRecord[]> {
@@ -483,10 +486,16 @@ export class AmaranthusDBProvider {
       data: []
     };
     try {
+      const students = studentsColl.data.map(unFormattedStudent => {
+        return{
+          ...unFormattedStudent,
+          ...formatStudent(unFormattedStudent)
+        };
+      });
       response = {
         ...response,
         success: true,
-        data: [...studentsColl.data]
+        data: [...students]
       }
       return response;
     } catch (error) {
@@ -508,10 +517,16 @@ export class AmaranthusDBProvider {
   // query by isActive
   getAllActiveStudents(date: ICalendar): IResponse<IStudent[]> {
     try {
-      const students = studentsColl.find({
+      const unFormattedtudents = studentsColl.find({
         'isActive': {
           '$eq': true
         }
+      });
+      const students = unFormattedtudents.map(unFormattedStudent => {
+        return{
+          ...unFormattedStudent,
+          ...formatStudent(unFormattedStudent)
+        };
       });
       let record: IRecord;
       const results = students.map(student => {

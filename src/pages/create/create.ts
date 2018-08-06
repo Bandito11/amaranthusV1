@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController, normalizeURL, ViewController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { trimText } from '../../common/formatToText';
 
 @IonicPage()
 @Component({
@@ -27,7 +28,7 @@ export class CreatePage {
 
   counter = 0;
   ionViewWillEnter() {
-    this.getNewId();
+    this.generateId();
     this.gender = 'male';
     this.picture = './assets/profilepics/default.png';
     this.phoneNumber = '';
@@ -37,11 +38,11 @@ export class CreatePage {
     this.viewCtrl.dismiss();
   }
 
-  getNewId() {
+  generateId() {
     this.idInput = `XY${Math.ceil(Math.random() * 100000000)}`;
     try {
       const value = this.db.checkIfStudentExists({ id: this.idInput });
-      if (!value) this.getNewId();
+      if (!value) this.generateId();
     } catch (error) {
       handleError(error);
     }
@@ -78,8 +79,7 @@ export class CreatePage {
       const picture = this.validatePicture({ gender: this.gender, picture: this.picture });
       const student: IStudent = {
         ...opts,
-        phoneNumber: opts.phoneNumber,
-        emergencyContactPhoneNumber: opts.emergencyContactPhoneNumber,
+        ...trimText(opts),
         picture: picture,
         gender: this.gender,
         isActive: true

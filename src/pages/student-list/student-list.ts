@@ -38,12 +38,12 @@ export class StudentListPage implements OnInit {
 
   ionViewWillEnter() {
     this.query = "None";
-    let studentInterval = setInterval(() => {
+    // let studentInterval = setInterval(() => {
       this.getStudents();
-      if (this.students.length > 0) {
-        clearInterval(studentInterval);
-      }
-    }, 500);
+    //   if (this.students.length > 0) {
+    //     clearInterval(studentInterval);
+    //   }
+    // }, 500);
   }
   searchStudent(event) {
     let query: string = event.target.value;

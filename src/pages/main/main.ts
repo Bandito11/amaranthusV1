@@ -19,14 +19,12 @@ export class MainPage implements OnInit {
   ) { }
 
   students: IStudent[];
-  private untouchedStudentList: IStudent[];
+  private STUDENTS: IStudent[];
   selectOptions: string[];
   filterOptions: string[];
   date: ICalendar;
 
   ngOnInit() {
-    this.students = [];
-    this.untouchedStudentList = [];
     const currentDate = new Date();
     this.date = {
       month: currentDate.getMonth(),
@@ -43,17 +41,7 @@ export class MainPage implements OnInit {
       if (this.students.length > 0) {
         clearInterval(studentInterval);
       }
-    }, 500);
-  }
-
-  getFullName(opts: { firstName: string, initial: string, lastName: string }) {
-    const firstName = opts.firstName.split('')[0].toUpperCase() + opts.firstName.slice(1, opts.firstName.length);
-    const lastName = opts.lastName.split('')[0].toUpperCase() + opts.lastName.slice(1, opts.lastName.length)
-    if (opts.initial) {
-      const initial = opts.initial.split('')[0].toUpperCase() + opts.initial.slice(1, opts.initial.length)
-      return `${firstName} ${initial} ${lastName}`;
-    }
-    else return `${firstName} ${lastName}`;
+    }, 50);
   }
 
   getFilterOptions() {
@@ -75,7 +63,7 @@ export class MainPage implements OnInit {
       this.initializeStudentsList();
       return;
     }
-    const students = [...this.untouchedStudentList];
+    const students = [...this.STUDENTS];
     const newQuery = students.filter(student => {
       if (student.class == option) {
         return student;
@@ -85,7 +73,7 @@ export class MainPage implements OnInit {
   }
 
   private initializeStudentsList() {
-    this.students = [...this.untouchedStudentList];
+    this.students = [...this.STUDENTS];
   };
 
   searchStudent(event) {
@@ -94,6 +82,8 @@ export class MainPage implements OnInit {
   }
 
   private getStudents() {
+    this.students = [];
+    this.STUDENTS = [];
     const date = {
       ...this.date,
       month: this.date.month + 1
@@ -102,7 +92,7 @@ export class MainPage implements OnInit {
       const studentResponse = this.db.getAllActiveStudents(date);
       if (studentResponse.success == true) {
         this.students = [...studentResponse.data];
-        this.untouchedStudentList = [...studentResponse.data];
+        this.STUDENTS = [...studentResponse.data];
       } else {
         handleError(studentResponse.error);
       }
@@ -147,7 +137,7 @@ export class MainPage implements OnInit {
   }
 
   private filterStudentsList(query: string) {
-    const students = [...this.untouchedStudentList];
+    const students = [...this.STUDENTS];
     let fullName: string;
     const newQuery = students.filter(student => {
       fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
@@ -217,7 +207,7 @@ export class MainPage implements OnInit {
       }
     });
     this.students = [...results];
-    this.untouchedStudentList = [...results];
+    this.STUDENTS = [...results];
   }
 
   private showSimpleAlert(options: ISimpleAlertOptions) {

@@ -27,8 +27,8 @@
       </ion-avatar>
       <div class="amaranthus">
         <p>
-          <span class="label name">Name: </span>
-          <span class="name">{{student.firstName}} {{student.lastName}}</span>
+          <span class="label name">Name: </span><span class="name">{{student.firstName}}
+          <span *ngIf="student.initial">{{student.initial}}</span> {{student.lastName}}</span>
         </p>
         <p>
           <span class="label">ID:</span>{{student.id}}
