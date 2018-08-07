@@ -16,7 +16,25 @@ export interface IStudent {
     emergencyContactPhoneNumber: string;
     isActive: boolean;
     class: string,
-    fullName?:string
+    fullName?: string
+}
+
+export interface IEvent {
+    logo: string;
+    name: string;
+    startDate: string;
+    members: {
+        id: string,
+        attendance: boolean;
+        absence: boolean;
+    }[];
+    endDate: string;
+}
+
+export interface IStudentEvent {
+    id: string,
+    attendance: boolean;
+    absence: boolean;
 }
 
 export interface IAssistance {
@@ -76,7 +94,7 @@ export interface productRestore {
     productId: string;
     state: string | number;
     transactionId: string;
-    type:string;
+    type: string;
     date: string;
     productType: string;
     receipt;

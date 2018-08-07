@@ -1,13 +1,16 @@
+import { IEvent } from './../../common/interface';
 import { Storage } from '@ionic/storage';
 import { IStudent, IResponse, IRecord, ICalendar } from '../../common/interface';
 import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';
 import { handleError } from '../../common/handleError';
-import { studentFormatter, formatStudent } from '../../common/formatToText';
+import { trimText, formatStudentName, formatEvent } from '../../common/formatToText';
 
 let studentsColl: Collection<IStudent>;
 let recordsColl: Collection<IRecord>;
+let eventsColl: Collection<IEvent>;
+
 let db: Loki;
 const dbName = 'amaranthus.db';
 
@@ -24,25 +27,68 @@ export class AmaranthusDBProvider {
       autosave: true,
       autoload: true,
       adapter: ionicStorageAdapter,
-      autoloadCallback: this.loadDatabase,
-      autosaveCallback: this.saveDatabase
+      autoloadCallback: this.loadDatabase
     }
     db = new Loki(dbName, lokiOptions);
-  }
-
-  private saveDatabase() {
-    db.saveDatabase();
   }
 
   private loadDatabase() {
     studentsColl = db.getCollection<IStudent>('students');
     recordsColl = db.getCollection<IRecord>('records');
-    if (!studentsColl && !recordsColl) {
-      studentsColl = db.addCollection<IStudent>('students')
+    eventsColl = db.getCollection<IEvent>('events');
+    if (!studentsColl) {
+      studentsColl = db.addCollection<IStudent>('students');
+    }
+    if (!recordsColl) {
       recordsColl = db.addCollection<IRecord>('records');
+    }
+    if (!eventsColl) {
+      eventsColl = db.addCollection<IEvent>('events');
     }
   }
 
+  getEvents(){
+    let response: IResponse<IEvent[]> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
+    try {
+      const results: any = eventsColl.chain().simplesort('startDate').data();
+      response = {
+        ...response,
+        success: true,
+        data: results
+      }
+      return response;
+    } catch (error) {
+      
+    }
+  }
+
+  addNewEvent(event: IEvent) {
+    let response: IResponse<null> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
+    try {
+      const formattedEvent = formatEvent(event);
+      eventsColl.insert(formattedEvent);
+      response = {
+        success: true,
+        error: null,
+        data: null
+      };
+      return response;
+    } catch (error) {
+      response = {
+        ...response,
+        error: error
+      }
+      return response;
+    }
+  }
   checkIfStudentExists(opts: { id: string }) {
     try {
       let results = studentsColl.findOne({
@@ -71,7 +117,7 @@ export class AmaranthusDBProvider {
     const value = this.checkIfStudentExists({ id: student.id });
     try {
       if (value == false) {
-        const formattedStudent = studentFormatter(student);
+        const formattedStudent = trimText(student);
         studentsColl.insert(formattedStudent);
         response = {
           success: true,
@@ -226,7 +272,7 @@ export class AmaranthusDBProvider {
           '$eq': student.id
         }
       });
-      const formattedStudent = studentFormatter(results);
+      const formattedStudent = trimText(results);
       results = {
         ...results,
         ...formattedStudent
@@ -277,7 +323,7 @@ export class AmaranthusDBProvider {
         }
       });
       const students = {
-        ...formatStudent(results)
+        ...formatStudentName(results)
       }
       response = {
         ...response,
@@ -487,9 +533,9 @@ export class AmaranthusDBProvider {
     };
     try {
       const students = studentsColl.data.map(unFormattedStudent => {
-        return{
+        return {
           ...unFormattedStudent,
-          ...formatStudent(unFormattedStudent)
+          ...formatStudentName(unFormattedStudent)
         };
       });
       response = {
@@ -523,9 +569,9 @@ export class AmaranthusDBProvider {
         }
       });
       const students = unFormattedtudents.map(unFormattedStudent => {
-        return{
+        return {
           ...unFormattedStudent,
-          ...formatStudent(unFormattedStudent)
+          ...formatStudentName(unFormattedStudent)
         };
       });
       let record: IRecord;

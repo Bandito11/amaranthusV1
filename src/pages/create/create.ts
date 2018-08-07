@@ -79,7 +79,6 @@ export class CreatePage {
       const picture = this.validatePicture({ gender: this.gender, picture: this.picture });
       const student: IStudent = {
         ...opts,
-        ...trimText(opts),
         picture: picture,
         gender: this.gender,
         isActive: true

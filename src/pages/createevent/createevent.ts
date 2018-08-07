@@ -1,9 +1,9 @@
-import { ModalController, Platform } from 'ionic-angular';
+import { ModalController, Platform, AlertController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, normalizeURL } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
-import { IStudent } from '../../common/interface';
+import { IStudent, ISimpleAlertOptions, IEvent } from '../../common/interface';
 import { CreatePage } from '../create/create';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { addZeroInFront } from '../../common/validation';
@@ -20,14 +20,15 @@ export class CreateEventPage {
     public camera: Camera,
     public platform: Platform,
     public modalCtrl: ModalController,
-    public db: AmaranthusDBProvider
+    public db: AmaranthusDBProvider,
+    public alertCtrl: AlertController
   ) {
   }
 
   logo;
   students: IStudent[];
   STUDENTS: IStudent[];
-  studentIds: IStudent[];
+  studentIds: string[];
   eventName;
   startDate;
   endDate;
@@ -44,15 +45,101 @@ export class CreateEventPage {
     this.endDate = '';
   }
   createNewEvent() {
-    if (
-      this.studentIds.length > 0 &&
-      this.startDate &&
-      this.eventName && 
-      this.logo
-    ) {
-      // TODO: Create Events Collection
-    }else{
-      //TODO: Custom ionic style Error message!!!
+    try {
+      if (this.studentIds.length < 1) {
+        const opts: ISimpleAlertOptions = {
+          title: 'Error',
+          subTitle: 'Have to choose at least one user from the list!'
+        }
+        this.showSimpleAlert(opts);
+        return;
+      }
+      if (!this.startDate) {
+        const opts: ISimpleAlertOptions = {
+          title: 'Error',
+          subTitle: 'Have to choose a start date!'
+        }
+        this.showSimpleAlert(opts);
+        return;
+      }
+      if (!this.eventName) {
+        const opts: ISimpleAlertOptions = {
+          title: 'Error',
+          subTitle: 'Have to write a name for the event!'
+        }
+        this.showSimpleAlert(opts);
+        return;
+      }
+      if (!this.logo) {
+        const opts: ISimpleAlertOptions = {
+          title: 'Error',
+          subTitle: 'Logo picture is required!'
+        }
+        this.showSimpleAlert(opts);
+        return;
+      }
+      const members = this.studentIds.map(studentId => {
+        return {
+          id: studentId,
+          attendance: false,
+          absence: false
+        }
+      })
+      let newEvent: IEvent = {
+        logo: this.logo,
+        name: this.eventName,
+        startDate: this.startDate,
+        members: members,
+        endDate: ''
+      };
+      if (this.endDate) {
+        newEvent = {
+          ...newEvent,
+          endDate: this.endDate
+        }
+      }
+      let opts = {
+        title: ''
+      }
+      const alert = this.alertCtrl.create({
+        title: 'Warning!',
+        subTitle: `Are you sure you want to create a new ${this.eventName}?`,
+        buttons: [
+          { text: 'No' },
+          {
+            text: 'Yes',
+            handler: () => {
+              // user has clicked the alert button
+              // begin the alert's dismiss transition
+              const navTransition = alert.dismiss();
+              const response = this.db.addNewEvent(newEvent);
+              if (response.success == true) {
+                navTransition.then(() => {
+                  const options = {
+                    title: 'Success!',
+                    subTitle: `${this.eventName} was created.`
+                  };
+                  this.showAdvancedAlert(options);
+                });
+              } else {
+                const options = {
+                  title: 'Error',
+                  subTitle: response.error
+                }
+                navTransition.then(() => this.showAdvancedAlert(options));
+              }
+              return false;
+            }
+          }
+        ]
+      });
+      alert.present();
+    } catch (error) {
+      const opts: ISimpleAlertOptions = {
+        title: 'Error',
+        subTitle: error
+      }
+      this.showSimpleAlert(opts);
     }
   }
 
@@ -131,5 +218,34 @@ export class CreateEventPage {
     return false;
   }
 
+  private showSimpleAlert(options: ISimpleAlertOptions) {
+    return this.alertCtrl.create({
+      title: options.title,
+      subTitle: options.subTitle,
+      buttons: options.buttons
+    })
+      .present();;
+  }
+  showAdvancedAlert(options: ISimpleAlertOptions) {
+    const alert = this.alertCtrl.create({
+      title: options.title,
+      subTitle: options.subTitle,
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            // user has clicked the alert button
+            // begin the alert's dismiss transition
+            alert.dismiss()
+              .then(() => {
+                this.navCtrl.pop();
+              });
+            return false;
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
 
-}
+} 
