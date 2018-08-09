@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, AlertController, ModalController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
 import { ISimpleAlertOptions, IStudent, ICalendar } from '../../common/interface';
+import { filterStudentsList, sortStudentsbyId, sortStudentsName } from '../../common/search';
 
 @IonicPage()
 @Component({ selector: 'page-main', templateUrl: 'main.html' })
@@ -19,7 +20,7 @@ export class MainPage implements OnInit {
   ) { }
 
   students: IStudent[];
-  private STUDENTS: IStudent[];
+  private unfilteredStudents: IStudent[];
   selectOptions: string[];
   filterOptions: string[];
   date: ICalendar;
@@ -63,8 +64,7 @@ export class MainPage implements OnInit {
       this.initializeStudentsList();
       return;
     }
-    const students = [...this.STUDENTS];
-    const newQuery = students.filter(student => {
+    const newQuery = this.unfilteredStudents.filter(student => {
       if (student.class == option) {
         return student;
       }
@@ -73,7 +73,7 @@ export class MainPage implements OnInit {
   }
 
   private initializeStudentsList() {
-    this.students = [...this.STUDENTS];
+    this.students = [...this.unfilteredStudents];
   };
 
   searchStudent(event) {
@@ -83,7 +83,7 @@ export class MainPage implements OnInit {
 
   private getStudents() {
     this.students = [];
-    this.STUDENTS = [];
+    this.unfilteredStudents = [];
     const date = {
       ...this.date,
       month: this.date.month + 1
@@ -92,7 +92,7 @@ export class MainPage implements OnInit {
       const studentResponse = this.db.getAllActiveStudents(date);
       if (studentResponse.success == true) {
         this.students = [...studentResponse.data];
-        this.STUDENTS = [...studentResponse.data];
+        this.unfilteredStudents = [...studentResponse.data];
       } else {
         handleError(studentResponse.error);
       }
@@ -115,41 +115,15 @@ export class MainPage implements OnInit {
   }
 
   private sortStudentsbyId() {
-    this.students = [
-      ...this.students.sort((a, b) => {
-        if (a.id.slice(2, a.id.length) < b.id.slice(2, a.id.length)) return -1;
-        if (a.id > b.id) return 1;
-        return 0;
-      })
-    ];
+    this.students = sortStudentsbyId(this.students);
   }
 
   private sortStudentsName() {
-    this.students = [
-      ...this.students.sort((a, b) => {
-        if (a.firstName.toLowerCase() < b.firstName.toLowerCase())
-          return -1;
-        if (a.firstName.toLowerCase() > b.firstName.toLowerCase())
-          return 1;
-        return 0;
-      })
-    ];
+    this.students = sortStudentsName(this.students);
   }
 
   private filterStudentsList(query: string) {
-    const students = [...this.STUDENTS];
-    let fullName: string;
-    const newQuery = students.filter(student => {
-      fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
-      if (
-        student.id == query ||
-        student.firstName.toLowerCase().includes(query.toLowerCase()) ||
-        student.lastName.toLowerCase().includes(query.toLowerCase()) ||
-        fullName == query.toLowerCase()) {
-        return student;
-      }
-    });
-    this.students = [...newQuery];
+    this.students = filterStudentsList({ query: query, students: this.unfilteredStudents })
   }
 
   addAttendance(opts: { id: string }) {
@@ -170,9 +144,7 @@ export class MainPage implements OnInit {
     }
   }
 
-  addAbsence(opts: {
-    id: string
-  }) {
+  addAbsence(opts: { id: string }) {
     const response = this.db.addAbsence({ date: this.date, id: opts.id });
     if (response.success == true) {
       this.updateStudentAttendance({
@@ -207,7 +179,7 @@ export class MainPage implements OnInit {
       }
     });
     this.students = [...results];
-    this.STUDENTS = [...results];
+    this.unfilteredStudents = [...results];
   }
 
   private showSimpleAlert(options: ISimpleAlertOptions) {

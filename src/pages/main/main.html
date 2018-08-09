@@ -17,62 +17,65 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-searchbar placeholder="Search by ID or Name" (ionInput)="searchStudent($event)">
-    </ion-searchbar>
-    <ion-item>
-      <ion-label>Sort by:</ion-label>
-      <ion-select interface="popover" multiple="false" selectSettings="selectOptions" placeholder="None">
-        <ion-option *ngFor="let option of selectOptions" (ionSelect)="sortData(option)">{{option}}</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>Filter by class: </ion-label>
-      <ion-select interface="popover" multiple="false" selectSettings="filterOptions" placeholder="None">
-        <ion-option *ngFor="let class of filterOptions" (ionSelect)="filterByClass(class)">{{class}}</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-list>
-      <ion-item-sliding *ngFor="let student of students">
-        <ion-item>
-          <ion-avatar item-left>
-            <img src="{{student.picture}}" alt="An image of user">
-          </ion-avatar>
-          <div class="amaranthus">
-            <p>
-              <span class="label name">Name: </span>
-              <span class="name">{{student.firstName}}
-                <span *ngIf="student.initial">{{student.initial}}</span> {{student.lastName}}</span>
-            </p>
-            <p>
-              <span class="label">ID: </span>{{student.id}}
-            </p>
-            <p *ngIf="student.phoneNumber">
-              <span class="label">Phone Number: </span>{{student.phoneNumber}}
-            </p>
-            <button ion-button small color="primary" (click)="addAttendance({id: student.id})">
-              Attended
-            </button>
-            <button ion-button small color="secondary" (click)="addAbsence({id: student.id})">
-              Absent
-            </button>
-            <div>
-              <p class="left attended" *ngIf="student.attendance">
-                {{student.firstName}}'s present today!
-              </p>
-              <p class="left attended" *ngIf="student.absence">
-                {{student.firstName}}'s absent today!
-              </p>
-              <p class="right">
-                Swipe for more options
-              </p>
-            </div>
-          </div>
-        </ion-item>
-        <ion-item-options>
-          <button ion-button color="secondary" (click)="goToStudentProfile(student.id)">
-            Profile
+  <ion-searchbar placeholder="Search by ID or Name" (ionInput)="searchStudent($event)">
+  </ion-searchbar>
+  <ion-item>
+    <ion-label>Sort by:</ion-label>
+    <ion-select interface="popover" multiple="false" selectSettings="selectOptions" placeholder="None">
+      <ion-option *ngFor="let option of selectOptions" (ionSelect)="sortData(option)">{{option}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Filter by class: </ion-label>
+    <ion-select interface="popover" multiple="false" selectSettings="filterOptions" placeholder="None">
+      <ion-option *ngFor="let class of filterOptions" (ionSelect)="filterByClass(class)">{{class}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-list>
+    <ion-item-sliding *ngFor="let student of students">
+      <ion-item>
+        <ion-avatar item-left>
+          <img src="{{student.picture}}" alt="An image of user">
+        </ion-avatar>
+        <div class="amaranthus">
+          <p>
+            <span class="label name">Name: </span>
+            <span class="name">{{student.firstName}}
+              <span *ngIf="student.initial">{{student.initial}}</span> {{student.lastName}}</span>
+          </p>
+          <p>
+            <span class="label">ID: </span>{{student.id}}
+          </p>
+          <p *ngIf="student.phoneNumber">
+            <span class="label">Phone Number: </span>{{student.phoneNumber}}
+          </p>
+          <p *ngIf="student.class">
+            <span class="label">Class: </span>{{student.class}}
+          </p>
+          <button ion-button small color="primary" (click)="addAttendance({id: student.id})">
+            Attended
           </button>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
+          <button ion-button small color="secondary" (click)="addAbsence({id: student.id})">
+            Absent
+          </button>
+          <div>
+            <p class="left attended" *ngIf="student.attendance">
+              {{student.firstName}}'s present today!
+            </p>
+            <p class="left attended" *ngIf="student.absence">
+              {{student.firstName}}'s absent today!
+            </p>
+            <p class="right">
+              Swipe for more options
+            </p>
+          </div>
+        </div>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button color="secondary" (click)="goToStudentProfile(student.id)">
+          Profile
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 </ion-content>

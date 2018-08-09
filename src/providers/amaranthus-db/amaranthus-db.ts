@@ -5,14 +5,12 @@ import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';
 import { handleError } from '../../common/handleError';
-import { trimText, formatStudentName, formatEvent } from '../../common/formatToText';
+import { trimText, trimEvent } from '../../common/formatToText';
 
 let studentsColl: Collection<IStudent>;
 let recordsColl: Collection<IRecord>;
 let eventsColl: Collection<IEvent>;
-
 let db: Loki;
-const dbName = 'amaranthus.db';
 
 @Injectable()
 export class AmaranthusDBProvider {
@@ -29,7 +27,7 @@ export class AmaranthusDBProvider {
       adapter: ionicStorageAdapter,
       autoloadCallback: this.loadDatabase
     }
-    db = new Loki(dbName, lokiOptions);
+    db = new Loki('amaranthus.db', lokiOptions);
   }
 
   private loadDatabase() {
@@ -47,14 +45,14 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getEvents(){
+  getEvents() {
     let response: IResponse<IEvent[]> = {
       success: false,
       error: null,
       data: undefined
     };
     try {
-      const results: any = eventsColl.chain().simplesort('startDate').data();
+      const results: any = eventsColl.chain().simplesort('startDate', true).data();
       response = {
         ...response,
         success: true,
@@ -62,18 +60,49 @@ export class AmaranthusDBProvider {
       }
       return response;
     } catch (error) {
-      
+      response = {
+        ...response,
+        error: error
+      }
+      return response;
     }
   }
 
-  addNewEvent(event: IEvent) {
+  getEventProfile(id) {
+    let response: IResponse<IEvent> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
+    try {
+      let results = eventsColl.findOne({
+        '$loki': {
+          '$eq': id
+        }
+      });
+      response = {
+        ...response,
+        success: true,
+        data: results
+      }
+      return response;
+    } catch (error) {
+      response = {
+        ...response,
+        error: error
+      }
+      return response;
+    }
+  }
+
+  insertEvent(event: IEvent) {
     let response: IResponse<null> = {
       success: false,
       error: null,
       data: undefined
     };
     try {
-      const formattedEvent = formatEvent(event);
+      const formattedEvent = trimEvent(event);
       eventsColl.insert(formattedEvent);
       response = {
         success: true,
@@ -265,6 +294,7 @@ export class AmaranthusDBProvider {
       }
     }
   }
+
   updateStudent(student: IStudent): IResponse<null> {
     try {
       let results: any = studentsColl.findOne({
@@ -272,7 +302,7 @@ export class AmaranthusDBProvider {
           '$eq': student.id
         }
       });
-      const formattedStudent = trimText(results);
+      const formattedStudent = trimText(student);
       results = {
         ...results,
         ...formattedStudent
@@ -322,14 +352,11 @@ export class AmaranthusDBProvider {
           '$eq': student.id
         }
       });
-      const students = {
-        ...formatStudentName(results)
-      }
       response = {
         ...response,
         success: true,
         error: null,
-        data: students
+        data: results
       };
       return response;
     } catch (error) {
@@ -532,12 +559,7 @@ export class AmaranthusDBProvider {
       data: []
     };
     try {
-      const students = studentsColl.data.map(unFormattedStudent => {
-        return {
-          ...unFormattedStudent,
-          ...formatStudentName(unFormattedStudent)
-        };
-      });
+      const students = studentsColl.data;
       response = {
         ...response,
         success: true,
@@ -563,16 +585,10 @@ export class AmaranthusDBProvider {
   // query by isActive
   getAllActiveStudents(date: ICalendar): IResponse<IStudent[]> {
     try {
-      const unFormattedtudents = studentsColl.find({
+      const students = studentsColl.find({
         'isActive': {
           '$eq': true
         }
-      });
-      const students = unFormattedtudents.map(unFormattedStudent => {
-        return {
-          ...unFormattedStudent,
-          ...formatStudentName(unFormattedStudent)
-        };
       });
       let record: IRecord;
       const results = students.map(student => {

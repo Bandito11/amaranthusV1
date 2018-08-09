@@ -1,8 +1,9 @@
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
 import { CreateEventPage } from '../createevent/createevent';
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { formatDate } from '../../common/formatToText';
+import { EventProfilePage } from '../event-profile/event-profile';
 
 @IonicPage()
 @Component({
@@ -14,7 +15,8 @@ export class EventsPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public db: AmaranthusDBProvider
+    public db: AmaranthusDBProvider,
+    public modal: ModalController
   ) { }
 
   selectOptions: string[];
@@ -23,10 +25,6 @@ export class EventsPage implements OnInit {
 
   ngOnInit() {
     this.selectOptions = ['Attendance', 'Absence', 'Event', 'Date'];
-  }
-
-  ionViewDidLoad() {
-
   }
 
   ionViewDidEnter() {
@@ -84,21 +82,15 @@ export class EventsPage implements OnInit {
         }
         return event;
       });
-
     }
   }
 
   goToCreateEvent() {
-    this.navCtrl.push(CreateEventPage);
+    this.modal.create(CreateEventPage).present();
+  }
+
+  goToEventProfile(id: string) {
+    this.navCtrl.push(EventProfilePage, { id: id });
   }
 
 }
-
-const mockEvents = [{
-  logo: 'https://firebasestorage.googleapis.com/v0/b/ageratum-ec8a3.appspot.com/o/Node.js_logo.png?alt=media&token=fce4e44e-ddc6-490e-ba83-d3080cb3d59b',
-  name: 'Default Event Name',
-  date: '07/30/2018',
-  totalMembers: '10',
-  totalAttendance: '8 | 80%',
-  totalAbsence: '2 | 20%'
-}]

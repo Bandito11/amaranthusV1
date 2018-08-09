@@ -1,0 +1,57 @@
+<!--
+  Generated template for the EventProfilePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>{{event.name}}</ion-title>
+    <ion-buttons end>
+        <button ion-button (click)="editEvent()">Edit</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <img src="{{event.logo}}" alt="{{event.name}}" />
+  <p>{{event.startDate}}</p>
+  <p>{{event.endDate}}</p>
+  <ion-list *ngFor="let member of eventProfile.members" no-lines>
+    <ion-item>
+      <ion-avatar item-left>
+        <img src="{{member.picture}}" alt="An image of user">
+      </ion-avatar>
+      <div class="amaranthus">
+        <p>
+          <span class="label name">Name: </span>
+          <span class="name">{{member.firstName}}
+            <span *ngIf="member.initial">{{member.initial}}</span> {{member.lastName}}</span>
+        </p>
+        <p>
+          <span class="label">ID: </span>{{member.id}}
+        </p>
+        <p *ngIf="member.phoneNumber">
+          <span class="label">Phone Number: </span>{{member.phoneNumber}}
+        </p>
+        <p *ngIf="member.class">
+          <span class="label">Class: </span>{{member.class}}
+        </p>
+        <button ion-button small color="primary" (click)="addAttendance(member.id)">
+          Attended
+        </button>
+        <button ion-button small color="secondary" (click)="addAbsence(member.id)">
+          Absent
+        </button>
+        <p class="left attended" *ngIf="member.attendance">
+          {{member.firstName}}'s present today!
+        </p>
+        <p class="left attended" *ngIf="member.absence">
+          {{member.firstName}}'s absent today!
+        </p>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

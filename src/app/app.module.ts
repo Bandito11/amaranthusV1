@@ -1,4 +1,4 @@
-import { LogoPreviewPageModule } from '../pages/logopreview/logopreview.module';
+import { EventProfilePageModule } from './../pages/event-profile/event-profile.module';
 import { CreateEventPageModule } from '../pages/createevent/createevent.module';
 import { EventsPageModule } from '../pages/events/events.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -49,7 +49,7 @@ import { EmailComposer } from '@ionic-native/email-composer';
     ExportPageModule,
     EventsPageModule,
     CreateEventPageModule,
-    LogoPreviewPageModule,
+    EventProfilePageModule,
     BrowserModule,
     HttpClientModule,
     FormsModule,

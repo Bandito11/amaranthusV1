@@ -6,7 +6,7 @@ import { StudentProfilePage } from '../student-profile/student-profile';
 import { CreatePage } from '../create/create';
 import { IStudent } from '../../common/interface';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
-
+import { sortStudentsbyId, sortStudentsName, filterStudentsList } from '../../common/search'
 /**
  * Generated class for the StudentListPage page.
  *
@@ -21,30 +21,60 @@ export class StudentListPage implements OnInit {
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public db: AmaranthusDBProvider) { }
 
   students: IStudent[];
-  private untouchedStudentList: IStudent[];
+  private unfilteredStudents: IStudent[];
   query: string;
   selectOptions: string[];
+  filterOptions: string[];
 
   ngOnInit() {
     this.students = [];
-    this.untouchedStudentList = [];
+    this.unfilteredStudents = [];
     this.selectOptions = ['Id', 'Name', 'Active', 'Not Active', 'None'];
   }
 
   private initializeStudentsList() {
-    this.students = [...this.untouchedStudentList];
+    this.students = [...this.unfilteredStudents];
   };
 
 
   ionViewWillEnter() {
     this.query = "None";
-    // let studentInterval = setInterval(() => {
-      this.getStudents();
-    //   if (this.students.length > 0) {
-    //     clearInterval(studentInterval);
-    //   }
-    // }, 500);
+    this.getStudents();
+    this.filterOptions = this.getFilterOptions();
   }
+  getFilterOptions() {
+    let options = [];
+    let checkIfHaveClass = this.students.filter(student => {
+      if (student.class) return true;
+    });
+    for (const student of checkIfHaveClass) {
+      if (options.indexOf(student.class) == -1) {
+        options = [...options, student.class];
+      }
+    }
+    options = [...options, 'None'];
+    return options;
+  };
+
+  filterByClass(option: string) {
+    switch (option) {
+      case 'Active':
+      case 'Not Active':
+        this.filterByIsActive(option);
+        break;
+      case 'None':
+        this.initializeStudentsList();
+        break;
+      default:
+        const newQuery = this.unfilteredStudents.filter(student => {
+          if (student.class == option) {
+            return student;
+          }
+        });
+        this.students = [...newQuery];
+    }
+  }
+
   searchStudent(event) {
     let query: string = event.target.value;
     query ? this.queryStudentsList(query) : this.initializeStudentsList();
@@ -55,7 +85,7 @@ export class StudentListPage implements OnInit {
       const response = this.db.getAllStudents();
       if (response.success == true) {
         this.students = [...response.data];
-        this.untouchedStudentList = [...response.data];
+        this.unfilteredStudents = [...response.data];
       } else {
         const options: ISimpleAlertOptions = {
           title: 'Error',
@@ -69,81 +99,66 @@ export class StudentListPage implements OnInit {
     }
   }
 
-  queryData(option: string) {
+  sortData(option: string) {
     switch (option) {
       case 'Id':
-        this.queryStudentsbyId();
+        this.sortStudentsbyId();
         break;
       case 'Name':
-        this.queryStudentsName();
-        break;
-      case 'Active':
-      case 'Not Active':
-        this.queryByIsActive(option);
+        this.sortStudentsName();
         break;
       default:
-        this.students = [...this.untouchedStudentList];
+        this.students = [...this.unfilteredStudents];
     }
   }
 
-  queryByIsActive(query: string) {
-    if (query == 'Active') {
-      this.students = [
-        ...this.students.sort((a, b) => {
-          if (a.isActive == true)
-            return -1;
-          if (a.isActive == false)
-            return 1;
-          return 0;
-        })
-      ];
+  // sortByIsActive(query: string) {
+  //   if (query == 'Active') {
+  //     this.students = [
+  //       ...this.students.sort((a, b) => {
+  //         if (a.isActive == true)
+  //           return -1;
+  //         if (a.isActive == false)
+  //           return 1;
+  //         return 0;
+  //       })
+  //     ];
+  //   } else {
+  //     this.students = [
+  //       ...this.students.sort((a, b) => {
+  //         if (a.isActive == false)
+  //           return -1;
+  //         if (a.isActive == true)
+  //           return 1;
+  //         return 0;
+  //       })
+  //     ];
+  //   }
+  // }
+
+  filterByIsActive(option: string) {
+    let filteredStudents;
+    if (option == 'Active') {
+      filteredStudents = this.unfilteredStudents.filter(student => {
+        if (student.isActive) return student;
+      });
     } else {
-      this.students = [
-        ...this.students.sort((a, b) => {
-          if (a.isActive == false)
-            return -1;
-          if (a.isActive == true)
-            return 1;
-          return 0;
-        })
-      ];
+      filteredStudents = this.unfilteredStudents.filter(student => {
+        if (!student.isActive) return student;
+      });
     }
+    this.students = filteredStudents;
+  }
+  sortStudentsbyId() {
+    this.students = sortStudentsbyId(this.students);
   }
 
-  queryStudentsbyId() {
-    this.students = [
-      ...this.students.sort((a, b) => {
-        if (a.id < b.id)
-          return -1;
-        if (a.id > b.id)
-          return 1;
-        return 0;
-      })
-    ];
-  }
-
-  queryStudentsName() {
-    this.students = [
-      ...this.students.sort((a, b) => {
-        if (a.firstName.toLowerCase() < b.firstName.toLowerCase())
-          return -1;
-        if (a.firstName.toLowerCase() > b.firstName.toLowerCase())
-          return 1;
-        return 0;
-      })
-    ];
+  sortStudentsName() {
+    this.students = sortStudentsName(this.students);
   }
 
   private queryStudentsList(query: string) {
-    const students = [...this.untouchedStudentList];
-    let fullName;
-    const newQuery = students.filter(student => {
-      fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
-      if (student.id == query || student.firstName.toLowerCase() == query.toLowerCase() || student.lastName.toLowerCase() == query.toLowerCase() || fullName == query.toLowerCase()) {
-        return student;
-      }
-    });
-    this.students = [...newQuery];
+    this.students = filterStudentsList({ query: query, students: this.unfilteredStudents })
   }
 
   goToStudentProfile(id: string) {

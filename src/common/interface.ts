@@ -23,12 +23,12 @@ export interface IEvent {
     logo: string;
     name: string;
     startDate: string;
+    endDate: string;
     members: {
         id: string,
         attendance: boolean;
         absence: boolean;
     }[];
-    endDate: string;
 }
 
 export interface IStudentEvent {

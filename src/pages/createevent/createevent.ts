@@ -1,7 +1,6 @@
-import { ModalController, Platform, AlertController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, normalizeURL } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, normalizeURL, ModalController, Platform, AlertController, ViewController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
 import { IStudent, ISimpleAlertOptions, IEvent } from '../../common/interface';
 import { CreatePage } from '../create/create';
@@ -21,7 +20,8 @@ export class CreateEventPage {
     public platform: Platform,
     public modalCtrl: ModalController,
     public db: AmaranthusDBProvider,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public viewCtrl: ViewController
   ) {
   }
 
@@ -98,9 +98,6 @@ export class CreateEventPage {
           endDate: this.endDate
         }
       }
-      let opts = {
-        title: ''
-      }
       const alert = this.alertCtrl.create({
         title: 'Warning!',
         subTitle: `Are you sure you want to create a new ${this.eventName}?`,
@@ -112,7 +109,7 @@ export class CreateEventPage {
               // user has clicked the alert button
               // begin the alert's dismiss transition
               const navTransition = alert.dismiss();
-              const response = this.db.addNewEvent(newEvent);
+              const response = this.db.insertEvent(newEvent);
               if (response.success == true) {
                 navTransition.then(() => {
                   const options = {
@@ -211,8 +208,11 @@ export class CreateEventPage {
   }
 
   addStudent() {
-    this.modalCtrl.create(CreatePage).present();
+    const modal = this.modalCtrl.create(CreatePage)
+    modal.onDidDismiss(_ => this.getStudents());
+    modal.present();
   }
+
   ifOnEventList(id) {
     if (this.studentIds.indexOf(id) != -1) return true
     return false;
@@ -226,7 +226,8 @@ export class CreateEventPage {
     })
       .present();;
   }
-  showAdvancedAlert(options: ISimpleAlertOptions) {
+
+  private showAdvancedAlert(options: ISimpleAlertOptions) {
     const alert = this.alertCtrl.create({
       title: options.title,
       subTitle: options.subTitle,
@@ -238,7 +239,7 @@ export class CreateEventPage {
             // begin the alert's dismiss transition
             alert.dismiss()
               .then(() => {
-                this.navCtrl.pop();
+                this.viewCtrl.dismiss();
               });
             return false;
           }
@@ -248,4 +249,7 @@ export class CreateEventPage {
     alert.present();
   }
 
+  goBack() {
+    this.viewCtrl.dismiss();
+  }
 } 

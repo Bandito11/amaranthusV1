@@ -1,10 +1,10 @@
 import { monthsLabels } from './labels';
 import { IStudent, IEvent } from "./interface";
 
-export function formatEvent(event: IEvent) {
+export function trimEvent(event: IEvent) {
     const formattedEvent: IEvent = {
         ...event,
-        name: event.name.toLowerCase().trim()
+        name: event.name.trim()
     }
     return formattedEvent;
 }
@@ -20,10 +20,10 @@ export function formatDate(date: string) {
 export function trimText(opts: IStudent) {
     let student = {
         ...opts,
-        firstName: opts.firstName.trim().toLowerCase(),
-        lastName: opts.lastName.trim().toLowerCase(),
-        id: opts.id.trim().toLowerCase(),
-        initial: opts.initial.trim().toLowerCase(),
+        firstName: opts.firstName.trim(),
+        lastName: opts.lastName.trim(),
+        id: opts.id.trim(),
+        initial: opts.initial.trim(),
         address: opts.address.trim(),
         phoneNumber: opts.phoneNumber.trim(),
         town: opts.town.trim(),
@@ -37,35 +37,6 @@ export function trimText(opts: IStudent) {
     }
     return student;
 }
-
-// export function toDelete(student: IStudent) {
-//     let formattedStudent = <IStudent>{};
-//     for (var prop in student) {
-//         switch (prop) {
-//             case 'firstName':
-//                 formattedStudent.firstName = student.firstName.toLowerCase();
-//                 break;
-//             case 'lastName':
-//                 formattedStudent.lastName = student.lastName.toLowerCase();
-//                 break;
-//             case 'initial':
-//                 formattedStudent.initial = student.initial.toLowerCase();
-//                 break;
-//             case 'address':
-//                 formattedStudent.address = student.address.toLowerCase();
-//                 break;
-//             case 'town':
-//                 formattedStudent.town = student.town.toLowerCase();
-//                 break;
-//             default:
-//                 formattedStudent = {
-//                     ...student,
-//                     ...formattedStudent
-//                 }
-//         }
-//     }
-//     return formattedStudent;
-// }
 
 export function formatStudentName(opts: IStudent) {
     const firstName = opts.firstName.split('')[0].toUpperCase() + opts.firstName.slice(1, opts.firstName.length);

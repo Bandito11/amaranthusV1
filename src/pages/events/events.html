@@ -18,7 +18,7 @@
       <ion-option *ngFor="let option of selectOptions" (ionSelect)="sortData(option)">{{option}}</ion-option>
     </ion-select>
   </ion-item>
-  <ion-card *ngFor="let event of events">
+  <ion-card *ngFor="let event of events" (click)="goToEventProfile(event.$loki)">
     <img src={{event.logo}} alt="logo"/> 
     <ion-card-content>
       <ion-card-title>

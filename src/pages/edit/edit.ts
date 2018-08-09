@@ -1,4 +1,3 @@
-import { MainPage } from '../main/main';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { ISimpleAlertOptions, IStudent, IResponse } from '../../common/interface';
 import { Component, OnInit } from '@angular/core';
@@ -133,11 +132,10 @@ export class EditPage implements OnInit {
       opts = { ...opts, phoneNumber: opts.phoneNumber, emergencyContactPhoneNumber: opts.emergencyContactPhoneNumber };
       const picture = this.validatePicture({ gender: this.gender, picture: this.picture })
       const student: IStudent = {
-        ...opts,
         ...trimText(opts),
         picture: picture,
         gender: this.gender,
-        isActive: true
+        isActive: this.isActive
       };
       const alert = this.alertCtrl.create({
         title: 'Warning!',
@@ -219,25 +217,21 @@ export class EditPage implements OnInit {
   }
 
   showAdvancedAlert(options: ISimpleAlertOptions) {
-    this.navCtrl.remove(0, this.navCtrl.length() - 1);
-    this.navCtrl.insert(0, MainPage);
     const alert = this.alertCtrl.create({
       title: options.title,
       subTitle: options.subTitle,
-      buttons: [
-        {
-          text: 'OK',
-          handler: () => {
-            // user has clicked the alert button
-            // begin the alert's dismiss transition
-            alert.dismiss()
-              .then(() => {
-                this.navCtrl.pop();
-              });
-            return false;
-          }
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          // user has clicked the alert button
+          // begin the alert's dismiss transition
+          alert.dismiss()
+            .then(() => {
+              this.navCtrl.pop();
+            });
+          return false;
         }
-      ]
+      }]
     });
     alert.present();
   }
