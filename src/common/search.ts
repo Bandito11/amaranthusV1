@@ -34,8 +34,8 @@ export function sortStudentsName(students: IStudent[]) {
 export function sortStudentsbyId(students: IStudent[]) {
     return [
         ...students.sort((a, b) => {
-            if (a.id.slice(2, a.id.length) < b.id.slice(2, a.id.length)) return -1;
-            if (a.id > b.id) return 1;
+            if (a.id.slice(2, a.id.length) < b.id.slice(2, b.id.length)) return -1;
+            if (a.id.slice(2, a.id.length) > b.id.slice(2, b.id.length)) return 1;
             return 0;
         })
     ];
