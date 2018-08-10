@@ -21,10 +21,12 @@ export class EventsPage implements OnInit {
 
   selectOptions: string[];
   events: any[];
-  untouchedEvents: any[];
+  unfilteredEvents: any[];
 
   ngOnInit() {
-    this.selectOptions = ['Attendance', 'Absence', 'Event', 'Date'];
+    this.events= [];
+    this.unfilteredEvents = [];
+    this.selectOptions = ['Attendance', 'Absence', 'Name', 'Date', 'None'];
   }
 
   ionViewDidEnter() {
@@ -39,24 +41,57 @@ export class EventsPage implements OnInit {
       case 'Absence':
         this.sortByAbsence();
         break;
-      case 'Event':
-        this.sortByEvents();
+      case 'Name':
+        this.sortByName();
         break;
       case 'Date':
         this.sortByDate();
         break;
       default:
-        this.events = [...this.untouchedEvents];
+        this.events = [...this.unfilteredEvents];
     }
   }
 
-  sortByAttendance() { }
+  sortByAttendance() { 
+      this.events = [
+        ...this.events.sort((a, b) => {
+            if (a.attendance < b.attendance) return -1;
+            if (a.attendance > b.attendance) return 1;
+            return 0;
+        })
+    ];
+  }
 
-  sortByAbsence() { }
+  sortByAbsence() {
+        this.events = [
+        ...this.events.sort((a, b) => {
+            if (a.absence < b.absence) return -1;
+            if (a.absence > b.absence) return 1;
+            return 0;
+        })
+    ];
 
-  sortByEvents() { }
+  }
 
-  sortByDate() { }
+  sortByName() {
+      this.events = [
+        ...events.sort((a, b) => {
+            if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+            if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+            return 0;
+        })
+    ];
+  }
+
+  sortByDate() { 
+       this.events = [
+        ...this.events.sort((a, b) => {
+            if (a.startDate < b.startDate) return -1;
+            if (a.startDate > b.startDate) return 1;
+            return 0;
+        })
+    ];
+  }
 
   getEvents() {
     const response = this.db.getEvents();
@@ -82,6 +117,7 @@ export class EventsPage implements OnInit {
         }
         return event;
       });
+      this.unfilteredEvents = [...this.events];
     }
   }
 
