@@ -1,18 +1,18 @@
+import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, normalizeURL, ModalController, Platform, AlertController, ViewController } from 'ionic-angular';
-import { handleError } from '../../common/handleError';
+import { IonicPage, NavController, NavParams, Platform, ModalController, AlertController, ViewController, normalizeURL } from 'ionic-angular';
 import { IStudent, ISimpleAlertOptions, IEvent } from '../../common/interface';
-import { CreatePage } from '../create/create';
-import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { addZeroInFront } from '../../common/validation';
+import { handleError } from '../../common/handleError';
+import { CreatePage } from '../create/create';
 
 @IonicPage()
 @Component({
-  selector: 'page-createevent',
-  templateUrl: 'createevent.html',
+  selector: 'page-editevent',
+  templateUrl: 'editevent.html',
 })
-export class CreateEventPage {
+export class EditEventPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -25,6 +25,7 @@ export class CreateEventPage {
   ) {
   }
 
+  id;
   logo;
   students: IStudent[];
   STUDENTS: IStudent[];
@@ -33,19 +34,53 @@ export class CreateEventPage {
   startDate;
   endDate;
   hasEndDate;
-  
+  event: IEvent & LokiObj;
   ionViewDidLoad() {
-    this.logo = '';
-    this.studentIds = [];
     this.getStudents();
-    const currentDate = new Date();
-    this.startDate = `${currentDate.getFullYear()}-${addZeroInFront(currentDate.getMonth() + 1)}-${addZeroInFront(currentDate.getDate())}`;
-    this.endDate = '';
+    // const currentDate = new Date();
+    // this.startDate = `${currentDate.getFullYear()}-${addZeroInFront(currentDate.getMonth() + 1)}-${addZeroInFront(currentDate.getDate())}`;
+    this.id = this.navParams.get('id');
+    this.getEventProfile(this.id);
   }
+
+  getEventProfile(id) {
+    this.studentIds = [];
+    const response = this.db.getEvent(id);
+    if (response.success) {
+      this.event = { ...response.data };
+      // let members = [];
+      // for (const member of response.data.members) {
+      //   const studentResponse = this.db.getStudentById(<any>member);
+      //   if (studentResponse.success) {
+      //     members = [...members, {
+      //       id: studentResponse.data.id,
+      //       firstName: studentResponse.data.firstName,
+      //       initial: studentResponse.data.initial,
+      //       lastName: studentResponse.data.lastName,
+      //       phoneNumber: studentResponse.data.phoneNumber,
+      //       picture: studentResponse.data.picture,
+      //       class: studentResponse.data.class,
+      //       attendance: member.attendance,
+      //       absence: member.absence
+      //     }];
+      //   }
+      // }
+      this.logo = response.data.logo;
+      this.eventName = response.data.name;
+      this.startDate = response.data.startDate;
+      this.endDate = response.data.endDate;
+      // this.students = members;
+      this.studentIds = response.data.members.map(member => member.id);
+    }
+    else handleError(response.error);
+  }
+
+
   resetEndDate() {
     this.endDate = '';
   }
-  createNewEvent() {
+
+  editEvent() {
     try {
       if (this.studentIds.length < 1) {
         const opts: ISimpleAlertOptions = {
@@ -79,29 +114,36 @@ export class CreateEventPage {
         this.showSimpleAlert(opts);
         return;
       }
-      const members = this.studentIds.map(studentId => {
-        return {
-          id: studentId,
-          attendance: false,
-          absence: false
+      
+      const members = this.studentIds.map(studentId=> {
+        const member = this.event.members.find(member=>studentId == member.id);
+        if (member) {
+          return member;
+        } else {
+          return {
+            id: studentId,
+            attendance: false,
+            absence: false
+          }
         }
-      })
-      let newEvent: IEvent = {
+      });
+      this.event = {
+        ...this.event,
         logo: this.logo,
         name: this.eventName,
         startDate: this.startDate,
-        members: members,
+        members: [...members],
         endDate: ''
       };
       if (this.endDate) {
-        newEvent = {
-          ...newEvent,
+        this.event = {
+          ...this.event,
           endDate: this.endDate
         }
       }
       const alert = this.alertCtrl.create({
         title: 'Warning!',
-        subTitle: `Are you sure you want to create a new ${this.eventName}?`,
+        subTitle: `Are you sure you want to edit ${this.eventName} event?`,
         buttons: [
           { text: 'No' },
           {
@@ -110,12 +152,12 @@ export class CreateEventPage {
               // user has clicked the alert button
               // begin the alert's dismiss transition
               const navTransition = alert.dismiss();
-              const response = this.db.insertEvent(newEvent);
+              const response = this.db.updateEvent(this.event);
               if (response.success == true) {
                 navTransition.then(() => {
                   const options = {
                     title: 'Success!',
-                    subTitle: `${this.eventName} was created.`
+                    subTitle: `${this.eventName} was edited successfully.`
                   };
                   this.showAdvancedAlert(options);
                 });
@@ -240,7 +282,7 @@ export class CreateEventPage {
             // begin the alert's dismiss transition
             alert.dismiss()
               .then(() => {
-                this.viewCtrl.dismiss();
+                this.viewCtrl.dismiss(this.id);
               });
             return false;
           }
@@ -250,7 +292,49 @@ export class CreateEventPage {
     alert.present();
   }
 
-  goBack() {
-    this.viewCtrl.dismiss();
+  removeEvent() {
+    try {
+      const alert = this.alertCtrl.create({
+        title: 'Warning!',
+        subTitle: `Are you sure you want to delete ${this.eventName} event?`,
+        buttons: [
+          { text: 'No' },
+          {
+            text: 'Yes',
+            handler: () => {
+              // user has clicked the alert button
+              // begin the alert's dismiss transition
+              const navTransition = alert.dismiss();
+              const response = this.db.removeEvent(this.event);
+              if (response.success == true) {
+                this.id = undefined;
+                navTransition.then(() => {
+                  const opts = {
+                    title: 'Success!',
+                    subTitle: 'Event was removed successfully from DB!'
+                  };
+                  this.showAdvancedAlert(opts);
+                });
+              } else {
+                const options = {
+                  title: 'Error',
+                  subTitle: response.error
+                }
+                navTransition.then(() => this.showAdvancedAlert(options));
+              }
+              return false;
+            }
+          }
+        ]
+      });
+      alert.present();
+    } catch (error) {
+      handleError(error)
+    }
   }
-} 
+
+  goBack() {
+    this.viewCtrl.dismiss(this.id);
+  }
+
+}

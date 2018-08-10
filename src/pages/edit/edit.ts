@@ -99,7 +99,7 @@ export class EditPage implements OnInit {
             // begin the alert's dismiss transition
             const navTransition = alert.dismiss();
             const response = {
-              ...this.db.deleteStudent(opts)
+              ...this.db.removeStudent(opts)
             };
             if (response.success == true) {
               navTransition.then(() => this.showAdvancedAlert(options));

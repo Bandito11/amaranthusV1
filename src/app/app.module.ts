@@ -1,5 +1,3 @@
-import { EventProfilePageModule } from './../pages/event-profile/event-profile.module';
-import { CreateEventPageModule } from '../pages/createevent/createevent.module';
 import { EventsPageModule } from '../pages/events/events.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +11,6 @@ import { Camera } from '@ionic-native/camera';
 import { TabsPageModule } from '../pages/tabs/tabs.module';
 import { MainPageModule } from '../pages/main/main.module';
 import { TablePageModule } from '../pages/table/table.module';
-import { EditPageModule } from '../pages/edit/edit.module';
 import { CreatePageModule } from '../pages/create/create.module';
 import { StudentProfilePageModule } from '../pages/student-profile/student-profile.module';
 import { StudentListPageModule } from '../pages/student-list/student-list.module';
@@ -26,7 +23,6 @@ import { TextTabDelimitedProvider } from '../providers/text-tab-delimited/text-t
 import { HttpClientModule } from '@angular/common/http';
 import { CSVProvider } from '../providers/csv/csv';
 import { FileProvider } from '../providers/file/file';
-import { ExportPageModule } from '../pages/export/export.module';
 import { XLSXProvider } from '../providers/xslx/xslx';
 import { IonicStorageModule } from '@ionic/storage';
 import { FileOpener } from '@ionic-native/file-opener';
@@ -40,16 +36,12 @@ import { EmailComposer } from '@ionic-native/email-composer';
     TabsPageModule,
     MainPageModule,
     TablePageModule,
-    EditPageModule,
     CreatePageModule,
     StudentProfilePageModule,
     StudentListPageModule,
     CalendarPageModule,
     SettingsPageModule,
-    ExportPageModule,
     EventsPageModule,
-    CreateEventPageModule,
-    EventProfilePageModule,
     BrowserModule,
     HttpClientModule,
     FormsModule,

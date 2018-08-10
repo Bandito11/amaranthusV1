@@ -30,26 +30,22 @@ export class XLSXProvider {
     };
   }
 
-  private createXLSX(tableRecords):Promise<Blob> {
+  private createXLSX(records: IRecord[]): Promise<Blob> {
     return new Promise((resolve, reject) => {
-      /* generate worksheet */
-      let studentsRecords: any[][] = [
+      let headers = [
         ['Id', 'Name', 'Attendance', 'Absence', 'Attendance %']
       ];
       try {
-        tableRecords.length;
+        records.length;
       } catch (error) {
         reject('There are no students created in database!');
       }
-      tableRecords.map(tableRecord => {
-        studentsRecords = [
-          ...studentsRecords,
-          [tableRecord.id, tableRecord.fullName, tableRecord.attendance, tableRecord.absence, tableRecord.percent]
+      records.map(record => {
+        const studentsRecords = [
+          ...headers,
+          [record.id, record.fullName, record.attendance, record.absence, record.percent]
         ];
-        const ws: XLSX.WorkSheet = XLSX
-          .utils
-          .aoa_to_sheet(studentsRecords);
-        /* generate workbook and add the worksheet */
+        const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(studentsRecords);
         const wb: XLSX.WorkBook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Students Attendance Records');
         const wbout: ArrayBuffer = XLSX.write(wb, {

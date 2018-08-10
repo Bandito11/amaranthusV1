@@ -1,13 +1,7 @@
-<!--
-  Generated template for the EventProfilePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>{{event.name}}</ion-title>
+    <ion-title>{{eventControls.name}}</ion-title>
     <ion-buttons end>
         <button ion-button (click)="editEvent()">Edit</button>
     </ion-buttons>
@@ -16,10 +10,10 @@
 
 
 <ion-content padding>
-  <img src="{{event.logo}}" alt="{{event.name}}" />
-  <p>{{event.startDate}}</p>
-  <p>{{event.endDate}}</p>
-  <ion-list *ngFor="let member of eventProfile.members" no-lines>
+  <img src="{{eventControls.logo}}" alt="{{eventControls.name}}" />
+  <p>From: {{eventControls.startDate}}</p>
+  <p *ngIf="eventControls.endDate">To: {{eventControls.endDate}}</p>
+  <ion-list *ngFor="let member of eventControls.members" no-lines>
     <ion-item>
       <ion-avatar item-left>
         <img src="{{member.picture}}" alt="An image of user">
@@ -34,7 +28,7 @@
           <span class="label">ID: </span>{{member.id}}
         </p>
         <p *ngIf="member.phoneNumber">
-          <span class="label">Phone Number: </span>{{member.phoneNumber}}
+          <span>Phone Number: </span>{{member.phoneNumber}}
         </p>
         <p *ngIf="member.class">
           <span class="label">Class: </span>{{member.class}}

@@ -86,7 +86,9 @@ export class EventsPage implements OnInit {
   }
 
   goToCreateEvent() {
-    this.modal.create(CreateEventPage).present();
+    const modal = this.modal.create(CreateEventPage)
+    modal.onDidDismiss(_=> this.getEvents())
+    modal.present();
   }
 
   goToEventProfile(id: string) {

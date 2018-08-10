@@ -45,6 +45,51 @@ export class AmaranthusDBProvider {
     }
   }
 
+  removeEvent(event: IEvent & LokiObj) {
+    try {
+      let results: any = eventsColl.findOne({
+        '$loki': {
+          '$eq': event.$loki
+        }
+      });
+      eventsColl.remove(results);
+      return {
+        success: true,
+        error: null,
+        data: null
+      };
+    } catch (error) {
+      return {
+        success: false, error: error
+      }
+    }
+  }
+
+  updateEvent(event: IEvent & LokiObj) {
+    try {
+      let results: any = eventsColl.findOne({
+        '$loki': {
+          '$eq': event.$loki
+        }
+      });
+      if(results){
+      eventsColl.update(event);
+      return {
+        success: true,
+        error: null,
+        data: null
+      }
+    }else{
+      return {
+        success:false,
+        error:'User doesn\'t exist on Database'
+      }
+    }
+    } catch (error) {
+      return { success: false, error: error }
+    }
+  }
+
   getEvents() {
     let response: IResponse<IEvent[]> = {
       success: false,
@@ -68,8 +113,8 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getEventProfile(id) {
-    let response: IResponse<IEvent> = {
+  getEvent(id) {
+    let response: IResponse<IEvent & LokiObj> = {
       success: false,
       error: null,
       data: undefined
@@ -237,9 +282,7 @@ export class AmaranthusDBProvider {
     return response;
   }
 
-  updateRecord(
-    opts: { attendance: boolean, absence: boolean, date: ICalendar, id: string }
-  ) {
+  updateRecord(opts: { attendance: boolean, absence: boolean, date: ICalendar, id: string }) {
     let response: IResponse<null> = {
       success: false,
       error: null,
@@ -320,7 +363,7 @@ export class AmaranthusDBProvider {
     }
   }
 
-  deleteStudent(student: IStudent): IResponse<null> {
+  removeStudent(student: IStudent): IResponse<null> {
     try {
       let results: any = studentsColl.findOne({
         'id': {

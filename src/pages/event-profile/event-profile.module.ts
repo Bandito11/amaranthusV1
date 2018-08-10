@@ -1,3 +1,4 @@
+import { EditEventPageModule } from './../editevent/editevent.module';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { EventProfilePage } from './event-profile';
@@ -8,6 +9,7 @@ import { EventProfilePage } from './event-profile';
   ],
   imports: [
     IonicPageModule.forChild(EventProfilePage),
+    EditEventPageModule
   ],
 })
 export class EventProfilePageModule {}

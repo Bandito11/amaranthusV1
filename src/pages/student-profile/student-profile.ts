@@ -26,7 +26,9 @@ export class StudentProfilePage implements OnInit {
    * @param id 
    */
   goToEdit(id: string) {
-    this.modalCtrl.create(EditPage, { id: id }).present();
+    const modal = this.modalCtrl.create(EditPage, { id: id })
+    modal.onWillDismiss(_ => this.getStudentFromDB(this.student));
+    modal.present();
   }
 
   picture: string;
