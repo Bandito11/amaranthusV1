@@ -75,7 +75,7 @@ export class EventsPage implements OnInit {
 
   sortByName() {
       this.events = [
-        ...events.sort((a, b) => {
+        ...this.events.sort((a, b) => {
             if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
             if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
             return 0;
