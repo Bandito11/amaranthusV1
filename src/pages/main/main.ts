@@ -197,7 +197,10 @@ export class MainPage implements OnInit {
 
   goToCreate() {
     const modal = this.modalCtrl.create(CreatePage);
-    modal.onDidDismiss(_ => this.getStudents())
+    modal.onDidDismiss(_ => {
+      this.getStudents();
+    this.getFilterOptions();
+  });
     modal.present();
   }
 

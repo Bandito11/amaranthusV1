@@ -195,7 +195,7 @@ export class CreateEventPage {
         )
     } else {
       // Only for Dev Purposes
-      this.logo = 'https://firebasestorage.googleapis.com/v0/b/ageratum-ec8a3.appspot.com/o/cordova_logo_normal_dark.png?alt=media&token=3b89f56e-8685-4f56-b5d7-2441f8857f97';
+      // this.logo = 'https://firebasestorage.googleapis.com/v0/b/ageratum-ec8a3.appspot.com/o/cordova_logo_normal_dark.png?alt=media&token=3b89f56e-8685-4f56-b5d7-2441f8857f97';
     }
   }
 

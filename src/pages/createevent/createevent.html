@@ -15,6 +15,8 @@
   <div *ngIf="logo" class="logo-image">
     <img src="{{logo}}" alt="A picture for the logo for the event">
   </div>
+  <button (click)="addLogo()" type="button" ion-button color="primary">Browse</button>
+  <button (click)="logo = '' " type="button" ion-button color="secondary">Reset</button>
   <ion-item-group>
     <ion-item>
       <ion-label stacked>Name</ion-label>
@@ -35,8 +37,6 @@
     <ion-datetime displayFormat="MMMM DD YYYY" pickerFormat="MMMM DD YYYY" [(ngModel)]="endDate"></ion-datetime>
     <ion-icon id="form-icon" item-right name="warning" *ngIf="!this.endDate && hasEndDate"></ion-icon>
   </ion-item>
-  <button (click)="addLogo()" type="button" ion-button color="primary">Browse</button>
-  <button (click)="logo = '' " type="button" ion-button color="secondary">Reset</button>
   <ion-list no-lines>
     <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
     <ion-item *ngFor="let student of students">

@@ -12,7 +12,7 @@
       <button ion-button (click)="goBack()">Cancel</button>
     </ion-buttons>
   <ion-buttons end>
-    <button ion-button (click)="editEvent()">Edit</button>
+    <button ion-button (click)="editEvent()">Save</button>
   </ion-buttons>
   </ion-navbar>
 
@@ -23,6 +23,8 @@
   <div *ngIf="logo" class="logo-image">
     <img src="{{logo}}" alt="A picture for the logo for the event">
   </div>
+  <button (click)="addLogo()" type="button" ion-button color="primary">Browse</button>
+  <button (click)="logo = '' " type="button" ion-button color="secondary">Reset</button>
   <ion-item-group>
     <ion-item>
       <ion-label stacked>Name</ion-label>
@@ -43,8 +45,6 @@
     <ion-datetime displayFormat="MMMM DD YYYY" pickerFormat="MMMM DD YYYY" [(ngModel)]="endDate"></ion-datetime>
     <ion-icon id="form-icon" item-right name="warning" *ngIf="!this.endDate && hasEndDate"></ion-icon>
   </ion-item>
-  <button (click)="addLogo()" type="button" ion-button color="primary">Browse</button>
-  <button (click)="logo = '' " type="button" ion-button color="secondary">Reset</button>
   <ion-list no-lines>
     <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
     <ion-item *ngFor="let student of students">
@@ -80,8 +80,8 @@
       </div>
     </ion-item>
   </ion-list>
-  <button ion-button (click)="editEvent()">Edit</button>
-  <button ion-button color="secondary" (click)="removeEvent()">Remove</button>
+  <button ion-button (click)="editEvent()">Save</button>
+  <button ion-button color="secondary" (click)="removeEvent()">Delete</button>
   <ion-fab bottom right>
     <button ion-fab color="secondary" (click)="addStudent()">
       <ion-icon name="add"></ion-icon>

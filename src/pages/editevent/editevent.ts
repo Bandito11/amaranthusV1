@@ -3,7 +3,6 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, ModalController, AlertController, ViewController, normalizeURL } from 'ionic-angular';
 import { IStudent, ISimpleAlertOptions, IEvent } from '../../common/interface';
-import { addZeroInFront } from '../../common/validation';
 import { handleError } from '../../common/handleError';
 import { CreatePage } from '../create/create';
 

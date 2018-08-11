@@ -30,7 +30,7 @@ export class CreatePage {
   ionViewWillEnter() {
     this.generateId();
     this.gender = 'male';
-    this.picture = './assets/profilepics/default.png';
+    this.picture = './assets/profilePics/default.png';
     this.phoneNumber = '';
   }
 
