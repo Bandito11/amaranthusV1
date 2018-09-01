@@ -17,8 +17,15 @@ export interface IStudent {
     isActive: boolean;
     class: string;
     fullName?: string;
+    notes?: string;
 }
-
+export interface INote {
+    id: string;
+    notes: string;
+    month: number;
+    day: number;
+    year: number;
+}
 export interface IEvent {
     logo: string;
     name: string;

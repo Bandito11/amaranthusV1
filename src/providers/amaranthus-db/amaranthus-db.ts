@@ -1,6 +1,5 @@
-import { IEvent } from './../../common/interface';
 import { Storage } from '@ionic/storage';
-import { IStudent, IResponse, IRecord, ICalendar } from '../../common/interface';
+import { IStudent, IResponse, IRecord, ICalendar, IEvent, INote } from '../../common/interface';
 import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';
@@ -10,6 +9,7 @@ import { trimText, trimEvent } from '../../common/formatToText';
 let studentsColl: Collection<IStudent>;
 let recordsColl: Collection<IRecord>;
 let eventsColl: Collection<IEvent>;
+let notesColl: Collection<INote>;
 let db: Loki;
 
 @Injectable()
@@ -34,6 +34,7 @@ export class AmaranthusDBProvider {
     studentsColl = db.getCollection<IStudent>('students');
     recordsColl = db.getCollection<IRecord>('records');
     eventsColl = db.getCollection<IEvent>('events');
+    notesColl = db.getCollection<INote>('notes');
     if (!studentsColl) {
       studentsColl = db.addCollection<IStudent>('students');
     }
@@ -43,9 +44,137 @@ export class AmaranthusDBProvider {
     if (!eventsColl) {
       eventsColl = db.addCollection<IEvent>('events');
     }
+    if (!notesColl) {
+      notesColl = db.addCollection<INote>('notes');
+    }
+  }
+
+  getNotesByDate(opts: { date: ICalendar, id: string }) {
+    let response: IResponse<INote> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
+    const results:any = notesColl.findOne({
+      'id': {
+        '$eq': opts.id
+      },
+      'month': {
+        '$eq': opts.date.month
+      },
+      'year': {
+        '$eq': opts.date.year
+      },
+      'day': {
+        '$eq': opts.date.day
+      }
+    });
+    if (results) {
+      response = {
+        ...response,
+        success: true,
+        data: results
+      };
+      return response;
+    } else {
+      response = {
+        ...response,
+        error: 'Error retrieving notes. Please try again!'
+      }
+      return response;
+    }
+  }
+
+  getNotesById(id: string) {
+    let response: IResponse<INote> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
+    const results = notesColl.findOne({
+      id: id
+    });
+    if (results) {
+      response = {
+        ...response,
+        success: true,
+        data: results
+      };
+      return response;
+    } else {
+      response = {
+        ...response,
+        error: 'Error retrieving notes. Please try again!'
+      }
+      return response;
+    }
+  }
+
+  getNotes() {
+    return notesColl.data;
+  }
+
+  insertNotes(note: INote) {
+    let response: IResponse<null> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
+    try {
+      const results:any = notesColl.findOne({
+        'id': {
+          '$eq': note.id
+        },
+        'month': {
+          '$eq': note.month
+        },
+        'year': {
+          '$eq': note.year
+        },
+        'day': {
+          '$eq': note.day
+        }
+      });
+      if (!results) {
+        notesColl.insert(note);
+      } else {
+        const newNote = {
+          ...results,
+          ...note
+        }
+        notesColl.update(newNote);
+      };
+      response = { ...response, success: true };
+      return response;
+    } catch (error) {
+      response = { ...response, error: error };
+      return response;
+    }
+  }
+
+  insertEvent(event: IEvent) {
+    let response: IResponse<null> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
+    try {
+      const formattedEvent = trimEvent(event);
+      eventsColl.insert(formattedEvent);
+      response = { ...response, success: true };
+      return response;
+    } catch (error) {
+      response = { ...response, error: error };
+      return response;
+    }
   }
 
   removeEvent(event: IEvent & LokiObj) {
+    let response: IResponse<null> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
     try {
       let results: any = eventsColl.findOne({
         '$loki': {
@@ -53,15 +182,9 @@ export class AmaranthusDBProvider {
         }
       });
       eventsColl.remove(results);
-      return {
-        success: true,
-        error: null,
-        data: null
-      };
+      return { ...response, success: true };
     } catch (error) {
-      return {
-        success: false, error: error
-      }
+      return { ...response, error: error };
     }
   }
 
@@ -72,19 +195,19 @@ export class AmaranthusDBProvider {
           '$eq': event.$loki
         }
       });
-      if(results){
-      eventsColl.update(event);
-      return {
-        success: true,
-        error: null,
-        data: null
+      if (results) {
+        eventsColl.update(event);
+        return {
+          success: true,
+          error: null,
+          data: null
+        }
+      } else {
+        return {
+          success: false,
+          error: 'User doesn\'t exist on Database'
+        }
       }
-    }else{
-      return {
-        success:false,
-        error:'User doesn\'t exist on Database'
-      }
-    }
     } catch (error) {
       return { success: false, error: error }
     }
@@ -140,29 +263,6 @@ export class AmaranthusDBProvider {
     }
   }
 
-  insertEvent(event: IEvent) {
-    let response: IResponse<null> = {
-      success: false,
-      error: null,
-      data: undefined
-    };
-    try {
-      const formattedEvent = trimEvent(event);
-      eventsColl.insert(formattedEvent);
-      response = {
-        success: true,
-        error: null,
-        data: null
-      };
-      return response;
-    } catch (error) {
-      response = {
-        ...response,
-        error: error
-      }
-      return response;
-    }
-  }
   checkIfStudentExists(opts: { id: string }) {
     try {
       let results = studentsColl.findOne({
@@ -395,11 +495,21 @@ export class AmaranthusDBProvider {
           '$eq': student.id
         }
       });
+      const noteResponse = this.getNotesById(results.id);
+      let studentFound = {
+        ...results
+      }
+      if (noteResponse.success) {
+        studentFound = {
+          ...studentFound,
+          notes: noteResponse.data.notes
+        }
+      }
       response = {
         ...response,
         success: true,
         error: null,
-        data: results
+        data: studentFound
       };
       return response;
     } catch (error) {
@@ -643,19 +753,33 @@ export class AmaranthusDBProvider {
             month: date.month
           })
         };
+        const note = this.getNotesByDate({ 
+          id: student.id, 
+          date: {
+            ...date,
+            month: date.month - 1
+          } 
+        });
+        let newStudent = {
+          ...student,
+          attendance: false,
+          absence: false,
+          notes: null
+        };
         if (record != null && record.id == student.id) {
-          return {
-            ...student,
+          newStudent = {
+            ...newStudent,
             attendance: record.attendance,
             absence: record.absence
           };
-        } else {
-          return {
-            ...student,
-            attendance: false,
-            absence: false
+        }
+        if (note.success) {
+          newStudent = {
+            ...newStudent,
+            notes: note.data.notes
           };
         }
+        return newStudent;
       }); // got results
       return { success: true, error: null, data: results };
     } catch (error) {

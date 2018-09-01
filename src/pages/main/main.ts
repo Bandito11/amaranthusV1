@@ -5,7 +5,7 @@ import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-d
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, AlertController, ModalController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
-import { ISimpleAlertOptions, IStudent, ICalendar } from '../../common/interface';
+import { ISimpleAlertOptions, IStudent, ICalendar, INote } from '../../common/interface';
 import { filterStudentsList, sortStudentsbyId, sortStudentsName } from '../../common/search';
 
 @IonicPage()
@@ -48,11 +48,19 @@ export class MainPage implements OnInit {
     }, 50);
   }
 
-  addNotes(notes:string){
+  addNotes(note) {
     clearTimeout(this.timer)
-    this.timer = setTimeout(()=>{
+    this.timer = setTimeout(() => {
       //TODO: Implement Notes DB Insert/ Load
-    },3000)
+      const currentDate = new Date();
+      const newNote = {
+        ...note,
+        month: currentDate.getMonth(),
+        day: currentDate.getDate(),
+        year: currentDate.getFullYear()
+      };
+      this.db.insertNotes(newNote);
+    }, 1000)
   }
 
   getFilterOptions() {
