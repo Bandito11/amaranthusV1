@@ -24,6 +24,8 @@ export class MainPage implements OnInit {
   selectOptions: string[];
   filterOptions: string[];
   date: ICalendar;
+  toggle;
+  timer: number;
 
   ngOnInit() {
     const currentDate = new Date();
@@ -36,6 +38,7 @@ export class MainPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.timer = 0;
     let studentInterval = setInterval(() => {
       this.getStudents();
       this.filterOptions = this.getFilterOptions();
@@ -43,6 +46,13 @@ export class MainPage implements OnInit {
         clearInterval(studentInterval);
       }
     }, 50);
+  }
+
+  addNotes(notes:string){
+    clearTimeout(this.timer)
+    this.timer = setTimeout(()=>{
+      //TODO: Implement Notes DB Insert/ Load
+    },3000)
   }
 
   getFilterOptions() {
@@ -199,8 +209,8 @@ export class MainPage implements OnInit {
     const modal = this.modalCtrl.create(CreatePage);
     modal.onDidDismiss(_ => {
       this.getStudents();
-    this.getFilterOptions();
-  });
+      this.getFilterOptions();
+    });
     modal.present();
   }
 

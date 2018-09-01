@@ -58,6 +58,12 @@
           <button ion-button small color="secondary" (click)="addAbsence({id: student.id})">
             Absent
           </button>
+          <button ion-button clear large color="dark" (click)="toggle? toggle = '' :toggle = student.id">
+            <ion-icon name="paper"></ion-icon>
+          </button>
+          <div *ngIf="toggle == student.id">
+            <textarea #notes (keyup)="addNotes(notes.value)"></textarea>
+          </div>
           <div>
             <p class="left attended" *ngIf="student.attendance">
               {{student.firstName}}'s present today!

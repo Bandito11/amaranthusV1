@@ -15,8 +15,8 @@ export interface IStudent {
     emergencyRelationship: string;
     emergencyContactPhoneNumber: string;
     isActive: boolean;
-    class: string,
-    fullName?: string
+    class: string;
+    fullName?: string;
 }
 
 export interface IEvent {
