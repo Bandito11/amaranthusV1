@@ -58,7 +58,7 @@
           <button ion-button small color="secondary" (click)="addAbsence({id: student.id})">
             Absent
           </button>
-          <button ion-button clear large color="dark" (click)="toggle? toggle = '' :toggle = student.id">
+          <button ion-button clear large color="dark" (click)="showNotes(student.id)">
             <ion-icon name="paper"></ion-icon>
           </button>
           <div *ngIf="toggle == student.id">

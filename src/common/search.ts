@@ -1,10 +1,10 @@
-import { IStudent } from "./interface";
+import { IStudent, IRecord } from "./interface";
 
 /**
  * 
  * @param {string, IStudent[]} opts 
  */
-export function filterStudentsList(opts: { students: IStudent[], query: string }): IStudent[] {
+export function filterStudentsList(opts: { students: IStudent[], query: string }) {
     let fullName: string;
     const newQuery = opts.students.filter(student => {
         fullName = `${student.firstName} ${student.lastName}`.toLowerCase();

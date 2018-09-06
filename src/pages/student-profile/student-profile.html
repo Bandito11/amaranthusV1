@@ -57,9 +57,6 @@
     <p class="text bold">
       <span class="text label">Phone Number: </span>{{student.emergencyContactPhoneNumber}}
     </p>
-    <p class="text bold">
-      <span class="text label">Notes: </span>{{student.notes}}
-    </p>
     <div class="text bold">
       <p *ngIf="student.isActive == true">
         *Student is currently active on the roster.*
@@ -67,6 +64,13 @@
       <p *ngIf="student.isActive == false">
         *Student is currently inactive on the roster.*
       </p>
+    </div>
+    <h2>Notes: </h2>
+    <div class="text bold" id="notes">
+        <ul id="notes-text" *ngFor="let note of notes">
+          <li><span class="text label">Date: </span> {{note.date}}</li>
+          <li><span class="text label">Notes: </span> {{note.note}}</li>
+        </ul>
     </div>
   </div>
 </ion-content>

@@ -74,6 +74,7 @@ export interface IRecord {
     fullName?: string;
     picture?: string;
     percent?: number;
+    notes?:string
 }
 
 export interface ICalendar {

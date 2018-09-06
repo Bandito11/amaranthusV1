@@ -49,13 +49,13 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getNotesByDate(opts: { date: ICalendar, id: string }) {
+  getNoteByDate(opts: { date: ICalendar, id: string }) {
     let response: IResponse<INote> = {
       success: false,
       error: null,
       data: undefined
     };
-    const results:any = notesColl.findOne({
+    const results: any = notesColl.findOne({
       'id': {
         '$eq': opts.id
       },
@@ -79,13 +79,14 @@ export class AmaranthusDBProvider {
     } else {
       response = {
         ...response,
-        error: 'Error retrieving notes. Please try again!'
+        error: 'Error retrieving notes. Please try again!',
+        data: null
       }
       return response;
     }
   }
 
-  getNotesById(id: string) {
+  getNoteById(id: string) {
     let response: IResponse<INote> = {
       success: false,
       error: null,
@@ -104,7 +105,39 @@ export class AmaranthusDBProvider {
     } else {
       response = {
         ...response,
-        error: 'Error retrieving notes. Please try again!'
+        error: 'Error retrieving notes. Please try again!',
+        data: null
+      }
+      return response;
+    }
+  }
+
+  getAllNotesById(id: string) {
+    let response: IResponse<INote[]> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
+    const results = notesColl.chain()
+      .find({
+        id: id
+      })
+      .simplesort('day')
+      .simplesort('month')
+      .simplesort('year')
+      .data();
+    if (results) {
+      response = {
+        ...response,
+        success: true,
+        data: [...results]
+      };
+      return response;
+    } else {
+      response = {
+        ...response,
+        error: 'Error retrieving notes. Please try again!',
+        data: null
       }
       return response;
     }
@@ -121,7 +154,7 @@ export class AmaranthusDBProvider {
       data: undefined
     };
     try {
-      const results:any = notesColl.findOne({
+      const results: any = notesColl.findOne({
         'id': {
           '$eq': note.id
         },
@@ -205,7 +238,8 @@ export class AmaranthusDBProvider {
       } else {
         return {
           success: false,
-          error: 'User doesn\'t exist on Database'
+          error: 'User doesn\'t exist on Database',
+          data: null
         }
       }
     } catch (error) {
@@ -483,8 +517,8 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getStudentById(student: IStudent): IResponse<IStudent> {
-    let response: IResponse<IStudent> = {
+  getStudentById(student: IStudent): IResponse<IStudent & LokiObj> {
+    let response: IResponse<IStudent & LokiObj> = {
       success: false,
       error: null,
       data: undefined
@@ -495,7 +529,7 @@ export class AmaranthusDBProvider {
           '$eq': student.id
         }
       });
-      const noteResponse = this.getNotesById(results.id);
+      const noteResponse = this.getNoteById(results.id);
       let studentFound = {
         ...results
       }
@@ -560,8 +594,9 @@ export class AmaranthusDBProvider {
           '$eq': true
         }
       });
-
+      let studentRecord;
       students.map((student: IStudent) => {
+        studentRecord = null;
         const record = recordsColl.findOne({
           'id': {
             '$eq': student.id
@@ -576,37 +611,48 @@ export class AmaranthusDBProvider {
             '$eq': opts.day
           }
         });
+        const noteDate = {
+          ...opts,
+          month: opts.month - 1
+        };
+        const noteResponse = this.getNoteByDate({ id: student.id, date: noteDate });
+        if (noteResponse.success) {
+          studentRecord = { notes: noteResponse.data.notes };
+        } else {
+          studentRecord = { notes: '' };
+        }
         if (record) {
           if (student.id == record.id) {
+            studentRecord = {
+              ...studentRecord,
+              firstName: student.firstName,
+              lastName: student.lastName,
+              fullName: `${student.firstName} ${student.lastName}`,
+              picture: student.picture,
+              attendance: record.attendance,
+              absence: record.absence,
+              id: student.id
+            }
             response = {
               ...response,
-              data: [
-                ...response.data, {
-                  firstName: student.firstName,
-                  lastName: student.lastName,
-                  fullName: `${student.firstName} ${student.lastName}`,
-                  picture: student.picture,
-                  attendance: record.attendance,
-                  absence: record.absence,
-                  id: student.id
-                }
-              ]
+              data: [...response.data, studentRecord]
             };
           }
         } else {
+          studentRecord = {
+            ...studentRecord,
+            firstName: student.firstName,
+            lastName: student.lastName,
+            fullName: `${student.firstName} ${student.lastName}`,
+            picture: student.picture,
+            attendance: false,
+            absence: false,
+            id: student.id
+          }
           response = {
             ...response,
             data: [
-              ...response.data, {
-                firstName: student.firstName,
-                lastName: student.lastName,
-                fullName: `${student.firstName} ${student.lastName}`,
-                picture: student.picture,
-                attendance: false,
-                absence: false,
-                id: student.id
-              }
-            ]
+              ...response.data, studentRecord]
           };
         };
       });
@@ -686,7 +732,6 @@ export class AmaranthusDBProvider {
                   attendance: attendance,
                   percent: 0,
                   absence: absence,
-
                   picture: student.picture
                 }
               ]
@@ -753,12 +798,12 @@ export class AmaranthusDBProvider {
             month: date.month
           })
         };
-        const note = this.getNotesByDate({ 
-          id: student.id, 
+        const note = this.getNoteByDate({
+          id: student.id,
           date: {
             ...date,
             month: date.month - 1
-          } 
+          }
         });
         let newStudent = {
           ...student,

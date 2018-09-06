@@ -2,10 +2,10 @@ import { EventsPage } from '../events/events';
 import { StudentProfilePage } from '../student-profile/student-profile';
 import { CreatePage } from '../create/create';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, AlertController, ModalController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
-import { ISimpleAlertOptions, IStudent, ICalendar, INote } from '../../common/interface';
+import { ISimpleAlertOptions, IStudent, ICalendar } from '../../common/interface';
 import { filterStudentsList, sortStudentsbyId, sortStudentsName } from '../../common/search';
 
 @IonicPage()
@@ -26,6 +26,7 @@ export class MainPage implements OnInit {
   date: ICalendar;
   toggle;
   timer: number;
+  @ViewChild('notes') notesElement: ElementRef;
 
   ngOnInit() {
     const currentDate = new Date();
@@ -48,19 +49,38 @@ export class MainPage implements OnInit {
     }, 50);
   }
 
-  addNotes(note) {
-    clearTimeout(this.timer)
+  showNotes(id) {
+    if (this.toggle) {
+      this.toggle = ''
+    } else {
+      this.toggle = id;
+      setTimeout(() => {
+        this.notesElement.nativeElement.focus();
+      }, 0);
+    }
+  }
+
+  addNotes(opts: { id: string, notes: string }) {
+    clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      //TODO: Implement Notes DB Insert/ Load
       const currentDate = new Date();
       const newNote = {
-        ...note,
+        ...opts,
         month: currentDate.getMonth(),
         day: currentDate.getDate(),
         year: currentDate.getFullYear()
       };
       this.db.insertNotes(newNote);
-    }, 1000)
+      this.updateNotes(opts);
+    }, 1000);
+  }
+
+  updateNotes(opts: { id: string, notes: string }) {
+    const index = this.students.findIndex((student) => {
+      if (student.id == opts.id) return true;
+    });
+    this.students[index].notes = opts.notes;
+    this.unfilteredStudents[index].notes = opts.notes;
   }
 
   getFilterOptions() {
@@ -180,11 +200,7 @@ export class MainPage implements OnInit {
     }
   }
 
-  private updateStudentAttendance(opts: {
-    id: string,
-    absence: boolean,
-    attendance: boolean
-  }) {
+  private updateStudentAttendance(opts: { id: string, absence: boolean, attendance: boolean }) {
     const results = this.students.map(student => {
       if (student.id == opts.id) {
         return {

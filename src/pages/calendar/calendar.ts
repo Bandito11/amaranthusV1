@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { ICalendar, IRecord, ISimpleAlertOptions } from '../../common/interface';
 import { monthsLabels, weekDaysHeader } from '../../common/labels';
 import { handleError } from '../../common/handleError';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
+import { filterStudentsList } from '../../common/search';
 
 @IonicPage()
 @Component({
@@ -21,22 +22,62 @@ export class CalendarPage {
 
   currentDate: string;
   students: IRecord[];
-  private untouchedStudentList: IRecord[];
+  private unfilteredStudents: IRecord[];
   private date: ICalendar;
+  timer: number;
+  @ViewChild('notes') notesElement: ElementRef;
+  toggle;
 
   ionViewWillEnter() {
+    this.timer = 0;
     this.getStudentsRecords(this.date);
   }
 
+  showNotes(id) {
+    if (this.toggle) {
+      this.toggle = ''
+    } else {
+      this.toggle = id;
+      setTimeout(() => {
+        this.notesElement.nativeElement.focus();
+      }, 0);
+    }
+  }
 
+  addNotes(opts: { id: string, notes: string }) {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      const newNote = {
+        ...opts,
+        month: this.date.month,
+        day: this.date.day,
+        year: this.date.year
+      };
+      this.db.insertNotes(newNote);
+      this.updateNotes(opts);
+    }, 1000);
+  }
+
+  updateNotes(opts: { id: string, notes: string }) {
+    const index = this.students.findIndex((student) => {
+      if (student.id == opts.id) return true;
+    });
+    this.students[index].notes = opts.notes;
+    this.unfilteredStudents[index].notes = opts.notes;
+  }
+
+  /**
+   * 
+   * @param {ICalendar} opts 
+   * Will get all Students queried by today's date.
+   */
   getStudentsRecords(opts: ICalendar) {
-    // Will get all Students queried by today's date.
-    const date = { ...opts, month: opts.month + 1 }
+    const date = { ...opts, month: opts.month + 1 };
     try {
       const response = this.db.getStudentsRecordsByDate(date)
       if (response.success == true) {
         this.students = [...response.data];
-        this.untouchedStudentList = [...response.data];
+        this.unfilteredStudents = [...response.data];
       } else {
         handleError(response.error);
       }
@@ -55,9 +96,7 @@ export class CalendarPage {
     this.getStudentsRecords(date);
   }
 
-  addAttendance(opts: {
-    id: string
-  }) {
+  addAttendance(opts: { id: string }) {
     const response = this.db.addAttendance({ date: this.date, id: opts.id });
     if (response.success == true) {
       this.updateStudentAttendance({
@@ -93,11 +132,7 @@ export class CalendarPage {
     }
   }
 
-  private updateStudentAttendance(opts: {
-    id: string,
-    absence: boolean,
-    attendance: boolean
-  }) {
+  private updateStudentAttendance(opts: { id: string, absence: boolean, attendance: boolean }) {
     const results = this.students.map(student => {
       if (student.id == opts.id) {
         return {
@@ -110,10 +145,8 @@ export class CalendarPage {
       }
     });
     this.students = [...results];
-    this.untouchedStudentList = [...results];
+    this.unfilteredStudents = [...results];
   }
-
-
 
   private showSimpleAlert(options: ISimpleAlertOptions) {
     return this.alertCtrl.create({
@@ -125,29 +158,17 @@ export class CalendarPage {
   }
 
   searchStudent(event) {
-    // TODO: implement query of the list by searchbar value
     let query: string = event.target.value;
-    query ? this.queryStudentsList(query) : this.initializeStudentsList();
+    query ? this.filterStudentsList(query) : this.initializeStudentsList();
   }
 
   private initializeStudentsList() {
-    this.students = [...this.untouchedStudentList];
+    this.students = [...this.unfilteredStudents];
   };
 
-  private queryStudentsList(query: string) {
-    const students = [...this.untouchedStudentList];
-    let fullName: string;
-    const newQuery = students.filter(student => {
-      fullName = `${student.fullName} ${student.fullName}`.toLowerCase();
-      if (student.id == query ||
-        student.firstName.toLowerCase() == query.toLowerCase() ||
-        student.lastName.toLowerCase() == query.toLowerCase() ||
-        fullName == query.toLowerCase()
-      ) {
-        return student;
-      }
-    });
-    this.students = [...newQuery];
+  private filterStudentsList(query: string) {
+    const students = <any>this.unfilteredStudents;
+    this.students = <any>filterStudentsList({ query: query, students: students })
   }
 
 }

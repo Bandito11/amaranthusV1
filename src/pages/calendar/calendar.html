@@ -17,7 +17,7 @@
   <calendar-component (getDate)="getDate($event)"></calendar-component>
   <h4>{{currentDate}}</h4>
   <ion-searchbar (ionInput)="searchStudent($event)">
-    </ion-searchbar>  
+  </ion-searchbar>
   <ion-list *ngIf="students">
     <ion-item-sliding *ngFor="let student of students">
       <ion-item>
@@ -32,6 +32,12 @@
           <p>
             <span class="label">ID: </span>{{student.id}}
           </p>
+          <button ion-button clear large color="dark" (click)="showNotes(student.id)">
+            <ion-icon name="paper"></ion-icon>
+          </button>
+          <div *ngIf="toggle == student.id">
+            <textarea #notes (keyup)="addNotes({id: student.id, notes:notes.value})">{{student.notes}}</textarea>
+          </div>
           <div>
             <p class="left attended" *ngIf="student.attendance">
               {{student.firstName}}'s is present this day!
