@@ -12,7 +12,6 @@ log.txt
 .vscode/
 npm-debug.log*
 
-zipalign
 .idea/
 .sourcemaps/
 .sass-cache/
@@ -41,3 +40,4 @@ attendancelog.apk
 app-release-unsigned.apk
 android-debug.apk
 android-release-unsigned.apk
+zipalign
