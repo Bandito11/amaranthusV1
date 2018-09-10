@@ -53,14 +53,14 @@ export class SettingsPage implements OnInit {
 
   sendEmail(message: string) {
     let email = {
-      to: 'bandito-dev@outlook.com',
+      to: 'attendancelogtracker@gmail.com',
       subject: 'Attendance Log: Browser',
       body: message,
       isHtml: true
     };
     if (this.platform.is('cordova')) {
-      this.emailComposer.isAvailable().then(available => {
-        if (available) {
+      // this.emailComposer.isAvailable().then(available => {
+      //   if (available) {
           if (this.platform.is('android')) {
             email = {
               ...email,
@@ -74,12 +74,12 @@ export class SettingsPage implements OnInit {
             };
           }
           // Send a text message using default options
-          this.emailComposer.open(email);
-        }
-      });
-    } else {
+          // this.emailComposer.open(email);
+      //   }
+      // });
+    }// else {
       this.emailComposer.open(email);
-    }
+    // }
   }
 
   createEmail(message: string) {

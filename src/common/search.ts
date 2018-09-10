@@ -1,4 +1,4 @@
-import { IStudent, IRecord } from "./interface";
+import { IStudent } from "./interface";
 
 /**
  * 

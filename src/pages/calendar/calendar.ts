@@ -26,7 +26,8 @@ export class CalendarPage {
   private date: ICalendar;
   timer: number;
   @ViewChild('notes') notesElement: ElementRef;
-  toggle;
+  toggle: string;
+  search: string;
 
   ionViewWillEnter() {
     this.timer = 0;
@@ -87,6 +88,7 @@ export class CalendarPage {
   }
 
   getDate(date: ICalendar) {
+    this.search = '';
     this.date = date;
     const currentDay = date.day;
     const currentMonth = monthsLabels[date.month];
@@ -157,8 +159,8 @@ export class CalendarPage {
       .present();;
   }
 
-  searchStudent(event) {
-    let query: string = event.target.value;
+  searchStudent() {
+    let query = this.search;
     query ? this.filterStudentsList(query) : this.initializeStudentsList();
   }
 
