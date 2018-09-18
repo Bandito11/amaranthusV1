@@ -11,11 +11,11 @@ export class AppPurchaseProvider {
   handleError(err) {
     let message = "";
     try {
-    for (let prop in err) {
-      try {
-        message += `${err[prop]} `;
-      } catch (error) { }
-    }
+      for (let prop in err) {
+        try {
+          message += `${err[prop]} `;
+        } catch (error) { }
+      }
     } catch (error) {
       message = err;
     }
@@ -25,7 +25,7 @@ export class AppPurchaseProvider {
   /**
    * Restore purchase
    */
-  restore(): Promise<productRestore[]> {
+  restoreAndroidPurchase(): Promise<productRestore[]> {
     return new Promise((resolve, reject) => {
       this.iap.restorePurchases()
         .then(purchased => resolve(purchased))
@@ -35,10 +35,18 @@ export class AppPurchaseProvider {
         });
     });
   }
+
+  restoreiOSPurchase(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.iap.getReceipt()
+        .then(receipt => resolve(receipt))
+        .catch(error => reject(error));
+    });
+  }
   /**
    * Buy Product
    */
-  buy(productId :string): Promise<productBought> {
+  buy(productId: string): Promise<productBought> {
     return new Promise((resolve, reject) => {
       this.iap.buy(productId)
         .then(product => resolve(product))

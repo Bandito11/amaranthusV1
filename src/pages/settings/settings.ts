@@ -13,13 +13,13 @@ import { EmailComposer } from '@ionic-native/email-composer';
 export class SettingsPage implements OnInit {
 
   constructor(
-    private emailComposer: EmailComposer, 
-    private loading: LoadingController, 
-    private storage: Storage, 
-    private platform: Platform, 
-    private iap: AppPurchaseProvider, 
+    private emailComposer: EmailComposer,
+    private loading: LoadingController,
+    private storage: Storage,
+    private platform: Platform,
+    private iap: AppPurchaseProvider,
     private alertCtrl: AlertController
-   ) { }
+  ) { }
 
 
   private products: productGet[];
@@ -61,24 +61,24 @@ export class SettingsPage implements OnInit {
     if (this.platform.is('cordova')) {
       // this.emailComposer.isAvailable().then(available => {
       //   if (available) {
-          if (this.platform.is('android')) {
-            email = {
-              ...email,
-              subject: 'Attendance Log: Android'
-            };
-          }
-          if (this.platform.is('ios')) {
-            email = {
-              ...email,
-              subject: 'Attendance Log: IPhone'
-            };
-          }
-          // Send a text message using default options
-          // this.emailComposer.open(email);
+      if (this.platform.is('android')) {
+        email = {
+          ...email,
+          subject: 'Attendance Log: Android'
+        };
+      }
+      if (this.platform.is('ios')) {
+        email = {
+          ...email,
+          subject: 'Attendance Log: IPhone'
+        };
+      }
+      // Send a text message using default options
+      // this.emailComposer.open(email);
       //   }
       // });
     }// else {
-      this.emailComposer.open(email);
+    this.emailComposer.open(email);
     // }
   }
 
@@ -104,38 +104,55 @@ export class SettingsPage implements OnInit {
   restorePurchases() {
     const loading = this.loading.create({ content: 'Restoring Purchases!' });
     loading.present();
-    this.iap.restore()
-      .then(products => {
-        products.forEach(product => {
-          if (this.platform.is('ios')) {
-            if (product.productId == 'master.key') {
+    if (this.platform.is('android')) {
+      this.iap.restoreAndroidPurchase()
+        .then(products => {
+          products.forEach(product => {
+            const receipt = JSON.parse(product.receipt);
+            if (product.productId == 'master.key' && stateAndroid[receipt.purchaseState] == ('ACTIVE' || 0)) {
               this.storage.set('boughtMasterKey', true);
               this.bought = true;
               const options: ISimpleAlertOptions = {
                 title: 'Information',
-                subTitle: 'Restored the purchase!'
+                subTitle: 'Restored the purchase!',
+                buttons: ['OK']
               };
               this.showSimpleAlert(options);
             }
-            loading.dismiss();
-          } else if (this.platform.is('android')) {
-            const receipt = JSON.parse(product.receipt);
-            if (product.productId == 'master.key' && stateAndroid[receipt.purchaseState] == ('ACTIVE' || 0)) {
-              this.storage.set('boughtMasterKey', true);
-              const options: ISimpleAlertOptions = {
-                title: 'Information',
-                subTitle: 'Restored the purchase!'
-              };
-              this.showSimpleAlert(options);
-            }
-            loading.dismiss();
-          }
+          });
+          loading.dismiss();
+        })
+        .catch(error => {
+          this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: `No receipts available in the App Store!` })
+          loading.dismiss();
         });
-      })
-      .catch(err => {
-        this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: err })
-        loading.dismiss();
-      });
+    } else if (this.platform.is('ios')) {
+      this.iap.restoreiOSPurchase()
+        .then(receipt => {
+          if (receipt) {
+            const options: ISimpleAlertOptions = {
+              title: 'Information',
+              subTitle: 'Restored the purchase!',
+              buttons: ['OK']
+            };
+            this.storage.set('boughtMasterKey', true);
+            this.bought = true;
+            this.showSimpleAlert(options);
+            loading.dismiss();
+          } else {
+            const options: ISimpleAlertOptions = {
+              title: 'Information',
+              subTitle: `No receipts available in the App Store!`,
+              buttons: ['OK']
+            };
+            this.showSimpleAlert(options);
+          }
+        })
+        .catch(error => {
+          this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: 'No receipts available in the App Store!' })
+          loading.dismiss();
+        });
+    }
   }
 
   buyProduct(opts: {
@@ -148,6 +165,7 @@ export class SettingsPage implements OnInit {
       .then(product => {
         this.showSimpleAlert({ buttons: ['OK'], title: 'Success!', subTitle: `${product.transactionId} was successfully bought.` });
         this.storage.set('boughtMasterKey', true);
+        this.bought = true;
         loading.dismiss();
       })
       .catch(err => {
