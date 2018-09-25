@@ -1,4 +1,4 @@
-import { monthsLabels, yearLabels } from '../../common/labels';
+import { MONTHSLABELS, YEARLABELS } from '../../common/constants';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
@@ -43,12 +43,12 @@ export class TablePage implements OnInit {
     // this.dateQuery =
     // `${this.currentDate.getFullYear()}-${this.currentDate.getMonth() - 1}`; //
     // will be used with the date time component
-    this.months = [...monthsLabels];
+    this.months = [...MONTHSLABELS];
     this.monthQuery = this.months[this.currentDate.getMonth()];
     this.students = [];
     this.untouchedStudentList = [];
     this.yearQuery = this.currentDate.getFullYear().toString();
-    this.years = [...yearLabels]
+    this.years = [...YEARLABELS]
     this.selectOptions = [
       'Id',
       'Attendance',

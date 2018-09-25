@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ICalendar } from '../../common/interface';
-import { weekDaysHeader, weekDaysLabels, monthsLabels } from '../../common/labels'
+import { WEEKDAYSHEADER, WEEKDAYSLABELS, MONTHSLABELS } from '../../common/constants'
 
 @Component({
   selector: 'calendar-component',
@@ -57,9 +57,9 @@ export class CalendarComponent implements OnInit {
 
   /**Initialize the labels and headers in order to generate the calendar and the output for the header*/
   private initialize() {
-    this.weekDaysLabels = weekDaysLabels;
-    this.monthsLabels = monthsLabels;
-    this.weekDaysHeader = weekDaysHeader;
+    this.weekDaysLabels = WEEKDAYSLABELS;
+    this.monthsLabels = MONTHSLABELS;
+    this.weekDaysHeader = WEEKDAYSHEADER;
     let calendar: ICalendar = { day: this.currentDate.getDate(), month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() };
     calendar.weekDay = this.currentDate.getDay();
     this.choseDay(calendar);

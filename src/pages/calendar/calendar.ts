@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { ICalendar, IRecord, ISimpleAlertOptions } from '../../common/interface';
-import { monthsLabels, weekDaysHeader } from '../../common/labels';
+import { MONTHSLABELS, WEEKDAYSHEADER } from '../../common/constants';
 import { handleError } from '../../common/handleError';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { filterStudentsList } from '../../common/search';
@@ -91,9 +91,9 @@ export class CalendarPage {
     this.search = '';
     this.date = date;
     const currentDay = date.day;
-    const currentMonth = monthsLabels[date.month];
+    const currentMonth = MONTHSLABELS[date.month];
     const currentYear = date.year;
-    const currentWeekDay = weekDaysHeader[date.weekDay];
+    const currentWeekDay = WEEKDAYSHEADER[date.weekDay];
     this.currentDate = `${currentWeekDay}, ${currentDay} ${currentMonth}, ${currentYear}`;
     this.getStudentsRecords(date);
   }

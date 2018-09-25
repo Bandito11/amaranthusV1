@@ -1,4 +1,4 @@
-import { monthsLabels } from './../../common/labels';
+import { MONTHSLABELS } from '../../common/constants';
 import { EditPage } from '../edit/edit';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { IStudent } from '../../common/interface';
@@ -60,7 +60,7 @@ export class StudentProfilePage implements OnInit {
         let note: { note, date };
         let date;
         for (const data of response.data) {
-         date = `${monthsLabels[data.month]}, ${data.day} ${data.year}`;
+         date = `${MONTHSLABELS[data.month]}, ${data.day} ${data.year}`;
          note = {
            note: data.notes, 
            date: date

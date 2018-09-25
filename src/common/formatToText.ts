@@ -1,4 +1,4 @@
-import { monthsLabels } from './labels';
+import { MONTHSLABELS } from './constants';
 import { IStudent, IEvent } from "./interface";
 
 export function trimEvent(event: IEvent) {
@@ -13,7 +13,7 @@ export function formatDate(date: string) {
     const year = date.slice(0, 4);
     const month = parseInt(date.slice(5, 7));
     const day = date.slice(8, 10);
-    const formattedDate = `${monthsLabels[month - 1]} ${day}, ${year}`;
+    const formattedDate = `${MONTHSLABELS[month - 1]} ${day}, ${year}`;
     return formattedDate;
 }
 
