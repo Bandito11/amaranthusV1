@@ -11,20 +11,19 @@ import { XLSXProvider } from '../../providers/xslx/xslx';
 export class ExportPage {
 
   students;
-  
+
   constructor(
-    private loading: LoadingController, 
-    private viewCtrl: ViewController, 
-    private navParams: NavParams, 
-    private csv: CSVProvider, 
-    private textTab: TextTabDelimitedProvider, 
-    private file: FileProvider, 
+    private loading: LoadingController,
+    private viewCtrl: ViewController,
+    private navParams: NavParams,
+    private csv: CSVProvider,
+    private textTab: TextTabDelimitedProvider,
+    private file: FileProvider,
     private xlsx: XLSXProvider
   ) { }
+
   ionViewDidEnter() {
-    this.students = this
-      .navParams
-      .get('students');
+    this.students = this.navParams.get('students');
     if (!this.students.length) {
       this.students = [];
     }

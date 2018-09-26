@@ -1,5 +1,5 @@
 import { Storage } from '@ionic/storage';
-import { IStudent, IResponse, IRecord, ICalendar, IEvent, INote } from '../../common/interface';
+import { IStudent, IResponse, IRecord, ICalendar, IEvent, INote } from '../../common/models';
 import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';

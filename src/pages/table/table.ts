@@ -3,33 +3,35 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { handleError } from '../../common/handleError';
-import { IRecord, ICalendar, ISimpleAlertOptions } from '../../common/interface';
+import { IRecord, ICalendar, ISimpleAlertOptions } from '../../common/models';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { ExportPage } from '../export/export';
 
 @IonicPage()
-@Component({ selector: 'page-table', templateUrl: 'table.html' })
+@Component({
+  selector: 'page-table',
+  templateUrl: 'table.html'
+})
 
 export class TablePage implements OnInit {
 
-  constructor(
-    private db: AmaranthusDBProvider, 
-    private alertCtrl: AlertController, 
-    private modalCtrl: ModalController
-  ) { }
-
-  students: IRecord[];
-  private untouchedStudentList: IRecord[];
+  students: IRecord[] = [];;
+  private untouchedStudentList: IRecord[] = [];;
   query: string;
   monthQuery: string;
-  months: string[];
-  currentDate: Date;
+  months: string[] = [...MONTHSLABELS];;
+  currentDate: Date = new Date();
   yearQuery: string;
-  years: number[];
-  selectOptions: string[];
-  // dateQuery: string; // Will be used with the date time component
+  years: number[] = [...YEARLABELS];
+  selectOptions: string[] = ['Id', 'Attendance', 'Absence', 'Date', 'Name', 'None'];
   bought: boolean;
+
+  constructor(
+    private db: AmaranthusDBProvider,
+    private alertCtrl: AlertController,
+    private modalCtrl: ModalController
+  ) { }
 
   ionViewWillEnter() {
     this.query = "None";
@@ -38,25 +40,8 @@ export class TablePage implements OnInit {
   }
 
   ngOnInit() {
-    // this.bought = false;
-    this.currentDate = new Date();
-    // this.dateQuery =
-    // `${this.currentDate.getFullYear()}-${this.currentDate.getMonth() - 1}`; //
-    // will be used with the date time component
-    this.months = [...MONTHSLABELS];
     this.monthQuery = this.months[this.currentDate.getMonth()];
-    this.students = [];
-    this.untouchedStudentList = [];
     this.yearQuery = this.currentDate.getFullYear().toString();
-    this.years = [...YEARLABELS]
-    this.selectOptions = [
-      'Id',
-      'Attendance',
-      'Absence',
-      'Date',
-      'Name',
-      'None'
-    ];
   }
 
   // exportMessage() {

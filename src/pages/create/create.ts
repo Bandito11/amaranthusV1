@@ -1,5 +1,5 @@
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
-import { IStudent, ISimpleAlertOptions } from '../../common/interface';
+import { IStudent, ISimpleAlertOptions } from '../../common/models';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController, normalizeURL, ViewController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
@@ -13,6 +13,13 @@ import { trimText } from '../../common/formatToText';
 })
 export class CreatePage {
 
+  gender: string;
+  picture: string;
+  phoneNumber: string;
+  idInput: string;
+
+  counter = 0;
+
   constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
@@ -21,12 +28,6 @@ export class CreatePage {
     private camera: Camera
   ) { }
 
-  gender: string;
-  picture: string;
-  phoneNumber: string;
-  idInput: string;
-
-  counter = 0;
   ionViewWillEnter() {
     this.generateId();
     this.gender = 'male';

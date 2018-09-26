@@ -8,14 +8,14 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 })
 export class LogoPreviewPage {
 
+  logo: string;
+  
   constructor(
     public navCtrl: NavController,
     private viewCtrl: ViewController,
     public navParams: NavParams
   ) { }
 
-  logo: string;
-  
   ionViewDidLoad() {
     this.logo = this.navParams.get('logo');
   }

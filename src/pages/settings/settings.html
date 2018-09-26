@@ -8,40 +8,52 @@
 
 <ion-content padding>
   <div *ngIf="this.platform.is('cordova')">
-  <loader *ngIf="noProducts"></loader>
-  <div *ngFor="let product of products">
-    <ion-icon name="pricetag"></ion-icon>
-    <div *ngIf="isIos">
-      <span>
-        The Master Key!
-      </span>
-      <p>
-        Unlocks limit to database max rows!
-      </p>
+    <loader *ngIf="noProducts"></loader>
+    <div *ngFor="let product of products">
+      <ion-icon name="pricetag"></ion-icon>
+      <div *ngIf="isIos">
+        <span>
+          The Master Key!
+        </span>
+        <p>
+          Unlocks limit to database max rows!
+        </p>
+      </div>
+      <div *ngIf="isAndroid">
+        <span>
+          {{product.title}}
+        </span>
+        <p>
+          {{product.description}}
+        </p>
+      </div>
+      <button *ngIf="isAndroid" ion-button color="primary" (click)="buyProduct({productId: product.productId, productTitle: product.title})">Buy
+        Now for only {{product.priceAsDecimal}} {{product.currency}}!</button>
+      <button *ngIf="isIos" ion-button color="primary" (click)="buyProduct({productId: product.productId, productTitle: 'The Master Key!'})">Buy
+        Now for only {{product.priceAsDecimal}} {{product.currency}}!</button>
+      <br>
+      <button ion-button color="secondary" (click)="restorePurchases()">Restore purchase!<ion-icon name="happy"></ion-icon>
+      </button>
+      <hr>
     </div>
-    <div *ngIf="isAndroid">
-      <span>
-        {{product.title}}
-      </span>
-      <p>
-        {{product.description}}
-      </p>
-    </div>
-    <button *ngIf="isAndroid" ion-button color="primary" (click)="buyProduct({productId: product.productId, productTitle: product.title})">Buy Now for only {{product.priceAsDecimal}} {{product.currency}}!</button>
-    <button *ngIf="isIos" ion-button color="primary" (click)="buyProduct({productId: product.productId, productTitle: 'The Master Key!'})">Buy Now for only {{product.priceAsDecimal}} {{product.currency}}!</button>
-    <br>
-    <button ion-button color="secondary" (click)="restorePurchases()">Restore purchase!<ion-icon name="happy"></ion-icon>
-    </button>
-    <hr>
   </div>
-</div>
-  <div *ngIf='bought'>
+  <div *ngIf="bought">
     <h2>Feedback</h2>
-    <p>Have any issues or just want to give me some feedback on how to make the app better? Just sent me an email 
+    <p>Have any issues or just want to give me some feedback on how to make the app better? Just sent me an email
       and I will answer accordingly!
     </p>
     <textarea #message></textarea>
     <br>
     <button ion-button color="primary" (click)="sendEmail(message.value)">Send email! </button>
+    <hr>
+  </div>
+  <div *ngIf="this.platform.is('cordova')">
+    <h4>If you like the app please consider rating it 5 stars!</h4>
+    <button *ngIf="platform.is('ios')" ion-button (click)="openMarketPage()">
+      Open App Store &nbsp; <ion-icon name="logo-apple"></ion-icon> 
+    </button>
+    <button *ngIf="platform.is('android')" ion-button color="secondary" (click)="openMarketPage()">
+      Open Play Store &nbsp; <ion-icon name="logo-google"></ion-icon> 
+    </button>
   </div>
 </ion-content>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InAppPurchase } from '@ionic-native/in-app-purchase';
-import { productRestore, productGet, productBought } from '../../common/interface';
+import { productRestore, productGet, productBought } from '../../common/models';
 
 @Injectable()
 export class AppPurchaseProvider {

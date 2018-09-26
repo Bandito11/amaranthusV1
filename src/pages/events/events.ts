@@ -1,6 +1,6 @@
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
 import { CreateEventPage } from '../createevent/createevent';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { formatDate } from '../../common/formatToText';
 import { EventProfilePage } from '../event-profile/event-profile';
@@ -10,7 +10,11 @@ import { EventProfilePage } from '../event-profile/event-profile';
   selector: 'page-events',
   templateUrl: 'events.html',
 })
-export class EventsPage implements OnInit {
+export class EventsPage {
+
+  selectOptions: string[] = ['Attendance', 'Absence', 'Name', 'Date', 'None'];
+  events: any[] = [];
+  unfilteredEvents: any[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -18,16 +22,6 @@ export class EventsPage implements OnInit {
     public db: AmaranthusDBProvider,
     public modal: ModalController
   ) { }
-
-  selectOptions: string[];
-  events: any[];
-  unfilteredEvents: any[];
-
-  ngOnInit() {
-    this.events= [];
-    this.unfilteredEvents = [];
-    this.selectOptions = ['Attendance', 'Absence', 'Name', 'Date', 'None'];
-  }
 
   ionViewDidEnter() {
     this.getEvents();
@@ -52,44 +46,44 @@ export class EventsPage implements OnInit {
     }
   }
 
-  sortByAttendance() { 
-      this.events = [
-        ...this.events.sort((a, b) => {
-            if (a.attendance < b.attendance) return -1;
-            if (a.attendance > b.attendance) return 1;
-            return 0;
-        })
+  sortByAttendance() {
+    this.events = [
+      ...this.events.sort((a, b) => {
+        if (a.attendance < b.attendance) return -1;
+        if (a.attendance > b.attendance) return 1;
+        return 0;
+      })
     ];
   }
 
   sortByAbsence() {
-        this.events = [
-        ...this.events.sort((a, b) => {
-            if (a.absence < b.absence) return -1;
-            if (a.absence > b.absence) return 1;
-            return 0;
-        })
+    this.events = [
+      ...this.events.sort((a, b) => {
+        if (a.absence < b.absence) return -1;
+        if (a.absence > b.absence) return 1;
+        return 0;
+      })
     ];
 
   }
 
   sortByName() {
-      this.events = [
-        ...this.events.sort((a, b) => {
-            if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-            if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-            return 0;
-        })
+    this.events = [
+      ...this.events.sort((a, b) => {
+        if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+        if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+        return 0;
+      })
     ];
   }
 
-  sortByDate() { 
-       this.events = [
-        ...this.events.sort((a, b) => {
-            if (a.startDate < b.startDate) return -1;
-            if (a.startDate > b.startDate) return 1;
-            return 0;
-        })
+  sortByDate() {
+    this.events = [
+      ...this.events.sort((a, b) => {
+        if (a.startDate < b.startDate) return -1;
+        if (a.startDate > b.startDate) return 1;
+        return 0;
+      })
     ];
   }
 
@@ -123,7 +117,7 @@ export class EventsPage implements OnInit {
 
   goToCreateEvent() {
     const modal = this.modal.create(CreateEventPage)
-    modal.onDidDismiss(_=> this.getEvents())
+    modal.onDidDismiss(_ => this.getEvents())
     modal.present();
   }
 

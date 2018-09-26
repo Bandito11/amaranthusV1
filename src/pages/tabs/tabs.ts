@@ -25,11 +25,11 @@ import { SettingsPage } from '../settings/settings';
 
 export class TabsPage {
 
-  constructor() { }
-
   tab1 = MainPage;
   tab2 = CalendarPage;
   tab3 = TablePage;
   tab4 = StudentListPage;
   tab5 = SettingsPage;
+
+  constructor() { }
 }

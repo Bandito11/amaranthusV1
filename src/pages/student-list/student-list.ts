@@ -1,10 +1,10 @@
-import { ISimpleAlertOptions } from '../../common/interface';
-import { Component, OnInit } from '@angular/core';
+import { ISimpleAlertOptions } from '../../common/models';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
 import { StudentProfilePage } from '../student-profile/student-profile';
 import { CreatePage } from '../create/create';
-import { IStudent } from '../../common/interface';
+import { IStudent } from '../../common/models';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { sortStudentsbyId, sortStudentsName, filterStudentsList } from '../../common/search'
 /**
@@ -16,21 +16,19 @@ import { sortStudentsbyId, sortStudentsName, filterStudentsList } from '../../co
 
 @IonicPage()
 @Component({ selector: 'page-student-list', templateUrl: 'student-list.html' })
-export class StudentListPage implements OnInit {
-
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public db: AmaranthusDBProvider) { }
-
-  students: IStudent[];
-  private unfilteredStudents: IStudent[];
+export class StudentListPage {
+  students: IStudent[] = [];
+  private unfilteredStudents: IStudent[] = [];
   query: string;
-  selectOptions: string[];
+  selectOptions: string[] = ['Id', 'Name', 'Active', 'Not Active', 'None'];
   filterOptions: string[];
 
-  ngOnInit() {
-    this.students = [];
-    this.unfilteredStudents = [];
-    this.selectOptions = ['Id', 'Name', 'Active', 'Not Active', 'None'];
-  }
+  constructor(
+    public alertCtrl: AlertController,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public db: AmaranthusDBProvider
+  ) { }
 
   private initializeStudentsList() {
     this.students = [...this.unfilteredStudents];

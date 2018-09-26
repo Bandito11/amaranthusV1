@@ -5,20 +5,16 @@ import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-d
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, AlertController, ModalController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
-import { ISimpleAlertOptions, IStudent, ICalendar } from '../../common/interface';
+import { ISimpleAlertOptions, IStudent, ICalendar } from '../../common/models';
 import { filterStudentsList, sortStudentsbyId, sortStudentsName } from '../../common/search';
 
 @IonicPage()
-@Component({ selector: 'page-main', templateUrl: 'main.html' })
+@Component({
+  selector: 'page-main',
+  templateUrl: 'main.html'
+})
+
 export class MainPage implements OnInit {
-
-  constructor(
-    private alertCtrl: AlertController,
-    private navCtrl: NavController,
-    private db: AmaranthusDBProvider,
-    private modalCtrl: ModalController
-  ) { }
-
   students: IStudent[];
   private unfilteredStudents: IStudent[];
   selectOptions: string[];
@@ -27,6 +23,13 @@ export class MainPage implements OnInit {
   toggle;
   timer: number;
   @ViewChild('notes') notesElement: ElementRef;
+
+  constructor(
+    private alertCtrl: AlertController,
+    private navCtrl: NavController,
+    private db: AmaranthusDBProvider,
+    private modalCtrl: ModalController
+  ) { }
 
   ngOnInit() {
     const currentDate = new Date();

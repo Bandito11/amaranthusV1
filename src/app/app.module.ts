@@ -27,6 +27,7 @@ import { XLSXProvider } from '../providers/xslx/xslx';
 import { IonicStorageModule } from '@ionic/storage';
 import { FileOpener } from '@ionic-native/file-opener';
 import { EmailComposer } from '@ionic-native/email-composer';
+import { Market } from '@ionic-native/market';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { EmailComposer } from '@ionic-native/email-composer';
     File,
     EmailComposer,
     FileOpener,
+    Market,
     TextTabDelimitedProvider,
     AppPurchaseProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler },

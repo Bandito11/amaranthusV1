@@ -2,7 +2,7 @@ import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, ModalController, AlertController, ViewController, normalizeURL } from 'ionic-angular';
-import { IStudent, ISimpleAlertOptions, IEvent } from '../../common/interface';
+import { IStudent, ISimpleAlertOptions, IEvent } from '../../common/models';
 import { handleError } from '../../common/handleError';
 import { CreatePage } from '../create/create';
 
@@ -12,17 +12,6 @@ import { CreatePage } from '../create/create';
   templateUrl: 'editevent.html',
 })
 export class EditEventPage {
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public camera: Camera,
-    public platform: Platform,
-    public modalCtrl: ModalController,
-    public db: AmaranthusDBProvider,
-    public alertCtrl: AlertController,
-    public viewCtrl: ViewController
-  ) {
-  }
 
   id;
   logo;
@@ -34,6 +23,18 @@ export class EditEventPage {
   endDate;
   hasEndDate;
   event: IEvent & LokiObj;
+
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public camera: Camera,
+    public platform: Platform,
+    public modalCtrl: ModalController,
+    public db: AmaranthusDBProvider,
+    public alertCtrl: AlertController,
+    public viewCtrl: ViewController
+  ) {  }
+
   ionViewDidLoad() {
     this.getStudents();
     // const currentDate = new Date();

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ICalendar } from '../../common/interface';
+import { ICalendar } from '../../common/models';
 import { WEEKDAYSHEADER, WEEKDAYSLABELS, MONTHSLABELS } from '../../common/constants'
 
 @Component({

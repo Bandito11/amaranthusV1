@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IRecord, IResponse } from '../../common/interface';
+import { IRecord, IResponse } from '../../common/models';
 import * as XLSX from 'xlsx';
 
 @Injectable()

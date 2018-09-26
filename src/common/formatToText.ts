@@ -1,5 +1,5 @@
 import { MONTHSLABELS } from './constants';
-import { IStudent, IEvent } from "./interface";
+import { IStudent, IEvent } from "./models";
 
 export function trimEvent(event: IEvent) {
     const formattedEvent: IEvent = {

@@ -1,6 +1,6 @@
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
-import { ISimpleAlertOptions, IStudent, IResponse } from '../../common/interface';
-import { Component, OnInit } from '@angular/core';
+import { ISimpleAlertOptions, IStudent, IResponse } from '../../common/models';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, normalizeURL, ViewController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -12,7 +12,33 @@ import { trimText } from '../../common/formatToText';
   selector: 'page-edit',
   templateUrl: 'edit.html',
 })
-export class EditPage implements OnInit {
+export class EditPage {
+
+  // HTML controls
+  picture: string;
+  gender: string;
+  isActive: boolean;
+
+  // HTML values
+  student: IStudent = {
+    id: '',
+    firstName: '',
+    initial: '',
+    lastName: '',
+    address: '',
+    phoneNumber: '',
+    town: '',
+    state: '',
+    class: '',
+    fatherName: '',
+    motherName: '',
+    emergencyContactName: '',
+    emergencyContactPhoneNumber: '',
+    emergencyRelationship: '',
+    picture: '',
+    gender: '',
+    isActive: false
+  };;
 
   constructor(
     public db: AmaranthusDBProvider,
@@ -22,35 +48,6 @@ export class EditPage implements OnInit {
     private viewCtrl: ViewController,
     private camera: Camera
   ) { }
-  // HTML controls
-  picture: string;
-  gender: string;
-  isActive: boolean;
-
-  // HTML values
-  student: IStudent;
-
-  ngOnInit() {
-    this.student = {
-      id: '',
-      firstName: '',
-      initial: '',
-      lastName: '',
-      address: '',
-      phoneNumber: '',
-      town: '',
-      state: '',
-      class: '',
-      fatherName: '',
-      motherName: '',
-      emergencyContactName: '',
-      emergencyContactPhoneNumber: '',
-      emergencyRelationship: '',
-      picture: '',
-      gender: '',
-      isActive: false
-    };
-  }
 
   ionViewDidLoad() {
     this.student = { ...this.student, id: this.navParams.get('id') };

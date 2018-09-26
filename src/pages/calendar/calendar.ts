@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { ICalendar, IRecord, ISimpleAlertOptions } from '../../common/interface';
+import { ICalendar, IRecord, ISimpleAlertOptions } from '../../common/models';
 import { MONTHSLABELS, WEEKDAYSHEADER } from '../../common/constants';
 import { handleError } from '../../common/handleError';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
@@ -13,13 +13,6 @@ import { filterStudentsList } from '../../common/search';
 })
 export class CalendarPage {
 
-  constructor(
-    public alertCtrl: AlertController,
-    public db: AmaranthusDBProvider,
-    public navCtrl: NavController,
-    public navParams: NavParams
-  ) { }
-
   currentDate: string;
   students: IRecord[];
   private unfilteredStudents: IRecord[];
@@ -29,6 +22,13 @@ export class CalendarPage {
   toggle: string;
   search: string;
 
+  constructor(
+    public alertCtrl: AlertController,
+    public db: AmaranthusDBProvider,
+    public navCtrl: NavController,
+    public navParams: NavParams
+  ) { }
+  
   ionViewWillEnter() {
     this.timer = 0;
     this.getStudentsRecords(this.date);

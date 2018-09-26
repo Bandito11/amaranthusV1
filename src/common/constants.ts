@@ -1,5 +1,3 @@
-import { CameraOptions } from "@ionic-native/camera";
-
 export const MONTHSLABELS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const RELEASEDATE = 2017;

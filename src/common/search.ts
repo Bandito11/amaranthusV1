@@ -1,4 +1,4 @@
-import { IStudent } from "./interface";
+import { IStudent } from "./models";
 
 /**
  * 

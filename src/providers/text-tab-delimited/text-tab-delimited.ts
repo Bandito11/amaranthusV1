@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {IResponse, IRecord} from '../../common/interface';
+import {IResponse, IRecord} from '../../common/models';
 
 @Injectable()
 export class TextTabDelimitedProvider {

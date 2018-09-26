@@ -2,7 +2,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, normalizeURL, ModalController, Platform, AlertController, ViewController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
-import { IStudent, ISimpleAlertOptions, IEvent } from '../../common/interface';
+import { IStudent, ISimpleAlertOptions, IEvent } from '../../common/models';
 import { CreatePage } from '../create/create';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { addZeroInFront } from '../../common/validation';
@@ -13,6 +13,16 @@ import { addZeroInFront } from '../../common/validation';
   templateUrl: 'createevent.html',
 })
 export class CreateEventPage {
+
+  logo;
+  students: IStudent[];
+  STUDENTS: IStudent[];
+  studentIds: string[];
+  eventName;
+  startDate;
+  endDate;
+  hasEndDate;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -24,15 +34,6 @@ export class CreateEventPage {
     public viewCtrl: ViewController
   ) {
   }
-
-  logo;
-  students: IStudent[];
-  STUDENTS: IStudent[];
-  studentIds: string[];
-  eventName;
-  startDate;
-  endDate;
-  hasEndDate;
   
   ionViewDidLoad() {
     this.logo = '';

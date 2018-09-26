@@ -1,7 +1,7 @@
 import { Platform } from 'ionic-angular';
 import { Injectable } from '@angular/core';
 import { File, IWriteOptions } from '@ionic-native/file';
-import { IResponse } from '../../common/interface';
+import { IResponse } from '../../common/models';
 import { FileOpener } from '@ionic-native/file-opener';
 
 @Injectable()

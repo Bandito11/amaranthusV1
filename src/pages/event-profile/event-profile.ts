@@ -1,29 +1,35 @@
-import { IEvent } from './../../common/interface';
+import { IEvent } from '../../common/models';
 import { EditEventPage } from './../editevent/editevent';
 import { AmaranthusDBProvider } from './../../providers/amaranthus-db/amaranthus-db';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
 import { formatDate } from '../../common/formatToText';
-import { ISimpleAlertOptions } from '../../common/interface';
+import { ISimpleAlertOptions } from '../../common/models';
 
+interface eventControls {
+  members;
+  endDate;
+  startDate;
+}
 
 @IonicPage()
 @Component({
   selector: 'page-event-profile',
   templateUrl: 'event-profile.html',
 })
-export class EventProfilePage implements OnInit {
+export class EventProfilePage {
 
   /**
    * This is the data show on the Page
    */
-  eventControls;
+  eventControls: IEvent & LokiObj & eventControls = <IEvent & LokiObj & eventControls>{};
   /**
    * This is the data that is to be used for CRUD
    */
-  event: IEvent & LokiObj;
+  event: IEvent & LokiObj = <IEvent & LokiObj>{};
   id;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -32,50 +38,45 @@ export class EventProfilePage implements OnInit {
     public modal: ModalController
   ) { }
 
-  ngOnInit() {
-    this.eventControls = {};
-    this.event = <IEvent & LokiObj>{};
-  }
-
   ionViewDidLoad() {
     this.id = this.navParams.get('id');
     this.getEventProfile(this.id);
   }
 
   getEventProfile(id) {
-      const response = this.db.getEvent(id);
-      if (response.success) {
-        this.event = { ...response.data };
-        let members = [];
-        for (const member of response.data.members) {
-          const studentResponse = this.db.getStudentById(<any>member);
-          if (studentResponse.success) {
-            members = [...members, {
-              id: studentResponse.data.id,
-              firstName: studentResponse.data.firstName,
-              initial: studentResponse.data.initial,
-              lastName: studentResponse.data.lastName,
-              phoneNumber: studentResponse.data.phoneNumber,
-              picture: studentResponse.data.picture,
-              class: studentResponse.data.class,
-              attendance: member.attendance,
-              absence: member.absence
-            }];
-          }
-        }
-        this.eventControls = {
-          ...response.data,
-          startDate: formatDate(response.data.startDate),
-          members: [...members]
-        }
-        if (response.data.endDate) {
-          this.eventControls = {
-            ...this.eventControls,
-            endDate: formatDate(response.data.endDate)
-          }
+    const response = this.db.getEvent(id);
+    if (response.success) {
+      this.event = { ...response.data };
+      let members = [];
+      for (const member of response.data.members) {
+        const studentResponse = this.db.getStudentById(<any>member);
+        if (studentResponse.success) {
+          members = [...members, {
+            id: studentResponse.data.id,
+            firstName: studentResponse.data.firstName,
+            initial: studentResponse.data.initial,
+            lastName: studentResponse.data.lastName,
+            phoneNumber: studentResponse.data.phoneNumber,
+            picture: studentResponse.data.picture,
+            class: studentResponse.data.class,
+            attendance: member.attendance,
+            absence: member.absence
+          }];
         }
       }
-      else handleError(response.error);
+      this.eventControls = {
+        ...response.data,
+        startDate: formatDate(response.data.startDate),
+        members: [...members]
+      }
+      if (response.data.endDate) {
+        this.eventControls = {
+          ...this.eventControls,
+          endDate: formatDate(response.data.endDate)
+        }
+      }
+    }
+    else handleError(response.error);
   }
 
 
