@@ -34,7 +34,7 @@ export class CreateEventPage {
     public viewCtrl: ViewController
   ) {
   }
-  
+
   ionViewDidLoad() {
     this.logo = '';
     this.studentIds = [];
@@ -68,14 +68,6 @@ export class CreateEventPage {
         const opts: ISimpleAlertOptions = {
           title: 'Error',
           subTitle: 'Have to write a name for the event!'
-        }
-        this.showSimpleAlert(opts);
-        return;
-      }
-      if (!this.logo) {
-        const opts: ISimpleAlertOptions = {
-          title: 'Error',
-          subTitle: 'Logo picture is required!'
         }
         this.showSimpleAlert(opts);
         return;

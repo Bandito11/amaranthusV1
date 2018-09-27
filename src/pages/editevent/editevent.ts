@@ -106,14 +106,6 @@ export class EditEventPage {
         this.showSimpleAlert(opts);
         return;
       }
-      if (!this.logo) {
-        const opts: ISimpleAlertOptions = {
-          title: 'Error',
-          subTitle: 'Logo picture is required!'
-        }
-        this.showSimpleAlert(opts);
-        return;
-      }
       
       const members = this.studentIds.map(studentId=> {
         const member = this.event.members.find(member=>studentId == member.id);
