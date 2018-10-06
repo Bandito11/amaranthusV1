@@ -1,20 +1,31 @@
 import { Storage } from '@ionic/storage';
-import { IStudent, IResponse, IRecord, ICalendar, IEvent, INote } from '../../common/models';
+import {
+  IStudent,
+  IResponse,
+  IRecord,
+  ICalendar,
+  IEvent,
+  INote
+} from '../../common/models';
 import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';
 import { handleError } from '../../common/handleError';
 import { trimText, trimEvent } from '../../common/formatToText';
 
+/**
+ * Collections use on db
+ */
 let studentsColl: Collection<IStudent>;
 let recordsColl: Collection<IRecord>;
 let eventsColl: Collection<IEvent>;
 let notesColl: Collection<INote>;
+let eventsRecordsColl: Collection<IEvent>;
+
 let db: Loki;
 
 @Injectable()
 export class AmaranthusDBProvider {
-
   constructor(private storage: Storage) {
     this.createDB();
   }
@@ -26,7 +37,7 @@ export class AmaranthusDBProvider {
       autoload: true,
       adapter: ionicStorageAdapter,
       autoloadCallback: this.loadDatabase
-    }
+    };
     db = new Loki('amaranthus.db', lokiOptions);
   }
 
@@ -49,24 +60,24 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getNoteByDate(opts: { date: ICalendar, id: string }) {
+  getNoteByDate(opts: { date: ICalendar; id: string }) {
     let response: IResponse<INote> = {
       success: false,
       error: null,
       data: undefined
     };
     const results: any = notesColl.findOne({
-      'id': {
-        '$eq': opts.id
+      id: {
+        $eq: opts.id
       },
-      'month': {
-        '$eq': opts.date.month
+      month: {
+        $eq: opts.date.month
       },
-      'year': {
-        '$eq': opts.date.year
+      year: {
+        $eq: opts.date.year
       },
-      'day': {
-        '$eq': opts.date.day
+      day: {
+        $eq: opts.date.day
       }
     });
     if (results) {
@@ -81,7 +92,7 @@ export class AmaranthusDBProvider {
         ...response,
         error: 'Error retrieving notes. Please try again!',
         data: null
-      }
+      };
       return response;
     }
   }
@@ -107,7 +118,7 @@ export class AmaranthusDBProvider {
         ...response,
         error: 'Error retrieving notes. Please try again!',
         data: null
-      }
+      };
       return response;
     }
   }
@@ -118,7 +129,8 @@ export class AmaranthusDBProvider {
       error: null,
       data: undefined
     };
-    const results = notesColl.chain()
+    const results = notesColl
+      .chain()
       .find({
         id: id
       })
@@ -138,7 +150,7 @@ export class AmaranthusDBProvider {
         ...response,
         error: 'Error retrieving notes. Please try again!',
         data: null
-      }
+      };
       return response;
     }
   }
@@ -155,17 +167,17 @@ export class AmaranthusDBProvider {
     };
     try {
       const results: any = notesColl.findOne({
-        'id': {
-          '$eq': note.id
+        id: {
+          $eq: note.id
         },
-        'month': {
-          '$eq': note.month
+        month: {
+          $eq: note.month
         },
-        'year': {
-          '$eq': note.year
+        year: {
+          $eq: note.year
         },
-        'day': {
-          '$eq': note.day
+        day: {
+          $eq: note.day
         }
       });
       if (!results) {
@@ -174,9 +186,9 @@ export class AmaranthusDBProvider {
         const newNote = {
           ...results,
           ...note
-        }
+        };
         notesColl.update(newNote);
-      };
+      }
       response = { ...response, success: true };
       return response;
     } catch (error) {
@@ -210,8 +222,8 @@ export class AmaranthusDBProvider {
     };
     try {
       let results: any = eventsColl.findOne({
-        '$loki': {
-          '$eq': event.$loki
+        $loki: {
+          $eq: event.$loki
         }
       });
       eventsColl.remove(results);
@@ -224,8 +236,8 @@ export class AmaranthusDBProvider {
   updateEvent(event: IEvent & LokiObj) {
     try {
       let results: any = eventsColl.findOne({
-        '$loki': {
-          '$eq': event.$loki
+        $loki: {
+          $eq: event.$loki
         }
       });
       if (results) {
@@ -234,16 +246,16 @@ export class AmaranthusDBProvider {
           success: true,
           error: null,
           data: null
-        }
+        };
       } else {
         return {
           success: false,
-          error: 'User doesn\'t exist on Database',
+          error: "User doesn't exist on Database",
           data: null
-        }
+        };
       }
     } catch (error) {
-      return { success: false, error: error }
+      return { success: false, error: error };
     }
   }
 
@@ -254,18 +266,21 @@ export class AmaranthusDBProvider {
       data: undefined
     };
     try {
-      const results: any = eventsColl.chain().simplesort('startDate', true).data();
+      const results: any = eventsColl
+        .chain()
+        .simplesort('startDate', true)
+        .data();
       response = {
         ...response,
         success: true,
         data: results
-      }
+      };
       return response;
     } catch (error) {
       response = {
         ...response,
         error: error
-      }
+      };
       return response;
     }
   }
@@ -278,21 +293,21 @@ export class AmaranthusDBProvider {
     };
     try {
       let results = eventsColl.findOne({
-        '$loki': {
-          '$eq': id
+        $loki: {
+          $eq: id
         }
       });
       response = {
         ...response,
         success: true,
         data: results
-      }
+      };
       return response;
     } catch (error) {
       response = {
         ...response,
         error: error
-      }
+      };
       return response;
     }
   }
@@ -300,12 +315,12 @@ export class AmaranthusDBProvider {
   checkIfStudentExists(opts: { id: string }) {
     try {
       let results = studentsColl.findOne({
-        'id': {
-          '$eq': opts.id
+        id: {
+          $eq: opts.id
         }
       });
       if (results) {
-        return true
+        return true;
       } else {
         return false;
       }
@@ -344,7 +359,7 @@ export class AmaranthusDBProvider {
       response = {
         ...response,
         error: error
-      }
+      };
       return response;
     }
   }
@@ -357,31 +372,30 @@ export class AmaranthusDBProvider {
     };
     return new Promise((resolve, reject) => {
       if (studentsColl.data.length > 9) {
-        this.storage.get('boughtMasterKey')
-          .then(boughtMasterKey => {
-            if (boughtMasterKey == true) {
-              response = {
-                ...response,
-                ...this.insertStudentIntoDB(student)
-              }
-              if (response.success) {
-                resolve(response);
-              }
-              reject(response);
-            } else {
-              response = {
-                success: false,
-                error: `Reached the limit of 10 persons in database. If you want to get rid of this limit please consider buying the app!`,
-                data: null
-              };
+        this.storage.get('boughtMasterKey').then(boughtMasterKey => {
+          if (boughtMasterKey == true) {
+            response = {
+              ...response,
+              ...this.insertStudentIntoDB(student)
+            };
+            if (response.success) {
               resolve(response);
             }
-          })
+            reject(response);
+          } else {
+            response = {
+              success: false,
+              error: `Reached the limit of 10 persons in database. If you want to get rid of this limit please consider buying the app!`,
+              data: null
+            };
+            resolve(response);
+          }
+        });
       } else {
         response = {
           ...response,
           ...this.insertStudentIntoDB(student)
-        }
+        };
         if (response.success) {
           resolve(response);
         }
@@ -390,8 +404,12 @@ export class AmaranthusDBProvider {
     });
   }
 
-  addAbsence(opts: { date: ICalendar, id: string }): IResponse<null> {
-    const response = this.updateRecord({
+  addAbsence(opts: {
+    date: ICalendar;
+    id: string;
+    event?: string;
+  }): IResponse<null> {
+    const response = this.insertOrUpdateRecord({
       ...opts,
       date: {
         ...opts.date,
@@ -399,12 +417,16 @@ export class AmaranthusDBProvider {
       },
       attendance: false,
       absence: true
-    })
+    });
     return response;
   }
 
-  addAttendance(opts: { date: ICalendar, id: string }): IResponse<null> {
-    const response = this.updateRecord({
+  addAttendance(opts: {
+    date: ICalendar;
+    id: string;
+    event?: string;
+  }): IResponse<null> {
+    const response = this.insertOrUpdateRecord({
       ...opts,
       date: {
         ...opts.date,
@@ -412,47 +434,62 @@ export class AmaranthusDBProvider {
       },
       attendance: true,
       absence: false
-    })
+    });
     return response;
   }
 
-  updateRecord(opts: { attendance: boolean, absence: boolean, date: ICalendar, id: string }) {
+  insertOrUpdateRecord(opts: {
+    attendance: boolean;
+    absence: boolean;
+    date: ICalendar;
+    id: string;
+    event?: string;
+  }) {
     let response: IResponse<null> = {
       success: false,
       error: null,
       data: undefined
-    }
+    };
     try {
-      const record: IRecord = {
+      let record: IRecord = {
         id: opts.id,
         month: opts.date.month,
         year: opts.date.year,
         day: opts.date.day,
         attendance: opts.attendance,
         absence: opts.absence
+      };
+      if (opts['event']) {
+        record = {
+          ...record,
+          event: opts.event
+        };
       }
       let results = recordsColl.findOne({
-        'id': {
-          '$eq': record.id
+        id: {
+          $eq: record.id
         },
-        'month': {
-          '$eq': record.month
+        month: {
+          $eq: record.month
         },
-        'year': {
-          '$eq': record.year
+        year: {
+          $eq: record.year
         },
-        'day': {
-          '$eq': record.day
+        day: {
+          $eq: record.day
         }
       });
       if (results) {
-        results = {
+        let foundRecord = {
           ...results,
           ...record
         };
-        recordsColl.update(results);
+        recordsColl.update(foundRecord);
       } else {
-        recordsColl.insert(record);
+        let newRecord = {
+          ...record
+        };
+        recordsColl.insert(newRecord);
       }
       response = {
         ...response,
@@ -466,7 +503,7 @@ export class AmaranthusDBProvider {
         response = {
           ...response,
           error: error || null
-        }
+        };
         return response;
       }
     }
@@ -475,8 +512,8 @@ export class AmaranthusDBProvider {
   updateStudent(student: IStudent): IResponse<null> {
     try {
       let results: any = studentsColl.findOne({
-        'id': {
-          '$eq': student.id
+        id: {
+          $eq: student.id
         }
       });
       const formattedStudent = trimText(student);
@@ -500,8 +537,8 @@ export class AmaranthusDBProvider {
   removeStudent(student: IStudent): IResponse<null> {
     try {
       let results: any = studentsColl.findOne({
-        'id': {
-          '$eq': student.id
+        id: {
+          $eq: student.id
         }
       });
       studentsColl.remove(results);
@@ -522,22 +559,22 @@ export class AmaranthusDBProvider {
       success: false,
       error: null,
       data: undefined
-    }
+    };
     try {
       const results = studentsColl.findOne({
-        'id': {
-          '$eq': student.id
+        id: {
+          $eq: student.id
         }
       });
       const noteResponse = this.getNoteById(results.id);
       let studentFound = {
         ...results
-      }
+      };
       if (noteResponse.success) {
         studentFound = {
           ...studentFound,
           notes: noteResponse.data.notes
-        }
+        };
       }
       response = {
         ...response,
@@ -553,7 +590,10 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getQueriedRecords(opts: { query: string, date?: ICalendar }): IResponse<IRecord[]> {
+  getQueriedRecords(opts: {
+    query: string;
+    date?: ICalendar;
+  }): IResponse<IRecord[]> {
     let response = {
       success: true,
       error: null,
@@ -564,12 +604,11 @@ export class AmaranthusDBProvider {
         this.getQueriedRecordsByDate(opts.date);
         break;
       default:
-        const options:
-          ICalendar = {
+        const options: ICalendar = {
           year: new Date().getFullYear(),
           month: new Date().getMonth() + 1,
           day: null
-        }
+        };
         try {
           response = {
             ...response,
@@ -578,7 +617,7 @@ export class AmaranthusDBProvider {
           return response;
         } catch (error) {
           return error;
-        };
+        }
     }
   }
 
@@ -590,32 +629,35 @@ export class AmaranthusDBProvider {
     };
     try {
       const students = studentsColl.find({
-        'isActive': {
-          '$eq': true
+        isActive: {
+          $eq: true
         }
       });
       let studentRecord;
       students.map((student: IStudent) => {
         studentRecord = null;
         const record = recordsColl.findOne({
-          'id': {
-            '$eq': student.id
+          id: {
+            $eq: student.id
           },
-          'year': {
-            '$eq': opts.year
+          year: {
+            $eq: opts.year
           },
-          'month': {
-            '$eq': opts.month
+          month: {
+            $eq: opts.month
           },
-          'day': {
-            '$eq': opts.day
+          day: {
+            $eq: opts.day
           }
         });
         const noteDate = {
           ...opts,
           month: opts.month - 1
         };
-        const noteResponse = this.getNoteByDate({ id: student.id, date: noteDate });
+        const noteResponse = this.getNoteByDate({
+          id: student.id,
+          date: noteDate
+        });
         if (noteResponse.success) {
           studentRecord = { notes: noteResponse.data.notes };
         } else {
@@ -632,7 +674,7 @@ export class AmaranthusDBProvider {
               attendance: record.attendance,
               absence: record.absence,
               id: student.id
-            }
+            };
             response = {
               ...response,
               data: [...response.data, studentRecord]
@@ -648,13 +690,12 @@ export class AmaranthusDBProvider {
             attendance: false,
             absence: false,
             id: student.id
-          }
+          };
           response = {
             ...response,
-            data: [
-              ...response.data, studentRecord]
+            data: [...response.data, studentRecord]
           };
-        };
+        }
       });
       return response;
     } catch (error) {
@@ -677,22 +718,22 @@ export class AmaranthusDBProvider {
     let absence: number;
     try {
       const students = studentsColl.find({
-        'isActive': {
-          '$eq': true
+        isActive: {
+          $eq: true
         }
       });
       students.map((student: IStudent) => {
         attendance = 0;
         absence = 0;
         const records = recordsColl.find({
-          'id': {
-            '$eq': student.id
+          id: {
+            $eq: student.id
           },
-          'year': {
-            '$eq': opts.year
+          year: {
+            $eq: opts.year
           },
-          'month': {
-            '$eq': opts.month
+          month: {
+            $eq: opts.month
           }
         });
         if (records) {
@@ -706,13 +747,14 @@ export class AmaranthusDBProvider {
           });
           let percent = '0';
           if (attendance + absence != 0) {
-            percent = (100 * attendance / (attendance + absence)).toFixed(2);
+            percent = ((100 * attendance) / (attendance + absence)).toFixed(2);
           }
           if (percent) {
             response = {
               ...response,
               data: [
-                ...response.data, {
+                ...response.data,
+                {
                   id: student.id,
                   fullName: `${student.firstName} ${student.lastName}`,
                   attendance: attendance,
@@ -726,7 +768,8 @@ export class AmaranthusDBProvider {
             response = {
               ...response,
               data: [
-                ...response.data, {
+                ...response.data,
+                {
                   id: student.id,
                   fullName: `${student.firstName} ${student.lastName}`,
                   attendance: attendance,
@@ -737,7 +780,7 @@ export class AmaranthusDBProvider {
               ]
             };
           }
-        };
+        }
       });
       return response;
     } catch (error) {
@@ -762,7 +805,7 @@ export class AmaranthusDBProvider {
         ...response,
         success: true,
         data: [...students]
-      }
+      };
       return response;
     } catch (error) {
       if (!studentsColl) {
@@ -774,7 +817,7 @@ export class AmaranthusDBProvider {
 
   getQueriedRecordsByDate(opts: ICalendar): IResponse<IRecord[]> {
     try {
-      return this.getAllStudentsRecords(opts)
+      return this.getAllStudentsRecords(opts);
     } catch (error) {
       return error;
     }
@@ -784,8 +827,8 @@ export class AmaranthusDBProvider {
   getAllActiveStudents(date: ICalendar): IResponse<IStudent[]> {
     try {
       const students = studentsColl.find({
-        'isActive': {
-          '$eq': true
+        isActive: {
+          $eq: true
         }
       });
       let record: IRecord;
@@ -835,25 +878,25 @@ export class AmaranthusDBProvider {
   }
 
   getQueriedRecordsByCurrentDate(opts: {
-    studentId: string,
-    day: number,
-    year: number,
-    month: number
+    studentId: string;
+    day: number;
+    year: number;
+    month: number;
   }): IRecord {
     let response: IRecord;
     try {
       const recordQuery = recordsColl.findOne({
-        'id': {
-          '$eq': opts.studentId
+        id: {
+          $eq: opts.studentId
         },
-        'year': {
-          '$eq': opts.year
+        year: {
+          $eq: opts.year
         },
-        'day': {
-          '$eq': opts.day
+        day: {
+          $eq: opts.day
         },
-        'month': {
-          '$eq': opts.month
+        month: {
+          $eq: opts.month
         }
       });
       if (recordQuery) {
@@ -869,5 +912,4 @@ export class AmaranthusDBProvider {
       }
     }
   }
-
 }
