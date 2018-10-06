@@ -41,3 +41,4 @@ app-release-unsigned.apk
 android-debug.apk
 android-release-unsigned.apk
 zipalign
+apksigner
