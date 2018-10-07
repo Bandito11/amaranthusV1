@@ -31,6 +31,7 @@ export interface IEvent {
   name: string;
   startDate: string;
   endDate: string;
+  infiniteDates: boolean;
   members: {
     id: string;
     attendance: boolean;
@@ -75,7 +76,7 @@ export interface IRecord {
   picture?: string;
   percent?: number;
   notes?: string;
-  event?: string;
+  event?:string;
 }
 
 export interface ICalendar {

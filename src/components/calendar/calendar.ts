@@ -8,10 +8,6 @@ import { WEEKDAYSHEADER, WEEKDAYSLABELS, MONTHSLABELS } from '../../common/const
 })
 
 export class CalendarComponent implements OnInit {
-  constructor() {
-    this.currentDate = new Date();
-  }
-
   /**
    * Date chosen by the user to be shown in the card Header
    * Will return @param Calendar
@@ -44,6 +40,7 @@ export class CalendarComponent implements OnInit {
   currentStyles;
 
   ngOnInit() {
+    this.currentDate = new Date();
     this.createCalendar(null, null);
     this.initialize();
   }

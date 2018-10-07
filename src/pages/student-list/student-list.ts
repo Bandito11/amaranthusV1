@@ -7,12 +7,6 @@ import { CreatePage } from '../create/create';
 import { IStudent } from '../../common/models';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { sortStudentsbyId, sortStudentsName, filterStudentsList } from '../../common/search'
-/**
- * Generated class for the StudentListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({ selector: 'page-student-list', templateUrl: 'student-list.html' })

@@ -1,0 +1,24 @@
+page-table-events {
+    .exportColor{
+        color:#c4c4c4
+    }
+    table {
+        border: 1px solid black;
+        border-spacing: 5px;
+        width:100%;
+        height:auto;
+        text-align: center;
+    }
+    th, td {
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: color($colors, secondary);;
+        color: white;
+    }
+     tr:nth-child(even) {background-color: #f2f2f2;} 
+     div#table{
+        overflow-x:auto
+     }
+}

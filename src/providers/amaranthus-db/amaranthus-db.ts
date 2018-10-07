@@ -1,12 +1,5 @@
 import { Storage } from '@ionic/storage';
-import {
-  IStudent,
-  IResponse,
-  IRecord,
-  ICalendar,
-  IEvent,
-  INote
-} from '../../common/models';
+import { IStudent, IResponse, IRecord, ICalendar, IEvent, INote } from '../../common/models';
 import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';
@@ -20,9 +13,11 @@ let studentsColl: Collection<IStudent>;
 let recordsColl: Collection<IRecord>;
 let eventsColl: Collection<IEvent>;
 let notesColl: Collection<INote>;
-let eventsRecordsColl: Collection<IEvent>;
 
-let db: Loki;
+/**
+ * Declaration of DB
+ */
+let amaranthusDB: Loki;
 
 @Injectable()
 export class AmaranthusDBProvider {
@@ -38,25 +33,25 @@ export class AmaranthusDBProvider {
       adapter: ionicStorageAdapter,
       autoloadCallback: this.loadDatabase
     };
-    db = new Loki('amaranthus.db', lokiOptions);
+    amaranthusDB = new Loki('amaranthus.db', lokiOptions);
   }
 
   private loadDatabase() {
-    studentsColl = db.getCollection<IStudent>('students');
-    recordsColl = db.getCollection<IRecord>('records');
-    eventsColl = db.getCollection<IEvent>('events');
-    notesColl = db.getCollection<INote>('notes');
+    studentsColl = amaranthusDB.getCollection<IStudent>('students');
+    recordsColl = amaranthusDB.getCollection<IRecord>('records');
+    eventsColl = amaranthusDB.getCollection<IEvent>('events');
+    notesColl = amaranthusDB.getCollection<INote>('notes');
     if (!studentsColl) {
-      studentsColl = db.addCollection<IStudent>('students');
+      studentsColl = amaranthusDB.addCollection<IStudent>('students');
     }
     if (!recordsColl) {
-      recordsColl = db.addCollection<IRecord>('records');
+      recordsColl = amaranthusDB.addCollection<IRecord>('records');
     }
     if (!eventsColl) {
-      eventsColl = db.addCollection<IEvent>('events');
+      eventsColl = amaranthusDB.addCollection<IEvent>('events');
     }
     if (!notesColl) {
-      notesColl = db.addCollection<INote>('notes');
+      notesColl = amaranthusDB.addCollection<INote>('notes');
     }
   }
 
@@ -404,111 +399,6 @@ export class AmaranthusDBProvider {
     });
   }
 
-  addAbsence(opts: {
-    date: ICalendar;
-    id: string;
-    event?: string;
-  }): IResponse<null> {
-    const response = this.insertOrUpdateRecord({
-      ...opts,
-      date: {
-        ...opts.date,
-        month: opts.date.month + 1
-      },
-      attendance: false,
-      absence: true
-    });
-    return response;
-  }
-
-  addAttendance(opts: {
-    date: ICalendar;
-    id: string;
-    event?: string;
-  }): IResponse<null> {
-    const response = this.insertOrUpdateRecord({
-      ...opts,
-      date: {
-        ...opts.date,
-        month: opts.date.month + 1
-      },
-      attendance: true,
-      absence: false
-    });
-    return response;
-  }
-
-  insertOrUpdateRecord(opts: {
-    attendance: boolean;
-    absence: boolean;
-    date: ICalendar;
-    id: string;
-    event?: string;
-  }) {
-    let response: IResponse<null> = {
-      success: false,
-      error: null,
-      data: undefined
-    };
-    try {
-      let record: IRecord = {
-        id: opts.id,
-        month: opts.date.month,
-        year: opts.date.year,
-        day: opts.date.day,
-        attendance: opts.attendance,
-        absence: opts.absence
-      };
-      if (opts['event']) {
-        record = {
-          ...record,
-          event: opts.event
-        };
-      }
-      let results = recordsColl.findOne({
-        id: {
-          $eq: record.id
-        },
-        month: {
-          $eq: record.month
-        },
-        year: {
-          $eq: record.year
-        },
-        day: {
-          $eq: record.day
-        }
-      });
-      if (results) {
-        let foundRecord = {
-          ...results,
-          ...record
-        };
-        recordsColl.update(foundRecord);
-      } else {
-        let newRecord = {
-          ...record
-        };
-        recordsColl.insert(newRecord);
-      }
-      response = {
-        ...response,
-        success: true,
-        error: null,
-        data: null
-      };
-      return response;
-    } catch (error) {
-      if (recordsColl) {
-        response = {
-          ...response,
-          error: error || null
-        };
-        return response;
-      }
-    }
-  }
-
   updateStudent(student: IStudent): IResponse<null> {
     try {
       let results: any = studentsColl.findOne({
@@ -554,6 +444,144 @@ export class AmaranthusDBProvider {
     }
   }
 
+  addAbsence(opts: { date: ICalendar; id: string; event?: string }): IResponse<null> {
+    let response;
+    if (opts['event']) {
+      response = this.insertOrUpdateRecord({
+        ...opts,
+        date: {
+          ...opts.date,
+          month: opts.date.month + 1
+        },
+        attendance: false,
+        absence: true,
+        event: opts.event
+      });
+    } else {
+      response = this.insertOrUpdateRecord({
+        ...opts,
+        date: {
+          ...opts.date,
+          month: opts.date.month + 1
+        },
+        attendance: false,
+        absence: true
+      });
+    }
+    return response;
+  }
+
+  addAttendance(opts: { date: ICalendar; id: string; event?: string }): IResponse<null> {
+    let response;
+    if (opts['event']) {
+      response = this.insertOrUpdateRecord({
+        ...opts,
+        date: {
+          ...opts.date,
+          month: opts.date.month + 1
+        },
+        attendance: true,
+        absence: false,
+        event: opts.event
+      });
+    } else {
+      response = this.insertOrUpdateRecord({
+        ...opts,
+        date: {
+          ...opts.date,
+          month: opts.date.month + 1
+        },
+        attendance: true,
+        absence: false
+      });
+    }
+    return response;
+  }
+
+  insertOrUpdateRecord(opts: { attendance: boolean; absence: boolean; date: ICalendar; id: string; event?: string }) {
+    let response: IResponse<null> = {
+      success: false,
+      error: null,
+      data: undefined
+    };
+    try {
+      let record: IRecord = {
+        id: opts.id,
+        month: opts.date.month,
+        year: opts.date.year,
+        day: opts.date.day,
+        attendance: opts.attendance,
+        absence: opts.absence
+      };
+      let results;
+      if (opts['event']) {
+        record = {
+          ...record,
+          event: opts.event
+        };
+        results = recordsColl.findOne({
+          id: {
+            $eq: record.id
+          },
+          month: {
+            $eq: record.month
+          },
+          year: {
+            $eq: record.year
+          },
+          day: {
+            $eq: record.day
+          },
+          event: {
+            $eq: opts.event
+          }
+        });
+      } else {
+        results = recordsColl.findOne({
+          id: {
+            $eq: record.id
+          },
+          month: {
+            $eq: record.month
+          },
+          year: {
+            $eq: record.year
+          },
+          day: {
+            $eq: record.day
+          }
+        });
+      }
+      if (results) {
+        let foundRecord = {
+          ...results,
+          ...record
+        };
+        recordsColl.update(foundRecord);
+      } else {
+        let newRecord = {
+          ...record
+        };
+        recordsColl.insert(newRecord);
+      }
+      response = {
+        ...response,
+        success: true,
+        error: null,
+        data: null
+      };
+      return response;
+    } catch (error) {
+      if (recordsColl) {
+        response = {
+          ...response,
+          error: error || null
+        };
+        return response;
+      }
+    }
+  }
+
   getStudentById(student: IStudent): IResponse<IStudent & LokiObj> {
     let response: IResponse<IStudent & LokiObj> = {
       success: false,
@@ -590,17 +618,15 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getQueriedRecords(opts: {
-    query: string;
-    date?: ICalendar;
-  }): IResponse<IRecord[]> {
+  getQueriedRecords(opts: { event?: string, query: string; date?: ICalendar }): IResponse<IRecord[]> {
     let response = {
       success: true,
       error: null,
       data: null
     };
+    // TODO: Add Event if condition!!!!
     switch (opts.query) {
-      case 'Date':
+      case 'Date': 
         this.getQueriedRecordsByDate(opts.date);
         break;
       default:
@@ -621,7 +647,7 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getStudentsRecordsByDate(opts: ICalendar): IResponse<IRecord[]> {
+  getStudentsRecordsByDate(opts: { date: ICalendar; event?: string }): IResponse<IRecord[]> {
     let response = {
       success: true,
       error: null,
@@ -634,25 +660,47 @@ export class AmaranthusDBProvider {
         }
       });
       let studentRecord;
+      let record;
       students.map((student: IStudent) => {
         studentRecord = null;
-        const record = recordsColl.findOne({
-          id: {
-            $eq: student.id
-          },
-          year: {
-            $eq: opts.year
-          },
-          month: {
-            $eq: opts.month
-          },
-          day: {
-            $eq: opts.day
-          }
-        });
+        record = null;
+        if (opts['event']) {
+          record = recordsColl.findOne({
+            id: {
+              $eq: student.id
+            },
+            year: {
+              $eq: opts.date.year
+            },
+            month: {
+              $eq: opts.date.month
+            },
+            day: {
+              $eq: opts.date.day
+            },
+            event: {
+              $eq: opts.event
+            }
+          });
+        } else {
+          record = recordsColl.findOne({
+            id: {
+              $eq: student.id
+            },
+            year: {
+              $eq: opts.date.year
+            },
+            month: {
+              $eq: opts.date.month
+            },
+            day: {
+              $eq: opts.date.day
+            }
+          });
+        }
         const noteDate = {
-          ...opts,
-          month: opts.month - 1
+          ...opts.date,
+          month: opts.date.month - 1
         };
         const noteResponse = this.getNoteByDate({
           id: student.id,
@@ -877,28 +925,45 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getQueriedRecordsByCurrentDate(opts: {
-    studentId: string;
-    day: number;
-    year: number;
-    month: number;
-  }): IRecord {
+  getQueriedRecordsByCurrentDate(opts: { event?: string; studentId: string; day: number; year: number; month: number }): IRecord {
     let response: IRecord;
     try {
-      const recordQuery = recordsColl.findOne({
-        id: {
-          $eq: opts.studentId
-        },
-        year: {
-          $eq: opts.year
-        },
-        day: {
-          $eq: opts.day
-        },
-        month: {
-          $eq: opts.month
-        }
-      });
+      let recordQuery;
+      if (opts['event']) {
+        recordQuery = recordsColl.findOne({
+          id: {
+            $eq: opts.studentId
+          },
+          year: {
+            $eq: opts.year
+          },
+          day: {
+            $eq: opts.day
+          },
+          month: {
+            $eq: opts.month
+          },
+          event: {
+            $eq: opts.event
+          }
+        });
+      } else {
+        recordQuery = recordsColl.findOne({
+          id: {
+            $eq: opts.studentId
+          },
+          year: {
+            $eq: opts.year
+          },
+          day: {
+            $eq: opts.day
+          },
+          month: {
+            $eq: opts.month
+          }
+        });
+      }
+
       if (recordQuery) {
         response = recordQuery;
         return response;

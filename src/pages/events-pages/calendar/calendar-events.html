@@ -1,0 +1,72 @@
+<!--
+  Generated template for the CalendarPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Calendar</ion-title>
+    <ion-buttons start>
+        <button ion-button (click)="goBack()" clear>
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </ion-buttons>
+  
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <calendar-component (getDate)="getDate($event)"></calendar-component>
+  <h4>{{currentDate}}</h4>
+  <ion-searchbar [(ngModel)]="search" (ionInput)="searchStudent()">
+  </ion-searchbar>
+  <ion-list *ngIf="students">
+    <ion-item-sliding *ngFor="let student of students">
+      <ion-item>
+        <ion-avatar item-left>
+          <img src="{{student.picture}}" alt="no image">
+        </ion-avatar>
+        <div class="amaranthus">
+          <p>
+            <span class="label name">Name: </span>
+            <span class="name">{{student.fullName}}</span>
+          </p>
+          <p>
+            <span class="label">ID: </span>{{student.id}}
+          </p>
+          <button ion-button clear large color="dark" (click)="showNotes(student.id)">
+            <ion-icon name="paper"></ion-icon>
+          </button>
+          <div *ngIf="toggle == student.id">
+            <textarea #notes (keyup)="addNotes({id: student.id, notes:notes.value})">{{student.notes}}</textarea>
+          </div>
+          <div>
+            <p class="left attended" *ngIf="student.attendance">
+              {{student.firstName}}'s is present this day!
+            </p>
+            <p class="left attended" *ngIf="student.absence">
+              {{student.firstName}}'s is absent this day!
+            </p>
+
+            <p class="right">
+              Swipe for more options
+            </p>
+          </div>
+        </div>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button color="primary" (click)="addAttendance({id: student.id})">
+          Attended
+        </button>
+        <button ion-button color="secondary" (click)="addAbsence({id: student.id})">
+          Absent
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+</ion-content>

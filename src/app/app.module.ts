@@ -1,4 +1,3 @@
-import { EventsPageModule } from '../pages/events/events.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -9,12 +8,9 @@ import { MyApp } from './app.component';
 import { AmaranthusDBProvider } from '../providers/amaranthus-db/amaranthus-db';
 import { Camera } from '@ionic-native/camera';
 import { TabsPageModule } from '../pages/tabs/tabs.module';
-import { MainPageModule } from '../pages/main/main.module';
-import { TablePageModule } from '../pages/table/table.module';
 import { CreatePageModule } from '../pages/create/create.module';
 import { StudentProfilePageModule } from '../pages/student-profile/student-profile.module';
 import { StudentListPageModule } from '../pages/student-list/student-list.module';
-import { CalendarPageModule } from '../pages/calendar/calendar.module';
 import { AppPurchaseProvider } from '../providers/app-purchase/app-purchase';
 import { File } from '@ionic-native/file';
 import { InAppPurchase } from '@ionic-native/in-app-purchase';
@@ -28,6 +24,10 @@ import { IonicStorageModule } from '@ionic/storage';
 import { FileOpener } from '@ionic-native/file-opener';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { Market } from '@ionic-native/market';
+import { MainPageModule } from '../pages/daily-pages/main/main.module';
+import { TablePageModule } from '../pages/daily-pages/table/table.module';
+import { CalendarPageModule } from '../pages/daily-pages/calendar/calendar.module';
+import { EventsPageModule } from '../pages/events-pages/events/events.module';
 
 @NgModule({
   declarations: [

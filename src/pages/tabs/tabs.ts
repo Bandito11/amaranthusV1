@@ -1,9 +1,9 @@
 import { StudentListPage } from '../student-list/student-list';
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
-import { MainPage } from '../main/main';
-import { TablePage } from '../table/table';
-import { CalendarPage } from '../calendar/calendar';
+import { MainPage } from '../daily-pages/main/main';
+import { TablePage } from '../daily-pages//table/table';
+import { CalendarPage } from '../daily-pages/calendar/calendar';
 import { SettingsPage } from '../settings/settings';
 
 
@@ -20,8 +20,6 @@ import { SettingsPage } from '../settings/settings';
   </ion-tabs>
 `
 })
-
-// <ion-tab tabIcon="cog" [root]="tab5"></ion-tab> 
 
 export class TabsPage {
 
