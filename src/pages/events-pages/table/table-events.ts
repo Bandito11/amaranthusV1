@@ -113,7 +113,7 @@ export class TableEventsPage implements OnInit {
       day: null
     };
     try {
-      const response = this.db.getQueriedRecordsByDate(date);
+      const response = this.db.getQueriedRecordsByDate({event: this.event, date: date});
       if (response.success == true) {
         this.students = [...response.data];
       }
@@ -138,7 +138,7 @@ export class TableEventsPage implements OnInit {
       };
     }
     try {
-      const response = this.db.getQueriedRecordsByDate(date);
+      const response = this.db.getQueriedRecordsByDate({event: this.event, date: date});
       if (response.success == true) {
         this.students = [...response.data];
       }

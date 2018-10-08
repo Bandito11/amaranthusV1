@@ -1,3 +1,4 @@
+import { Market } from '@ionic-native/market';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -23,7 +24,6 @@ import { XLSXProvider } from '../providers/xslx/xslx';
 import { IonicStorageModule } from '@ionic/storage';
 import { FileOpener } from '@ionic-native/file-opener';
 import { EmailComposer } from '@ionic-native/email-composer';
-import { Market } from '@ionic-native/market';
 import { MainPageModule } from '../pages/daily-pages/main/main.module';
 import { TablePageModule } from '../pages/daily-pages/table/table.module';
 import { CalendarPageModule } from '../pages/daily-pages/calendar/calendar.module';

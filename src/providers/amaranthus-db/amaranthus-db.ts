@@ -511,7 +511,8 @@ export class AmaranthusDBProvider {
         year: opts.date.year,
         day: opts.date.day,
         attendance: opts.attendance,
-        absence: opts.absence
+        absence: opts.absence,
+        event: ''
       };
       let results;
       if (opts['event']) {
@@ -549,6 +550,9 @@ export class AmaranthusDBProvider {
           },
           day: {
             $eq: record.day
+          },
+          event: {
+            $eq: ''
           }
         });
       }
@@ -618,7 +622,7 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getQueriedRecords(opts: { event?: string, query: string; date?: ICalendar }): IResponse<IRecord[]> {
+  getQueriedRecords(opts: { event?: string; query: string; date?: ICalendar }): IResponse<IRecord[]> {
     let response = {
       success: true,
       error: null,
@@ -626,15 +630,25 @@ export class AmaranthusDBProvider {
     };
     // TODO: Add Event if condition!!!!
     switch (opts.query) {
-      case 'Date': 
-        this.getQueriedRecordsByDate(opts.date);
+      case 'Date':
+        this.getQueriedRecordsByDate(<any>opts);
         break;
       default:
-        const options: ICalendar = {
+        const date: ICalendar = {
           year: new Date().getFullYear(),
           month: new Date().getMonth() + 1,
           day: null
         };
+        let options = {
+          date: date,
+          event: ''
+        }
+        if(opts['event']){
+          options = {
+            ...options,
+            event: opts.event
+          }
+        }
         try {
           response = {
             ...response,
@@ -695,6 +709,9 @@ export class AmaranthusDBProvider {
             },
             day: {
               $eq: opts.date.day
+            },
+            event: {
+              $eq: ''
             }
           });
         }
@@ -756,7 +773,7 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getAllStudentsRecords(opts: ICalendar): IResponse<IRecord[]> {
+  getAllStudentsRecords(opts: { event?: string; date: ICalendar }): IResponse<IRecord[]> {
     let response = {
       success: true,
       error: null,
@@ -773,17 +790,38 @@ export class AmaranthusDBProvider {
       students.map((student: IStudent) => {
         attendance = 0;
         absence = 0;
-        const records = recordsColl.find({
-          id: {
-            $eq: student.id
-          },
-          year: {
-            $eq: opts.year
-          },
-          month: {
-            $eq: opts.month
-          }
-        });
+        let records;
+        if (opts['event']) {
+          records = recordsColl.find({
+            id: {
+              $eq: student.id
+            },
+            year: {
+              $eq: opts.date.year
+            },
+            month: {
+              $eq: opts.date.month
+            },
+            event: {
+              $eq: opts.event
+            }
+          });
+        } else {
+          records = recordsColl.find({
+            id: {
+              $eq: student.id
+            },
+            year: {
+              $eq: opts.date.year
+            },
+            month: {
+              $eq: opts.date.month
+            },
+            event: {
+              $eq: ''
+            }
+          });
+        }
         if (records) {
           records.map((record: IRecord) => {
             if (record.attendance == true) {
@@ -863,7 +901,7 @@ export class AmaranthusDBProvider {
     }
   }
 
-  getQueriedRecordsByDate(opts: ICalendar): IResponse<IRecord[]> {
+  getQueriedRecordsByDate(opts: { event?: string; date: ICalendar }): IResponse<IRecord[]> {
     try {
       return this.getAllStudentsRecords(opts);
     } catch (error) {
@@ -960,6 +998,9 @@ export class AmaranthusDBProvider {
           },
           month: {
             $eq: opts.month
+          },
+          event: {
+            $eq: ''
           }
         });
       }

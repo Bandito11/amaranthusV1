@@ -2,14 +2,19 @@
 
   <ion-navbar color="primary">
     <ion-title>Daily Attendance Records</ion-title>
-  <ion-buttons end>
-    <button *ngIf="students.length > 0" ion-button (click)="toExportPage()">
-      Export
-    </button>
-    <!-- <button class="exportColor" *ngIf="!bought" ion-button (click)="exportMessage()">
+    <ion-buttons start>
+      <button ion-button (click)="goBack()" clear>
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button *ngIf="students.length > 0" ion-button (click)="toExportPage()">
+        Export
+      </button>
+      <!-- <button class="exportColor" *ngIf="!bought" ion-button (click)="exportMessage()">
       Export
     </button> -->
-  </ion-buttons>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -42,7 +47,8 @@
   <div id="table">
     <table>
       <caption [ngSwitch]="query">
-        <ng-template ngSwitchWhen="Date">Students attendance in {{months[currentDate.getMonth()]}}, {{currentDate.getFullYear()}}</ng-template>
+        <ng-template ngSwitchWhen="Date">Students attendance in {{months[currentDate.getMonth()]}},
+          {{currentDate.getFullYear()}}</ng-template>
         <ng-template ngSwitchDefault>Students attendance in {{monthQuery}}, {{yearQuery}}</ng-template>
       </caption>
       <!-- <caption *ngIf="query != 'Date'">Students attendance in {{months[currentDate.getMonth()]}}, {{currentDate.getFullYear()}}</caption>

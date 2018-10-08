@@ -12,11 +12,11 @@ import { Market } from '@ionic-native/market';
 @Component({ selector: 'page-settings', templateUrl: 'settings.html' })
 
 export class SettingsPage {
-  private products: productGet[] = [];
-  private noProducts: boolean = true;
-  private isIos: boolean;
-  private isAndroid: boolean;
-  private bought: boolean;
+  public products: productGet[] = [];
+  public noProducts: boolean = true;
+  public isIos: boolean;
+  public isAndroid: boolean;
+  public bought: boolean;
 
   constructor(
     private emailComposer: EmailComposer,
@@ -42,6 +42,7 @@ export class SettingsPage {
           this.bought = false;
         }
       });
+      this.getProducts();
   }
 
   ionViewWillEnter() {

@@ -111,7 +111,7 @@ export class TablePage implements OnInit {
       day: null
     };
     try {
-      const response = this.db.getQueriedRecordsByDate(date);
+      const response = this.db.getQueriedRecordsByDate({ date: date });
       if (response.success == true) {
         this.students = [...response.data];
       }
@@ -136,7 +136,7 @@ export class TablePage implements OnInit {
       };
     }
     try {
-      const response = this.db.getQueriedRecordsByDate(date);
+      const response = this.db.getQueriedRecordsByDate({ date: date });
       if (response.success == true) {
         this.students = [...response.data];
       }

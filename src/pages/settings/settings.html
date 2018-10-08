@@ -37,7 +37,17 @@
       <hr>
     </div>
   </div>
+  <div *ngIf="this.platform.is('cordova')">
+    <h4>If you like the app please consider rating it 5 stars!</h4>
+    <button *ngIf="platform.is('ios')" ion-button (click)="openMarketPage()">
+      Open App Store &nbsp; <ion-icon name="logo-apple"></ion-icon>
+    </button>
+    <button *ngIf="platform.is('android')" ion-button color="secondary" (click)="openMarketPage()">
+      Open Play Store &nbsp; <ion-icon name="logo-google"></ion-icon>
+    </button>
+  </div>
   <div *ngIf="bought">
+    <hr>
     <h2>Feedback</h2>
     <p>Have any issues or just want to give me some feedback on how to make the app better? Just sent me an email
       and I will answer accordingly!
@@ -46,14 +56,5 @@
     <br>
     <button ion-button color="primary" (click)="sendEmail(message.value)">Send email! </button>
     <hr>
-  </div>
-  <div *ngIf="this.platform.is('cordova')">
-    <h4>If you like the app please consider rating it 5 stars!</h4>
-    <button *ngIf="platform.is('ios')" ion-button (click)="openMarketPage()">
-      Open App Store &nbsp; <ion-icon name="logo-apple"></ion-icon> 
-    </button>
-    <button *ngIf="platform.is('android')" ion-button color="secondary" (click)="openMarketPage()">
-      Open Play Store &nbsp; <ion-icon name="logo-google"></ion-icon> 
-    </button>
   </div>
 </ion-content>
