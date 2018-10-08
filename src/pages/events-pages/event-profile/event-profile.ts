@@ -148,7 +148,7 @@ export class EventProfilePage {
       //TODO: Make an attendance method
       // const date = new Date();
       const currentDate = {
-        month: new Date().getMonth(),
+        month: new Date().getMonth() + 1,
         day: new Date().getDate(),
         year: new Date().getFullYear()
       };
@@ -205,7 +205,7 @@ export class EventProfilePage {
   }
 
   goToTable() {
-    const modal = this.modal.create(TableEventsPage, { event: this.event });
+    const modal = this.modal.create(TableEventsPage, { event: this.event.name });
     // modal.onDidDismiss(_ => {
     //   this.getEventProfile(this.id);
     // });
