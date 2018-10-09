@@ -537,7 +537,8 @@ export class AmaranthusDBProvider {
             $eq: opts.event
           }
         });
-      } else {
+      } 
+      else if (opts.hasOwnProperty('event')) {
         results = recordsColl.findOne({
           id: {
             $eq: record.id
@@ -553,6 +554,21 @@ export class AmaranthusDBProvider {
           },
           event: {
             $eq: ''
+          }
+        });
+      } else {
+        results = recordsColl.findOne({
+          id: {
+            $eq: record.id
+          },
+          month: {
+            $eq: record.month
+          },
+          year: {
+            $eq: record.year
+          },
+          day: {
+            $eq: record.day
           }
         });
       }
@@ -696,7 +712,7 @@ export class AmaranthusDBProvider {
               $eq: opts.event
             }
           });
-        } else {
+        } else if (opts.hasOwnProperty('event')) {
           record = recordsColl.findOne({
             id: {
               $eq: student.id
@@ -712,6 +728,21 @@ export class AmaranthusDBProvider {
             },
             event: {
               $eq: ''
+            }
+          });
+        } else {
+          record = recordsColl.findOne({
+            id: {
+              $eq: student.id
+            },
+            year: {
+              $eq: opts.date.year
+            },
+            month: {
+              $eq: opts.date.month
+            },
+            day: {
+              $eq: opts.date.day
             }
           });
         }
@@ -806,7 +837,7 @@ export class AmaranthusDBProvider {
               $eq: opts.event
             }
           });
-        } else {
+        } else if (opts.hasOwnProperty('event')) {
           records = recordsColl.find({
             id: {
               $eq: student.id
@@ -819,6 +850,18 @@ export class AmaranthusDBProvider {
             },
             event: {
               $eq: ''
+            }
+          });
+        } else {
+          records = recordsColl.find({
+            id: {
+              $eq: student.id
+            },
+            year: {
+              $eq: opts.date.year
+            },
+            month: {
+              $eq: opts.date.month
             }
           });
         }
@@ -985,7 +1028,7 @@ export class AmaranthusDBProvider {
             $eq: opts.event
           }
         });
-      } else {
+      } else if (opts.hasOwnProperty('event')) {
         recordQuery = recordsColl.findOne({
           id: {
             $eq: opts.studentId
@@ -1001,6 +1044,21 @@ export class AmaranthusDBProvider {
           },
           event: {
             $eq: ''
+          }
+        });
+      } else {
+        recordQuery = recordsColl.findOne({
+          id: {
+            $eq: opts.studentId
+          },
+          year: {
+            $eq: opts.year
+          },
+          day: {
+            $eq: opts.day
+          },
+          month: {
+            $eq: opts.month
           }
         });
       }
