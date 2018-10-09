@@ -555,6 +555,22 @@ export class AmaranthusDBProvider {
             $eq: ''
           }
         });
+        if(!results){
+          results = recordsColl.findOne({
+            id: {
+              $eq: record.id
+            },
+            month: {
+              $eq: record.month
+            },
+            year: {
+              $eq: record.year
+            },
+            day: {
+              $eq: record.day
+            }
+          });
+        }
       }
       if (results) {
         let foundRecord = {
@@ -714,6 +730,22 @@ export class AmaranthusDBProvider {
               $eq: ''
             }
           });
+          if(!record){
+            record = recordsColl.findOne({
+              id: {
+                $eq: student.id
+              },
+              year: {
+                $eq: opts.date.year
+              },
+              month: {
+                $eq: opts.date.month
+              },
+              day: {
+                $eq: opts.date.day
+              }
+            });
+          }
         }
         const noteDate = {
           ...opts.date,
@@ -821,6 +853,19 @@ export class AmaranthusDBProvider {
               $eq: ''
             }
           });
+          if(!records){
+            records = recordsColl.find({
+              id: {
+                $eq: student.id
+              },
+              year: {
+                $eq: opts.date.year
+              },
+              month: {
+                $eq: opts.date.month
+              }
+            });
+          }
         }
         if (records) {
           records.map((record: IRecord) => {
@@ -1003,8 +1048,24 @@ export class AmaranthusDBProvider {
             $eq: ''
           }
         });
+        if(!recordQuery){
+          recordQuery = recordsColl.findOne({
+            id: {
+              $eq: opts.studentId
+            },
+            year: {
+              $eq: opts.year
+            },
+            day: {
+              $eq: opts.day
+            },
+            month: {
+              $eq: opts.month
+            }
+          });
+  
+        }
       }
-
       if (recordQuery) {
         response = recordQuery;
         return response;
