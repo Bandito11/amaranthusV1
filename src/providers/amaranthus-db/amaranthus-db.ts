@@ -25,6 +25,26 @@ export class AmaranthusDBProvider {
     this.createDB();
   }
 
+  /**
+   * Use to convert Legacy data.
+   */
+  convertLegacyData() {
+    const records = recordsColl.data;
+    const noEventPropRecords = records.map(record => {
+      if (!record['event']) {
+        return {
+          ...record,
+          event: ''
+        };
+      } else {
+        return record;
+      }
+    });
+    if (noEventPropRecords) {
+      recordsColl.update(noEventPropRecords);
+    }
+  }
+
   private createDB() {
     const ionicStorageAdapter = new IonicStorageAdapter();
     const lokiOptions: Partial<LokiConfigOptions> = {
@@ -537,8 +557,7 @@ export class AmaranthusDBProvider {
             $eq: opts.event
           }
         });
-      } 
-      else if (opts.hasOwnProperty('event')) {
+      } else if (opts.hasOwnProperty('event')) {
         results = recordsColl.findOne({
           id: {
             $eq: record.id
@@ -655,15 +674,15 @@ export class AmaranthusDBProvider {
           month: new Date().getMonth() + 1,
           day: null
         };
-        let options = {
+        let options: any = {
           date: date,
           event: ''
-        }
-        if(opts['event']){
+        };
+        if (opts['event']) {
           options = {
             ...options,
             event: opts.event
-          }
+          };
         }
         try {
           response = {

@@ -3,38 +3,37 @@ import { EditPage } from '../edit/edit';
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { IStudent } from '../../common/models';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ModalController, Platform } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
-
 
 @IonicPage()
 @Component({
   selector: 'page-student-profile',
-  templateUrl: 'student-profile.html',
+  templateUrl: 'student-profile.html'
 })
 export class StudentProfilePage {
-
-  picture: string = "";;
+  picture: string = '';
   gender: string = 'male';
-  isActive: boolean = false;;
+  isActive: boolean = false;
   student: IStudent & LokiObj = <IStudent & LokiObj>{};
   headerName: string;
-  notes: { note: string, date: string }[] = [];
+  notes: { note: string; date: string }[] = [];
 
   constructor(
-    public db: AmaranthusDBProvider,
+    private db: AmaranthusDBProvider,
     public alertCtrl: AlertController,
     public navCtrl: NavController,
+    public platform: Platform,
     private modalCtrl: ModalController,
-    public navParams: NavParams
-  ) { }
+    private navParams: NavParams
+  ) {}
 
   /**
-   * 
-   * @param id 
+   *
+   * @param id
    */
   goToEdit(id: string) {
-    const modal = this.modalCtrl.create(EditPage, { id: id })
+    const modal = this.modalCtrl.create(EditPage, { id: id });
     modal.onWillDismiss(_ => this.getStudentFromDB(this.student));
     modal.present();
   }
@@ -49,7 +48,7 @@ export class StudentProfilePage {
     try {
       const response = this.db.getAllNotesById(id);
       if (response.success) {
-        let note: { note, date };
+        let note: { note; date };
         let date;
         for (const data of response.data) {
           date = `${MONTHSLABELS[data.month]}, ${data.day} ${data.year}`;
@@ -57,7 +56,7 @@ export class StudentProfilePage {
             note: data.notes,
             date: date
           };
-          this.notes = [...this.notes, note]
+          this.notes = [...this.notes, note];
         }
       }
     } catch (error) {
@@ -72,12 +71,13 @@ export class StudentProfilePage {
         this.isActive = response.data.isActive;
         this.gender = response.data.gender;
         this.picture = response.data.picture;
-        this.student = { ...response.data };
+        this.student = {
+          ...response.data,
+          gender: response.data.gender[0].toUpperCase() + response.data.gender.slice(1, response.data.gender.length)
+        };
       }
     } catch (error) {
-      handleError(error)
-    };
+      handleError(error);
+    }
   }
-
-
 }

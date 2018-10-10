@@ -1,7 +1,7 @@
 import { AmaranthusDBProvider } from '../../providers/amaranthus-db/amaranthus-db';
 import { ISimpleAlertOptions, IStudent, IResponse } from '../../common/models';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, normalizeURL, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, normalizeURL, ViewController, Platform } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { trimText } from '../../common/formatToText';
@@ -46,7 +46,8 @@ export class EditPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private viewCtrl: ViewController,
-    private camera: Camera
+    private camera: Camera,
+    public platform: Platform,
   ) { }
 
   ionViewDidLoad() {

@@ -43,6 +43,7 @@ export class MainPage implements OnInit {
       this.filterOptions = this.getFilterOptions();
       if (this.students.length > 0) {
         clearInterval(studentInterval);
+        this.db.convertLegacyData();
       }
     }, 50);
   }

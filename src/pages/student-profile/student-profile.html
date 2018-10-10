@@ -16,48 +16,48 @@
     <img src="{{picture}}" />
   </div>
   <div class="text text-box">
-    <p class="text bold id">
-      <span class="text label">ID: </span>{{student.id}}
+    <p class="text id">
+      <span class="bold label">ID: </span>{{student.id}}
     </p>
-    <p class="text bold">
-      <span class="text label">Name: </span> {{student.firstName}}
+    <p class="text">
+      <span class="bold label">Name: </span> {{student.firstName}}
       <span *ngIf="student.initial">{{student.initial}}</span> {{student.lastName}}
     </p>
-    <p class="text bold">
-      <span class="text label">Address: </span>{{student.address}}
+    <p class="text">
+      <span class="bold label">Address: </span>{{student.address}}
     </p>
-    <p class="text bold" *ngIf="student.phoneNumber">
-      <span class="text label">Phone Number: </span>{{student.phoneNumber}}
+    <p class="text" *ngIf="student.phoneNumber">
+      <span class="bold label">Phone Number: </span>{{student.phoneNumber}}
     </p>
-    <p class="text bold">
-      <span class="text label">City: </span>{{student.town}}
+    <p class="text">
+      <span class="bold label">City: </span>{{student.town}}
     </p>
-    <p class="text bold">
-      <span class="text label">State: </span>{{student.state}}
+    <p class="text">
+      <span class="bold label">State: </span>{{student.state}}
     </p>
-    <p class="text bold">
-      <span class="text label">Class: </span>{{student.class}}
+    <p class="text">
+      <span class="bold label">Class: </span>{{student.class}}
     </p>
-    <p class="text bold">
-      <span class="text label">Gender: </span>{{student.gender}}
+    <p class="text">
+      <span class="bold label">Gender: </span>{{student.gender}}
     </p>
-    <p class="text bold">
-      <span class="text label">Father's Name: </span> {{student.fatherName}}
+    <p class="text">
+      <span class="bold label">Father's Name: </span> {{student.fatherName}}
     </p>
-    <p class="text bold">
-      <span class="text label">Mother's Name: </span> {{student.motherName}}
+    <p class="text">
+      <span class="bold label">Mother's Name: </span> {{student.motherName}}
     </p>
     <h2> Emergency Contact </h2>
-    <p class="text bold">
-      <span class="text label"> Name: </span>{{student.emergencyContactName}}
+    <p class="text">
+      <span class="bold label"> Name: </span>{{student.emergencyContactName}}
     </p>
-    <p class="text bold">
-      <span class="text label">Relationship: </span>{{student.emergencyRelationship}}
+    <p class="text">
+      <span class="bold label">Relationship: </span>{{student.emergencyRelationship}}
     </p>
-    <p class="text bold">
-      <span class="text label">Phone Number: </span>{{student.emergencyContactPhoneNumber}}
+    <p class="text">
+      <span class="bold label">Phone Number: </span>{{student.emergencyContactPhoneNumber}}
     </p>
-    <div class="text bold">
+    <div class="text">
       <p *ngIf="student.isActive == true">
         *Student is currently active on the roster.*
       </p>
@@ -66,10 +66,10 @@
       </p>
     </div>
     <h2>Notes: </h2>
-    <div class="text bold" id="notes">
+    <div class="text" id="notes">
         <ul id="notes-text" *ngFor="let note of notes">
-          <li><span class="text label">Date: </span> {{note.date}}</li>
-          <li><span class="text label">Notes: </span> {{note.note}}</li>
+          <li><span class="bold label">Date: </span> {{note.date}}</li>
+          <li><span class="bold label">Notes: </span> {{note.note}}</li>
         </ul>
     </div>
   </div>
