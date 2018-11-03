@@ -23,10 +23,6 @@ export class ClientLoginPage {
   }
 
   checkUser(opts: { username: string; password }) {
-    const user = {
-      ...opts,
-      username: opts.username.toLowerCase()
-    };
     const response = this.db.checkIfUserExists(opts);
     let options: ISimpleAlertOptions;
     if (response.success) {
