@@ -10,7 +10,6 @@ import { Market } from '@ionic-native/market';
 
 @IonicPage()
 @Component({ selector: 'page-settings', templateUrl: 'settings.html' })
-
 export class SettingsPage {
   public products: productGet[] = [];
   public noProducts: boolean = true;
@@ -26,7 +25,7 @@ export class SettingsPage {
     private iap: AppPurchaseProvider,
     private alertCtrl: AlertController,
     private market: Market
-  ) { }
+  ) {}
 
   ionViewWillLoad() {
     if (this.platform.is('ios')) {
@@ -34,28 +33,28 @@ export class SettingsPage {
     } else if (this.platform.is('android')) {
       this.isAndroid = true;
     }
-    this.storage.get('boughtMasterKey')
-      .then(boughtMasterKey => {
-        if (boughtMasterKey) {
-          this.bought = true;
-        } else {
-          this.bought = false;
-        }
-      });
+    this.storage.get('boughtMasterKey').then(boughtMasterKey => {
+      if (boughtMasterKey) {
+        this.bought = true;
+      } else {
+        this.bought = false;
+      }
+    });
+    if (this.platform.is('cordova')) {
       this.getProducts();
+    }
   }
 
   ionViewWillEnter() {
     if (this.platform.is('cordova')) {
-      this.storage.get('products')
-        .then(products => {
-          if (products) {
-            this.products = products;
-            this.noProducts = false;
-          } else {
-            this.getProducts;
-          }
-        });
+      this.storage.get('products').then(products => {
+        if (products) {
+          this.products = products;
+          this.noProducts = false;
+        } else {
+          this.getProducts;
+        }
+      });
     }
   }
 
@@ -103,7 +102,8 @@ export class SettingsPage {
   }
 
   getProducts() {
-    this.iap.getProducts()
+    this.iap
+      .getProducts()
       .then(products => {
         this.noProducts = false;
         this.products = [...products];
@@ -116,7 +116,8 @@ export class SettingsPage {
     const loading = this.loading.create({ content: 'Restoring Purchases!' });
     loading.present();
     if (this.platform.is('android')) {
-      this.iap.restoreAndroidPurchase()
+      this.iap
+        .restoreAndroidPurchase()
         .then(products => {
           products.forEach(product => {
             const receipt = JSON.parse(product.receipt);
@@ -134,11 +135,12 @@ export class SettingsPage {
           loading.dismiss();
         })
         .catch(_ => {
-          this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: `No receipts available in the App Store!` })
+          this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: `No receipts available in the App Store!` });
           loading.dismiss();
         });
     } else if (this.platform.is('ios')) {
-      this.iap.restoreiOSPurchase()
+      this.iap
+        .restoreiOSPurchase()
         .then(receipt => {
           if (receipt) {
             const options: ISimpleAlertOptions = {
@@ -160,19 +162,17 @@ export class SettingsPage {
           }
         })
         .catch(error => {
-          this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: 'No receipts available in the App Store!' })
+          this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: 'No receipts available in the App Store!' });
           loading.dismiss();
         });
     }
   }
 
-  buyProduct(opts: {
-    productTitle: string,
-    productId: string
-  }) {
+  buyProduct(opts: { productTitle: string; productId: string }) {
     const loading = this.loading.create({ content: `Buying ${opts.productTitle}!` });
     loading.present();
-    this.iap.buy(opts.productId)
+    this.iap
+      .buy(opts.productId)
       .then(product => {
         this.showSimpleAlert({ buttons: ['OK'], title: 'Success!', subTitle: `${product.transactionId} was successfully bought.` });
         this.storage.set('boughtMasterKey', true);
@@ -180,14 +180,12 @@ export class SettingsPage {
         loading.dismiss();
       })
       .catch(err => {
-        this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: err })
+        this.showSimpleAlert({ buttons: ['OK'], title: 'Error!', subTitle: err });
         loading.dismiss();
       });
   }
 
   private showSimpleAlert(options: ISimpleAlertOptions) {
-    return this.alertCtrl.create({ title: options.title, subTitle: options.subTitle, buttons: options.buttons })
-      .present();
+    return this.alertCtrl.create({ title: options.title, subTitle: options.subTitle, buttons: options.buttons }).present();
   }
-
 }

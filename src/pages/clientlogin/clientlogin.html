@@ -1,0 +1,28 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div id="card">
+    <img src="assets/cartoon-desk.jpg" alt="A cluttered desk">
+    <form #clientLoginForm (ngSubmit)="checkUser({username: username.value, password: password.value} )">
+      <ion-item>
+        <ion-label stacked>User ID or Full Name with a space between First Name and Last Name</ion-label>
+        <ion-input #username type="text" value=""></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Phone Number</ion-label>
+        <ion-input #password type="password"></ion-input>
+      </ion-item>
+
+      <button type="submit" ion-button full large>Submit</button>
+    </form>
+  </div>
+  {{test}}
+</ion-content>

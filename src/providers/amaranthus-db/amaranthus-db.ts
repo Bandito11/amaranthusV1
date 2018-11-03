@@ -75,6 +75,56 @@ export class AmaranthusDBProvider {
     }
   }
 
+  checkIfUserExists(opts: { username: string; password }) {
+    let response: IResponse<any> = {
+      success: false,
+      error: null,
+      data: null
+    };
+    let checkUser = studentsColl.findOne({
+      id: {
+        $eq: opts.username
+      },
+      phoneNumber: {
+        $eq: opts.password
+      }
+    });
+    if (!checkUser) {
+      const fullName = opts.username.split(' ');
+      checkUser = studentsColl.findOne({
+        firstName: {
+          $eq: fullName[0]
+        },
+        lastName: {
+          $eq: fullName[1]
+        },
+        phoneNumber: {
+          $eq: opts.password
+        }
+      });
+    }
+    if (checkUser) {
+      response = {
+        ...response,
+        success: true,
+        data: checkUser.firstName
+      };
+      const currentDate = new Date();
+      const date: ICalendar = {
+        month: currentDate.getMonth(),
+        day: currentDate.getDate(),
+        year: currentDate.getFullYear()
+      };
+      this.addAttendance({ date: date, id: checkUser.id });
+    } else {
+      response = {
+        ...response,
+        error: 'User does not exist! Please check that your entries were written correctly and try again! If the name was used please check that there is one space between the first name and last name and check for correct capitalization.'
+      };
+    }
+    return response;
+  }
+
   getNoteByDate(opts: { date: ICalendar; id: string }) {
     let response: IResponse<INote> = {
       success: false,
