@@ -1,73 +1,51 @@
-<ion-header>
+<ion-menu [content]="mycontent">
+  <ion-content>
+    <ion-list> <p>some menu content, could be list items</p> </ion-list>
+  </ion-content>
+</ion-menu>
 
+<ion-header>
   <ion-navbar color="primary">
-    <ion-title>{{eventControls.name}}</ion-title>
-    <ion-buttons start *ngIf="eventControls.infiniteDates">
-      <button ion-button (click)="goToCalendar()">Calendar</button>
-      <button ion-button (click)="goToTable()">Table</button>
-    </ion-buttons>
-    <ion-buttons end>
-      <button ion-button (click)="editEvent()">Edit</button>
-    </ion-buttons>
+    <ion-title>{{ eventControls.name }}</ion-title>
+    <ion-buttons end> <button ion-button (click)="editEvent()">Edit</button> </ion-buttons>
   </ion-navbar>
+  <ion-toolbar color="primary" *ngIf="eventControls.infiniteDates">
+    <ion-buttons end> <button ion-button (click)="goToCalendar()">Calendar</button> <button ion-button (click)="goToTable()">Table</button> </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
-
-<ion-content padding>
+<ion-content #mycontent padding>
   <img src="{{eventControls.logo}}" />
-  <div *ngIf="!eventControls.infiniteDates else infiniteDatesIsTrue">
-    <h5>From: {{eventControls.startDate}} &nbsp; <span *ngIf="eventControls.endDate">to: {{eventControls.endDate}}</span></h5>
+  <div *ngIf="!eventControls.infiniteDates; else: infiniteDatesIsTrue">
+    <h5>
+      From: {{ eventControls.startDate }} &nbsp; <span *ngIf="eventControls.endDate">to: {{ eventControls.endDate }}</span>
+    </h5>
   </div>
   <ng-template #infiniteDatesIsTrue>
-    <h5>Today is: {{currentDate}}</h5>
+    <h5>Today is: {{ currentDate }}</h5>
   </ng-template>
   <ion-list *ngFor="let member of eventControls.members" no-lines>
     <ion-item>
-      <ion-avatar item-left>
-        <img src="{{member.picture}}" alt="An image of user">
-      </ion-avatar>
+      <ion-avatar item-left> <img src="{{member.picture}}" alt="An image of user" /> </ion-avatar>
       <div class="amaranthus">
         <p>
           <span class="label name">Name: </span>
-          <span class="name">{{member.firstName}}
-            <span *ngIf="member.initial">{{member.initial}}</span> {{member.lastName}}</span>
+          <span class="name"
+            >{{ member.firstName }} <span *ngIf="member.initial">{{ member.initial }}</span> {{ member.lastName }}</span
+          >
         </p>
-        <p>
-          <span class="label">ID: </span>{{member.id}}
-        </p>
-        <p *ngIf="member.phoneNumber">
-          <span>Phone Number: </span>{{member.phoneNumber}}
-        </p>
-        <p *ngIf="member.class">
-          <span class="label">Class: </span>{{member.class}}
-        </p>
-        <div *ngIf="!eventControls.infiniteDates else infiniteDatesIsTrue">
-          <button ion-button small color="primary" (click)="addAttendance(member.id)">
-            Attended
-          </button>
-          <button ion-button small color="secondary" (click)="addAbsence(member.id)">
-            Absent
-          </button>
-          <p class="left attended" *ngIf="member.attendance">
-            {{member.firstName}}'s present today!
-          </p>
-          <p class="left attended" *ngIf="member.absence">
-            {{member.firstName}}'s absent today!
-          </p>
+        <p><span class="label">ID: </span>{{ member.id }}</p>
+        <p *ngIf="member.phoneNumber"><span>Phone Number: </span>{{ member.phoneNumber }}</p>
+        <p *ngIf="member.class"><span class="label">Class: </span>{{ member.class }}</p>
+        <div *ngIf="!eventControls.infiniteDates; else: infiniteDatesIsTrue">
+          <button ion-button small color="primary" (click)="addAttendance(member.id)">Attended</button> <button ion-button small color="secondary" (click)="addAbsence(member.id)">Absent</button>
+          <p class="left attended" *ngIf="member.attendance">{{ member.firstName }}'s present today!</p>
+          <p class="left attended" *ngIf="member.absence">{{ member.firstName }}'s absent today!</p>
         </div>
         <ng-template #infiniteDatesIsTrue>
-          <button ion-button small color="primary" (click)="addAttendance(member.id)">
-            Attended
-          </button>
-          <button ion-button small color="secondary" (click)="addAbsence(member.id)">
-            Absent
-          </button>
-          <p class="left attended" *ngIf="member.record.attendance">
-            {{member.firstName}}'s present today!
-          </p>
-          <p class="left attended" *ngIf="member.record.absence">
-            {{member.firstName}}'s absent today!
-          </p>
+          <button ion-button small color="primary" (click)="addAttendance(member.id)">Attended</button> <button ion-button small color="secondary" (click)="addAbsence(member.id)">Absent</button>
+          <p class="left attended" *ngIf="member.record.attendance">{{ member.firstName }}'s present today!</p>
+          <p class="left attended" *ngIf="member.record.absence">{{ member.firstName }}'s absent today!</p>
         </ng-template>
       </div>
     </ion-item>

@@ -1,31 +1,16 @@
-<!--
-  Generated template for the EditeventPage page.
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar color="primary">
     <ion-title>Edit</ion-title>
-    <ion-buttons start>
-      <button ion-button (click)="goBack()">Cancel</button>
-    </ion-buttons>
-    <ion-buttons end>
-      <button ion-button (click)="editEvent()">Save</button>
-    </ion-buttons>
+    <ion-buttons start> <button ion-button (click)="goBack()">Cancel</button> </ion-buttons>
+    <ion-buttons end> <button ion-button (click)="addAll()">Add All</button> <button ion-button (click)="editEvent()">Save</button> </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content padding>
-  <div *ngIf="logo" class="logo-image">
-    <img src="{{logo}}" alt="A picture for the logo for the event">
-  </div>
+  <div *ngIf="logo" class="logo-image"><img src="{{logo}}" alt="A picture for the logo for the event" /></div>
   <div id="logo">
-    <button (click)="addLogo()" type="button" ion-button color="primary">Add a Logo Picture</button>
-    <button (click)="logo = '' " type="button" ion-button color="secondary">Reset</button>
+    <button (click)="addLogo()" type="button" ion-button color="primary">Add a Logo Picture</button> <button (click)="logo = ''" type="button" ion-button color="secondary">Reset</button>
     <p>(Optional)</p>
   </div>
   <ion-item-group>
@@ -35,11 +20,10 @@
       <ion-icon id="form-icon" item-right name="warning" *ngIf="!name.value"></ion-icon>
     </ion-item>
   </ion-item-group>
-  <div *ngIf="!infiniteDates else noStartDate">
+  <div *ngIf="!infiniteDates; else: noStartDate">
     <ion-item>
       <ion-label>Start Date</ion-label>
-      <ion-datetime displayFormat="MMMM DD YYYY" min="2018-01-01" max="2999-12-31" pickerFormat="MMMM DD YYYY"
-        [(ngModel)]="startDate"></ion-datetime>
+      <ion-datetime displayFormat="MMMM DD YYYY" min="2018-01-01" max="2999-12-31" pickerFormat="MMMM DD YYYY" [(ngModel)]="startDate"></ion-datetime>
     </ion-item>
   </div>
   <ng-template #noStartDate>
@@ -52,11 +36,10 @@
     <ion-label>Has End Date?</ion-label>
     <ion-checkbox [(ngModel)]="hasEndDate"></ion-checkbox>
   </ion-item>
-  <div *ngIf="!infiniteDates else noEndDate">
+  <div *ngIf="!infiniteDates; else: noEndDate">
     <ion-item *ngIf="hasEndDate" (ionChange)="resetEndDate()">
       <ion-label>End Date</ion-label>
-      <ion-datetime displayFormat="MMMM DD YYYY" min="2018-01-01" max="2999-12-31" pickerFormat="MMMM DD YYYY"
-        [(ngModel)]="endDate"></ion-datetime>
+      <ion-datetime displayFormat="MMMM DD YYYY" min="2018-01-01" max="2999-12-31" pickerFormat="MMMM DD YYYY" [(ngModel)]="endDate"></ion-datetime>
       <ion-icon id="form-icon" item-right name="warning" *ngIf="!this.endDate && hasEndDate"></ion-icon>
     </ion-item>
   </div>
@@ -75,43 +58,26 @@
   <ion-list no-lines>
     <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
     <ion-item *ngFor="let student of students">
-      <ion-avatar item-left>
-        <img src="{{student.picture}}" alt="{{student.firstName}}'s profile image">
-      </ion-avatar>
+      <ion-avatar item-left> <img src="{{student.picture}}" alt="{{student.firstName}}'s profile image" /> </ion-avatar>
       <div class="amaranthus">
         <p>
           <span class="label name">Name: </span>
-          <span class="name">{{student.firstName}}
-            <span *ngIf="student.initial">{{student.initial}}</span> {{student.lastName}}</span>
+          <span class="name"
+            >{{ student.firstName }} <span *ngIf="student.initial">{{ student.initial }}</span> {{ student.lastName }}</span
+          >
         </p>
-        <p>
-          <span class="label">ID: </span>{{student.id}}
-        </p>
-        <p *ngIf="student.phoneNumber">
-          <span class="label">Phone Number: </span>{{student.phoneNumber}}
-        </p>
-        <button ion-button small color="primary" (click)="addToEvent(student.id)">
-          Add
-        </button>
-        <button ion-button small color="secondary" (click)="removeFromEvent(student.id)">
-          Remove
-        </button>
+        <p><span class="label">ID: </span>{{ student.id }}</p>
+        <p *ngIf="student.phoneNumber"><span class="label">Phone Number: </span>{{ student.phoneNumber }}</p>
+        <button ion-button small color="primary" (click)="addToEvent(student.id)">Add</button> <button ion-button small color="secondary" (click)="removeFromEvent(student.id)">Remove</button>
         <div>
-          <p class="left attended" *ngIf="ifOnEventList(student.id)">
-            {{student.firstName}} was added to event list!
-          </p>
-          <p class="left attended" *ngIf="!ifOnEventList(student.id)">
-            {{student.firstName}} wasn't added to event list!
-          </p>
+          <p class="left attended" *ngIf="ifOnEventList(student.id)">{{ student.firstName }} was added to event list!</p>
+          <p class="left attended" *ngIf="!ifOnEventList(student.id)">{{ student.firstName }} wasn't added to event list!</p>
         </div>
       </div>
     </ion-item>
   </ion-list>
-  <button ion-button (click)="editEvent()">Save</button>
-  <button ion-button color="secondary" (click)="removeEvent()">Delete</button>
+  <button ion-button (click)="editEvent()">Save</button> <button ion-button color="secondary" (click)="removeEvent()">Delete</button>
   <ion-fab bottom right>
-    <button ion-fab color="secondary" (click)="addStudent()">
-      <ion-icon name="add"></ion-icon>
-    </button>
+    <button ion-fab color="secondary" (click)="addStudent()"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 </ion-content>

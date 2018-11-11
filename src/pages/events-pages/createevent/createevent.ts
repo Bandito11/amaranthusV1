@@ -45,6 +45,14 @@ export class CreateEventPage {
   resetEndDate() {
     this.endDate = '';
   }
+
+  addAll() {
+    for (const student of this.STUDENTS) {
+      this.addToEvent(student.id);
+    }
+    
+  }
+
   createNewEvent() {
     try {
       if (this.studentIds.length < 1) {
@@ -87,11 +95,11 @@ export class CreateEventPage {
         endDate: '',
         infiniteDates: this.infiniteDates
       };
-      if (!newEvent.infiniteDates){
+      if (!newEvent.infiniteDates) {
         newEvent = {
           ...newEvent,
           startDate: this.startDate
-        }
+        };
       }
       if (this.endDate && !newEvent.infiniteDates) {
         newEvent = {

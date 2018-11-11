@@ -43,6 +43,12 @@ export class EditEventPage {
     this.getEventProfile(this.id);
   }
 
+  addAll() {
+    for (const student of this.STUDENTS) {
+      this.addToEvent(student.id);
+    }
+  }
+
   getEventProfile(id) {
     this.studentIds = [];
     const response = this.db.getEvent(id);
