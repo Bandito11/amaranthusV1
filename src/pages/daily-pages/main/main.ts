@@ -21,10 +21,9 @@ export class MainPage implements OnInit {
   date: ICalendar;
   toggle;
   timer: number;
-  @ViewChild('notes')
-  notesElement: ElementRef;
+  @ViewChild('notes') notesElement: ElementRef;
 
-  constructor(private alertCtrl: AlertController, private navCtrl: NavController, private db: AmaranthusDBProvider, private modalCtrl: ModalController) {}
+  constructor(private alertCtrl: AlertController, private navCtrl: NavController, private db: AmaranthusDBProvider, private modalCtrl: ModalController) { }
 
   ngOnInit() {
     const currentDate = new Date();
