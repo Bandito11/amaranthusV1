@@ -408,15 +408,13 @@ export class AmaranthusDBProvider {
         const formattedStudent = trimText(student);
         studentsColl.insert(formattedStudent);
         response = {
-          success: true,
-          error: null,
-          data: null
+          ...response,
+          success: true
         };
       } else {
         response = {
-          success: false,
-          error: 'User already exists in the database',
-          data: null
+          ...response,
+          error: 'User already exists in the database'
         };
       }
       return response;

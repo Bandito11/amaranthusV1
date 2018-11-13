@@ -55,6 +55,7 @@ export interface IResponse<T> {
   success: boolean;
   error: string;
   data: T;
+  dateStamp?: string;
 }
 
 export interface ISimpleAlertOptions {
