@@ -1,4 +1,4 @@
-const MONTHSLABELS = [
+export const MONTHSLABELS = [
   'January',
   'February',
   'March',
