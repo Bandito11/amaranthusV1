@@ -2,7 +2,7 @@ import { AmaranthusDBProvider } from './../../../providers/amaranthus-db/amarant
 import { CreateEventPage } from '../createevent/createevent';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
-import { formatDate } from '../../../common/formatToText';
+import { formatDate } from '../../../common/formatted';
 import { EventProfilePage } from '../event-profile/event-profile';
 
 @IonicPage()

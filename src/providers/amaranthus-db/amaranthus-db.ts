@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { IonicStorageAdapter } from './adapter';
 import * as Loki from 'lokijs';
 import { handleError } from '../../common/handleError';
-import { trimText, trimEvent } from '../../common/formatToText';
+import { trimText, trimEvent } from '../../common/formatted';
 
 /**
  * Collections use on db

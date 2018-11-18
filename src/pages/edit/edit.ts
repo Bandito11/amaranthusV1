@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, normalizeURL, ViewController, Platform } from 'ionic-angular';
 import { handleError } from '../../common/handleError';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { trimText } from '../../common/formatToText';
+import { trimText } from '../../common/formatted';
 
 
 @IonicPage()

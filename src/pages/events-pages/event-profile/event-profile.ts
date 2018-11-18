@@ -7,7 +7,7 @@ import { AmaranthusDBProvider } from './../../../providers/amaranthus-db/amarant
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ModalController, ViewController } from 'ionic-angular';
 import { handleError } from '../../../common/handleError';
-import { formatDate } from '../../../common/formatToText';
+import { formatDate } from '../../../common/formatted';
 
 interface eventControls {
   members;
