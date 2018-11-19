@@ -706,10 +706,11 @@ export class AmaranthusDBProvider {
   }
 
   getQueriedRecords(opts: { event?: string; query: string; date?: ICalendar }): IResponse<IRecord[]> {
-    let response = {
+    let response: IResponse<any> = {
       success: true,
       error: null,
-      data: null
+      data: null,
+      dateStamp: new Date().toString()
     };
     // TODO: Add Event if condition!!!!
     switch (opts.query) {
