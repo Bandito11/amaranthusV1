@@ -20,9 +20,6 @@ import { ClientLoginPage } from '../clientlogin/clientlogin';
      <ion-tab tabIcon="log-in" [root]="tab6"></ion-tab>
      </div>
      <ion-tab tabIcon="cog" [root]="tab5"></ion-tab>
-     <!--
-     <ion-tab tabIcon="log-in" [root]="tab6"></ion-tab>
-     -->
   </ion-tabs>
 `
 })
